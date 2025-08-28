@@ -1,0 +1,9 @@
+[submodule "frontend/contracts/lib/forge-std"]
+	path = frontend/contracts/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "frontend/contracts/lib/solady"]
+	path = frontend/contracts/lib/solady
+	url = https://github.com/vectorized/solady
+[submodule "frontend/contracts/lib/openzeppelin-contracts"]
+	path = frontend/contracts/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
