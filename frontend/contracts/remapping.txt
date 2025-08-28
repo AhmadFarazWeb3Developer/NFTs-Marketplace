@@ -1,0 +1,4 @@
+remapping = [
+    'openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/',
+    'solady/src=lib/solday/src/',
+]
