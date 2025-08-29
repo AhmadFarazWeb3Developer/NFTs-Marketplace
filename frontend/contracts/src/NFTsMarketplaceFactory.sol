@@ -31,5 +31,6 @@ contract NFTsMarketplaceFactory is Ownable {
     // user update the price and sell it on the marketplace
 
     // someone who want to sell his entire collection, calculate the entire collection fee ,
+    function sellAllHisCollection() public pure {}
     // change the fee for a specific Nft
 }

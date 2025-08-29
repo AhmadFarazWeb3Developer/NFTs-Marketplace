@@ -7,10 +7,11 @@ import {IERC721Metadata} from "@openzeppelin/contracts/interfaces/IERC721Metadat
 import {IERC721Receiver} from "@openzeppelin/contracts/interfaces/IERC721Receiver.sol";
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 // Every ERC-721 compliant contract must implement the ERC721 and ERC165 interfaces
 
-contract NFTsCollection is Ownable, IERC165, ERC721 {
+contract NFTsCollection is Ownable, ReentrancyGuard, IERC165, ERC721 {
     uint256 public tokenId;
     string public baseURI = "BoardApes/";
 
@@ -20,17 +21,24 @@ contract NFTsCollection is Ownable, IERC165, ERC721 {
     mapping(uint256 => bool) private isForSale;
 
     event TokenPriceUpdated(
-        uint256 TokenID,
-        uint256 OldPrice,
-        uint256 NewPrice
+        uint256 indexed tokenID,
+        uint256 indexed oldPrice,
+        uint256 indexed newPrice
     );
-    event BaseURIUpdated(string OldBaseURI, string NewBaseURI);
+    event BaseURIUpdated(string indexed oldBaseURI, string indexed newBaseURI);
 
     event TokenIdSaleUpdated(
-        address UpdatedBy,
-        uint256 TokenID,
-        bool IsAllowed
+        address indexed updatedBy,
+        uint256 indexed tokenID,
+        bool indexed isAllowed
     );
+
+    // event TokenSoldForETH(
+    //     address indexed from,
+    //     address indexed to,
+    //     uint256 indexed tokenID,
+    //     uint256 indexed ETH
+    // );
 
     error InsufficientETH(uint256 Sent, uint256 Required);
     error EmptyURINotAccepted(string uri);
@@ -113,16 +121,24 @@ contract NFTsCollection is Ownable, IERC165, ERC721 {
 
     // anyone can buy any token if it is listed and is for sale
 
-    function buy(uint256 _tokenId) public payable IsTokenExists(_tokenId) {
+    function buy(
+        uint256 _tokenId
+    ) public payable nonReentrant IsTokenExists(_tokenId) {
         uint256 requiredETH = tokenPrice[_tokenId];
 
-        // if (!isListed[_tokenId]) revert TokenIdNotListed(_tokenId);
         if (!isForSale[_tokenId]) revert NotForSale(_tokenId);
         else if (msg.value < requiredETH) {
             revert InsufficientETH(msg.value, requiredETH);
         }
 
-        _safeTransfer(ownerOf(_tokenId), msg.sender, _tokenId);
+        address seller = ownerOf(_tokenId);
+
+        _safeTransfer(seller, _msgSender(), _tokenId);
+
+        (bool success, ) = payable(seller).call{value: msg.value}("");
+        require(success, "Payment failed");
+
+        // emit TokenSoldForETH(seller, _msgSender(), _tokenId, requiredETH);
     }
 
     // -> Allow for sale token A
@@ -207,4 +223,8 @@ contract NFTsCollection is Ownable, IERC165, ERC721 {
     ) external pure returns (bytes4) {
         return IERC721Receiver.onERC721Received.selector;
     }
+
+    // if someone tries to send tokens direclty to my contract , then ?
+
+    // fallback() external payable {}
 }

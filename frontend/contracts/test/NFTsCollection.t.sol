@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import {Test} from "forge-std/Test.sol";
+import {Test, console} from "forge-std/Test.sol";
 import {UtilsTest} from "./Utils.t.sol";
 import {NFTsCollection} from "../src/NFTsCollection.sol";
 
@@ -67,12 +67,10 @@ contract NFTsCollectionTest is UtilsTest {
         boardApesCollection.allowForSale(tokenId);
 
         vm.deal(buyer, 10 ether);
-        vm.startPrank(buyer);
-        boardApesCollection.buy{value: 1 ether}(tokenId);
-        vm.stopPrank();
 
-        boardApesCollection.balanceOf(buyer);
-        boardApesCollection.tokenURI(tokenId);
+        vm.startPrank(buyer);
+        boardApesCollection.buy{value: 3 ether}(tokenId);
+        vm.stopPrank();
 
         assertEq(boardApesCollection.ownerOf(tokenId), buyer);
     }
