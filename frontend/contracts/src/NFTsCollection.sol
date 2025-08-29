@@ -17,7 +17,7 @@ contract NFTsCollection is Ownable, IERC165, ERC721 {
     mapping(uint256 => string) private tokenURIs;
     mapping(uint256 => uint256) public tokenPrice;
     mapping(uint256 => bool) private isListed;
-    mapping(uint256 => bool) private IsForSale;
+    mapping(uint256 => bool) private isForSale;
 
     event TokenPriceUpdated(
         uint256 TokenID,
@@ -26,7 +26,11 @@ contract NFTsCollection is Ownable, IERC165, ERC721 {
     );
     event BaseURIUpdated(string OldBaseURI, string NewBaseURI);
 
-    event TokenIdSaleUpdated(uint256 TokenID, bool IsAllowed);
+    event TokenIdSaleUpdated(
+        address UpdatedBy,
+        uint256 TokenID,
+        bool IsAllowed
+    );
 
     error InsufficientETH(uint256 Sent, uint256 Required);
     error EmptyURINotAccepted(string uri);
@@ -53,7 +57,12 @@ contract NFTsCollection is Ownable, IERC165, ERC721 {
         _;
     }
 
-    // it will mint only , not list on marketplace, later-on can be added
+    modifier IsTokenListed(uint256 _tokenId) {
+        if (!(isListed[_tokenId])) revert TokenIdNotListed(_tokenId);
+        _;
+    }
+
+    // -> 1. Minted token A
     function mint(
         string memory _tokenURI,
         uint256 _tokenPrice
@@ -68,40 +77,22 @@ contract NFTsCollection is Ownable, IERC165, ERC721 {
         return tokenId - 1;
     }
 
+    // -> 2. List token A
     // list on marketplace after minting
     // so transfer to marketplace
     function listOnMarketplace(
         uint256 _tokenId
     ) public onlyOwner IsTokenExists(_tokenId) {
-        _safeTransfer(owner(), address(this), _tokenId);
         isListed[_tokenId] = true;
     }
 
-    function allowForSale(uint256 _tokenId) public IsTokenExists(_tokenId) {
-        if (!(isListed[_tokenId])) revert TokenIdNotListed(_tokenId);
-        else if (ownerOf(_tokenId) != _msgSender() && _msgSender() != owner()) {
-            revert ERC721IncorrectOwner(
-                _msgSender(),
-                _tokenId,
-                ownerOf(_tokenId)
-            );
-        }
-
-        IsForSale[_tokenId] = true;
-        emit TokenIdSaleUpdated(_tokenId, true);
-    }
-
     // mint and list at a time in one transaction
-
-    // check onlyOwner
-    // check URI
-    // mint to marketplace
 
     function mintAndListOnMarketplace(
         string memory _tokenURI,
         uint256 _tokenPrice
     ) external onlyOwner checkURI(_tokenURI) returns (uint256) {
-        _safeMint(address(this), tokenId); // mint directly to exchange
+        _safeMint(owner(), tokenId); // mint to owner
 
         tokenURIs[tokenId] = _tokenURI;
         tokenPrice[tokenId] = _tokenPrice;
@@ -111,17 +102,22 @@ contract NFTsCollection is Ownable, IERC165, ERC721 {
         return tokenId - 1;
     }
 
+    // check onlyOwner
+    // check URI
+    // mint to marketplace
+
     // check tokenId exists
     // check tokenId is listed
+    // check tokenId is for sale
     // check the msg.value
 
-    // anyone can buy any token if it is listed
+    // anyone can buy any token if it is listed and is for sale
 
     function buy(uint256 _tokenId) public payable IsTokenExists(_tokenId) {
         uint256 requiredETH = tokenPrice[_tokenId];
 
-        if (!isListed[_tokenId]) revert TokenIdNotListed(_tokenId);
-        else if (!IsForSale[_tokenId]) revert NotForSale(_tokenId);
+        // if (!isListed[_tokenId]) revert TokenIdNotListed(_tokenId);
+        if (!isForSale[_tokenId]) revert NotForSale(_tokenId);
         else if (msg.value < requiredETH) {
             revert InsufficientETH(msg.value, requiredETH);
         }
@@ -129,21 +125,51 @@ contract NFTsCollection is Ownable, IERC165, ERC721 {
         _safeTransfer(ownerOf(_tokenId), msg.sender, _tokenId);
     }
 
-    // onlyOwner can dilist someones token , beaucse it can be reputation for collection owner.
-    // but user can not be stopped  from selling , he can sell it to anyone
+    // -> Allow for sale token A
+    function allowForSale(
+        uint256 _tokenId
+    ) public IsTokenListed(_tokenId) IsTokenExists(_tokenId) {
+        if (ownerOf(_tokenId) != _msgSender()) {
+            revert ERC721IncorrectOwner(
+                _msgSender(),
+                _tokenId,
+                ownerOf(_tokenId)
+            );
+        }
+
+        isForSale[_tokenId] = true;
+        emit TokenIdSaleUpdated(_msgSender(), _tokenId, true);
+    }
+
+    // -> Disallow for sale token A
+    function disAllowForSale(uint256 _tokenId) public IsTokenExists(_tokenId) {
+        if (ownerOf(_tokenId) != _msgSender()) {
+            revert ERC721IncorrectOwner(
+                _msgSender(),
+                _tokenId,
+                ownerOf(_tokenId)
+            );
+        }
+        isForSale[_tokenId] = false;
+        emit TokenIdSaleUpdated(_msgSender(), _tokenId, false);
+    }
+
     function diListFromMarketplace(
         uint256 _tokenId
     ) public onlyOwner IsTokenExists(_tokenId) {
         isListed[_tokenId] = false;
     }
 
-    // only the holder of the token can update the price
+    // only the holder of the token can update the price , marketplace cannot update the price
+
+    // if the marketplace want to update the price it must dilist first and become the owner
+
     function updateTokenPrice(uint256 _tokenId, uint256 _newPrice) public {
         address tokenOwner = _ownerOf(_tokenId);
 
         if (tokenOwner == address(0)) {
             revert ERC721NonexistentToken(_tokenId);
-        } else if ((tokenOwner != _msgSender()) && (_msgSender() != owner())) {
+        } else if ((tokenOwner != _msgSender())) {
             revert ERC721IncorrectOwner(_msgSender(), _tokenId, tokenOwner);
         } else {
             uint256 oldPrice = tokenPrice[_tokenId];
@@ -167,7 +193,7 @@ contract NFTsCollection is Ownable, IERC165, ERC721 {
     function updateBaseURI(
         string memory _baseURI
     ) external onlyOwner checkURI(_baseURI) {
-        string memory _oldBaseURI = _baseURI;
+        string memory _oldBaseURI = baseURI;
         baseURI = _baseURI;
         emit BaseURIUpdated(_oldBaseURI, baseURI);
     }

@@ -13,13 +13,15 @@ contract NFTsCollectionTest is UtilsTest {
     function setUp() public override {
         super.setUp();
 
-        // create collection
+        // owner create collection
         vm.startPrank(collectionOwner);
         factory.createCollection("Board Apes", "BAs");
         boardApesCollection = NFTsCollection(
             factory.collections(collectionOwner)
         );
         vm.stopPrank();
+
+        vm.deal(buyer, 10 ether);
     }
 
     modifier onlyCollectionOwner() {
@@ -36,10 +38,14 @@ contract NFTsCollectionTest is UtilsTest {
     }
 
     function test_mintAndListOnMarketplace() public onlyCollectionOwner {
+        // mint and list
         uint256 tokenId = boardApesCollection.mintAndListOnMarketplace(
             "first/uri",
             1 ether
         );
+
+        // allow for sale
+        boardApesCollection.allowForSale(tokenId);
 
         vm.deal(buyer, 10 ether);
         vm.startPrank(buyer);
@@ -73,23 +79,81 @@ contract NFTsCollectionTest is UtilsTest {
 
     function test_diListFromMarketplace() public onlyCollectionOwner {
         uint256 tokenId = boardApesCollection.mint("first/uri", 1 ether);
-        boardApesCollection.diListFromMarketplace(tokenId);
+        // list on marketplace
+        boardApesCollection.listOnMarketplace(tokenId);
 
-        // cannot buy after dilisting
+        // allowed for sale
+        boardApesCollection.allowForSale(tokenId);
 
         vm.deal(buyer, 10 ether);
         vm.startPrank(buyer);
-        vm.expectRevert(
-            abi.encodeWithSelector(
-                NFTsCollection.TokenIdNotListed.selector,
-                tokenId
-            )
-        );
         boardApesCollection.buy{value: 1 ether}(tokenId);
+        vm.stopPrank();
+
+        // now marketplace dilist the token but the cannot stop from selling
+        vm.startPrank(collectionOwner);
+        boardApesCollection.diListFromMarketplace(tokenId);
+        vm.stopPrank();
+
+        // new user come and want to buy the tokenId 0
+        address newBuyer = makeAddr("new buyer");
+
+        vm.deal(newBuyer, 10 ether);
+        vm.startPrank(newBuyer);
+        boardApesCollection.buy{value: 1 ether}(tokenId);
+
         vm.stopPrank();
     }
 
     function test_updateTokenPrice() public onlyCollectionOwner {
-        boardApesCollection.updateTokenPrice(0, 10 ether);
+        uint256 tokenId = boardApesCollection.mintAndListOnMarketplace(
+            "first/uri",
+            5 ether
+        );
+
+        boardApesCollection.allowForSale(tokenId);
+        boardApesCollection.updateTokenPrice(tokenId, 10 ether);
+
+        vm.startPrank(buyer);
+        uint256 tokenPrice = boardApesCollection.tokenPrice(tokenId);
+        boardApesCollection.buy{value: tokenPrice}(tokenId);
+
+        boardApesCollection.updateTokenPrice(tokenId, 15 ether);
+        vm.stopPrank();
+
+        // new buyer came and want to buy after token price update
+
+        address newBuyer = makeAddr("new buyer");
+        vm.deal(newBuyer, 15 ether);
+
+        vm.startPrank(newBuyer);
+
+        boardApesCollection.buy{value: 15 ether}(tokenId);
+    }
+
+    function test_tokenURI() public onlyCollectionOwner {
+        uint256 tokenId = boardApesCollection.mintAndListOnMarketplace(
+            "first/uri",
+            5 ether
+        );
+        boardApesCollection.tokenURI(tokenId);
+    }
+
+    function test_updateBaseURI() public onlyCollectionOwner {
+        uint256 tokenId = boardApesCollection.mintAndListOnMarketplace(
+            "first/uri",
+            5 ether
+        );
+
+        boardApesCollection.tokenURI(tokenId);
+
+        boardApesCollection.updateBaseURI("ActiveApes/");
+
+        tokenId = boardApesCollection.mintAndListOnMarketplace(
+            "second/uri",
+            10 ether
+        );
+
+        boardApesCollection.tokenURI(tokenId);
     }
 }

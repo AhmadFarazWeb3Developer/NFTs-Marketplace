@@ -1,0 +1,51 @@
+
+
+
+
+
+------------------ Marketplace Policy ------------------
+
+
+
+
+
+what if Marketplace restrict a collection then ?
+the buyer can sell their collections ?
+
+
+------------------- Collection Policy -------------------
+
+Collection Owner :
+->  Minted token A
+->  List token A
+
+
+Token Buyer:
+->  Bought A 
+->  Allow  or  Disallow for sale  
+->  Buyer updated the price 
+->  Again Allowed for sale A 
+
+
+
+@Note:
+->  Marketplace can dislist the token A but cannot stop him from selling , beaucse its his right 
+-> owner holds the tokens not the collection contract
+
+
+
+Token A is already listed and allowed for sale
+
+Buyer Bought the token A 
+
+Initially marketplace is owner, transfered from marketplace to Buyer 
+still listed 
+
+Already allowed for sale,
+Buyer can Disallow for sale,
+
+Buyer updated Token A 
+
+
+
+
