@@ -17,7 +17,7 @@ contract NFTsCollectionTest is UtilsTest {
         vm.startPrank(collectionOwner);
         factory.createCollection("Board Apes", "BAs");
         boardApesCollection = NFTsCollection(
-            factory.collections(collectionOwner)
+            factory.collections(0, collectionOwner)
         );
         vm.stopPrank();
 

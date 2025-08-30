@@ -20,6 +20,8 @@ contract NFTsCollection is Ownable, ReentrancyGuard, IERC165, ERC721 {
     mapping(uint256 => bool) private isListed;
     mapping(uint256 => bool) private isForSale;
 
+    address private factoryAddress;
+
     event TokenPriceUpdated(
         uint256 indexed tokenID,
         uint256 indexed oldPrice,
@@ -141,6 +143,8 @@ contract NFTsCollection is Ownable, ReentrancyGuard, IERC165, ERC721 {
         // emit TokenSoldForETH(seller, _msgSender(), _tokenId, requiredETH);
     }
 
+    // function updateForSaleStatus(uint256 _tokenId, bool status)
+
     // -> Allow for sale token A
     function allowForSale(
         uint256 _tokenId
@@ -212,6 +216,15 @@ contract NFTsCollection is Ownable, ReentrancyGuard, IERC165, ERC721 {
         string memory _oldBaseURI = baseURI;
         baseURI = _baseURI;
         emit BaseURIUpdated(_oldBaseURI, baseURI);
+    }
+
+    function transferOwnershipFromFactory(address newOwner) external {
+        require(_msgSender() == factoryAddress, "Only factory can call this");
+        _transferOwnership(newOwner);
+    }
+
+    function setFactoryAddress(address _factoryAddress) external onlyOwner {
+        factoryAddress = _factoryAddress;
     }
 
     // mandatory
