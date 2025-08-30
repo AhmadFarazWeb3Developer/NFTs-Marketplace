@@ -5,7 +5,6 @@ import {Test} from "forge-std/Test.sol";
 import {NFTsMarketplaceFactory} from "../src/NFTsMarketplaceFactory.sol";
 
 abstract contract UtilsTest is Test {
-    
     NFTsMarketplaceFactory factory;
 
     address factoryOwner = makeAddr("factoryOnwer");

@@ -45,7 +45,7 @@ contract NFTsCollectionTest is UtilsTest {
         );
 
         // allow for sale
-        boardApesCollection.allowForSale(tokenId);
+        boardApesCollection.UpdateSaleStatus(tokenId, true);
 
         vm.deal(buyer, 10 ether);
         vm.startPrank(buyer);
@@ -62,9 +62,9 @@ contract NFTsCollectionTest is UtilsTest {
         // Enter tokenURI for new NFT
         uint256 tokenId = boardApesCollection.mint("first/uri", 1 ether);
         // list on exchange
-        boardApesCollection.listOnMarketplace(tokenId);
+        boardApesCollection.UpdateListingStatusForToken(tokenId, true);
         // allow for sale
-        boardApesCollection.allowForSale(tokenId);
+        boardApesCollection.UpdateSaleStatus(tokenId, true);
 
         vm.deal(buyer, 10 ether);
 
@@ -78,10 +78,10 @@ contract NFTsCollectionTest is UtilsTest {
     function test_diListFromMarketplace() public onlyCollectionOwner {
         uint256 tokenId = boardApesCollection.mint("first/uri", 1 ether);
         // list on marketplace
-        boardApesCollection.listOnMarketplace(tokenId);
+        boardApesCollection.UpdateListingStatusForToken(tokenId, true);
 
         // allowed for sale
-        boardApesCollection.allowForSale(tokenId);
+        boardApesCollection.UpdateSaleStatus(tokenId, true);
 
         vm.deal(buyer, 10 ether);
         vm.startPrank(buyer);
@@ -90,7 +90,7 @@ contract NFTsCollectionTest is UtilsTest {
 
         // now marketplace dilist the token but the cannot stop from selling
         vm.startPrank(collectionOwner);
-        boardApesCollection.diListFromMarketplace(tokenId);
+        boardApesCollection.UpdateListingStatusForToken(tokenId, false);
         vm.stopPrank();
 
         // new user come and want to buy the tokenId 0
@@ -109,7 +109,7 @@ contract NFTsCollectionTest is UtilsTest {
             5 ether
         );
 
-        boardApesCollection.allowForSale(tokenId);
+        boardApesCollection.UpdateSaleStatus(tokenId,true);
         boardApesCollection.updateTokenPrice(tokenId, 10 ether);
 
         vm.startPrank(buyer);
