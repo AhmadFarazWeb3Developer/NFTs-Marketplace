@@ -6,16 +6,16 @@ import {NFTsCollection} from "./NFTsCollection.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 contract NFTsMarketplaceFactory is Ownable, ReentrancyGuard {
+    // Taking collectionId, beacuase there can be multiple collections at same addres then it will vanish oldone
+
     uint256 public collectionId;
 
-    uint256 public immutable SELL_FEE = 3 * 10 ** 16; //  3%
+    uint256 public immutable SELL_FEE = 3e16; //  charging 3% the eth amount of token
 
     mapping(uint256 => mapping(address => address)) public collections; // id => owner => collection
     mapping(address => address) private ownerOfCollection; // collection => owner
     mapping(uint256 => bool) public isForSale; // id => true/false
     mapping(uint256 => uint256) public collectionPrice; // id => 5 ETH
-
-    // we are taking id beacuase there can be multiple collections at same addres then it will vanish oldone
 
     error CollectionIsNotForSale(uint256 collectionId, address collection);
     error UnauthorizedCollectionOwner(address caller, address owner);
@@ -72,7 +72,7 @@ contract NFTsMarketplaceFactory is Ownable, ReentrancyGuard {
     ) public payable nonReentrant {
         // CHECKS
         NFTsCollection collection = NFTsCollection(
-            collections[_collectionId][_of]
+            payable(collections[_collectionId][_of])
         );
 
         _checkCollectionStatus(_collectionId, _of);
@@ -96,7 +96,7 @@ contract NFTsMarketplaceFactory is Ownable, ReentrancyGuard {
         uint256 sellerAmount = msg.value - marketplaceFee;
 
         // Update storage before external calls
-        collections[_collectionId][_msgSender()] = collection;
+        collections[_collectionId][_msgSender()] = address(collection);
         delete collections[_collectionId][_of];
         ownerOfCollection[address(collection)] = _msgSender();
 
@@ -116,7 +116,7 @@ contract NFTsMarketplaceFactory is Ownable, ReentrancyGuard {
     function _validateCollectionOwner(uint256 _collectionId) internal {
         address _collection = collections[_collectionId][_msgSender()];
 
-        NFTsCollection collection = NFTsCollection(_collection);
+        NFTsCollection collection = NFTsCollection(payable(_collection));
 
         if (_msgSender() != ownerOfCollection[_collection]) {
             revert UnauthorizedCollectionOwner(

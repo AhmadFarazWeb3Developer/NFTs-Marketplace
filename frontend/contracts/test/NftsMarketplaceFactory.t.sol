@@ -11,13 +11,14 @@ contract NftsMarketplaceFactory is UtilsTest {
     address nftBuyer = makeAddr("nft buyer");
     NFTsCollection boardApesCollection;
 
+    uint256 collectionId;
     function setUp() public override {
         super.setUp();
 
         vm.startPrank(collectionOwner);
-        factory.createCollection("Board Apes", "BAs");
+        collectionId = factory.createCollection("Board Apes", "BAs");
         boardApesCollection = NFTsCollection(
-            factory.collections(0, collectionOwner)
+            payable(factory.collections(0, collectionOwner))
         );
         vm.stopPrank();
 
@@ -37,10 +38,11 @@ contract NftsMarketplaceFactory is UtilsTest {
         factory.UpdateCollectionStatus(0, 10 ether, true);
 
         vm.startPrank(collectionBuyer);
-        factory.BuyCollection{value: 10 ether}(0, collectionOwner);
-        boardApesCollection.UpdateListingStatusForToken(0, false);
+
+        factory.BuyCollection{value: 10 ether}(collectionId, collectionOwner);
+        boardApesCollection.updateTokenListingStatus(0, false);
         uint256 tokenId = boardApesCollection.mint("fourth/uri", 15 ether);
-        boardApesCollection.UpdateSaleStatus(tokenId, true);
+        boardApesCollection.updateSaleStatus(tokenId, true);
         vm.stopPrank();
 
         vm.startPrank(nftBuyer);

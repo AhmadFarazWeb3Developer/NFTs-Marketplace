@@ -17,7 +17,7 @@ contract NFTsCollectionTest is UtilsTest {
         vm.startPrank(collectionOwner);
         factory.createCollection("Board Apes", "BAs");
         boardApesCollection = NFTsCollection(
-            factory.collections(0, collectionOwner)
+            payable(factory.collections(0, collectionOwner))
         );
         vm.stopPrank();
 
@@ -45,7 +45,7 @@ contract NFTsCollectionTest is UtilsTest {
         );
 
         // allow for sale
-        boardApesCollection.UpdateSaleStatus(tokenId, true);
+        boardApesCollection.updateSaleStatus(tokenId, true);
 
         vm.deal(buyer, 10 ether);
         vm.startPrank(buyer);
@@ -62,35 +62,36 @@ contract NFTsCollectionTest is UtilsTest {
         // Enter tokenURI for new NFT
         uint256 tokenId = boardApesCollection.mint("first/uri", 1 ether);
         // list on exchange
-        boardApesCollection.UpdateListingStatusForToken(tokenId, true);
+        boardApesCollection.updateTokenListingStatus(tokenId, true);
         // allow for sale
-        boardApesCollection.UpdateSaleStatus(tokenId, true);
+        boardApesCollection.updateSaleStatus(tokenId, true);
 
         vm.deal(buyer, 10 ether);
 
         vm.startPrank(buyer);
-        boardApesCollection.buy{value: 3 ether}(tokenId);
+        boardApesCollection.buy{value: 1 ether}(tokenId);
         vm.stopPrank();
 
         assertEq(boardApesCollection.ownerOf(tokenId), buyer);
     }
 
-    function test_diListFromMarketplace() public onlyCollectionOwner {
+    function test_UpdateListingStatusForToken() public onlyCollectionOwner {
         uint256 tokenId = boardApesCollection.mint("first/uri", 1 ether);
         // list on marketplace
-        boardApesCollection.UpdateListingStatusForToken(tokenId, true);
+        boardApesCollection.updateTokenListingStatus(tokenId, true);
 
         // allowed for sale
-        boardApesCollection.UpdateSaleStatus(tokenId, true);
+        boardApesCollection.updateSaleStatus(tokenId, true);
 
         vm.deal(buyer, 10 ether);
         vm.startPrank(buyer);
         boardApesCollection.buy{value: 1 ether}(tokenId);
+        boardApesCollection.updateSaleStatus(tokenId, true);
         vm.stopPrank();
 
         // now marketplace dilist the token but the cannot stop from selling
         vm.startPrank(collectionOwner);
-        boardApesCollection.UpdateListingStatusForToken(tokenId, false);
+        boardApesCollection.updateTokenListingStatus(tokenId, false);
         vm.stopPrank();
 
         // new user come and want to buy the tokenId 0
@@ -109,21 +110,20 @@ contract NFTsCollectionTest is UtilsTest {
             5 ether
         );
 
-        boardApesCollection.UpdateSaleStatus(tokenId,true);
+        boardApesCollection.updateSaleStatus(tokenId, true);
         boardApesCollection.updateTokenPrice(tokenId, 10 ether);
 
         vm.startPrank(buyer);
         uint256 tokenPrice = boardApesCollection.tokenPrice(tokenId);
         boardApesCollection.buy{value: tokenPrice}(tokenId);
-
         boardApesCollection.updateTokenPrice(tokenId, 15 ether);
+        boardApesCollection.updateSaleStatus(tokenId, true);
         vm.stopPrank();
 
         // new buyer came and want to buy after token price update
-
         address newBuyer = makeAddr("new buyer");
-        vm.deal(newBuyer, 15 ether);
 
+        vm.deal(newBuyer, 15 ether);
         vm.startPrank(newBuyer);
 
         boardApesCollection.buy{value: 15 ether}(tokenId);
