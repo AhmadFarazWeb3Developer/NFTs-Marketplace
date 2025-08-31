@@ -1,66 +1,49 @@
-## Foundry
+# Dream NFT Marketplace
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+![alt](Image.png)
 
-Foundry consists of:
+**Description:** `Dream NFT Marketplace` is an open NFT marketplace for buyers and sellers.
 
-- **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
-- **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
-- **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
-- **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+**Contracts:** /frontend/contracts/src
 
-## Documentation
+- `NFTsMarketplaceFactory.sol`
+- `NFTsCollection.sol`
 
-https://book.getfoundry.sh/
+---
 
-## Usage
+## Working
 
-### Build
+1. **NFTsMarketplaceFactory.sol**: Allows users to create their own collection instances with their desired names and symbols. Only the collection owner can mint new NFTs, which buyers can later purchase through the `buy` function.
 
-```shell
-$ forge build
-```
+2. **NFTsCollection.sol**: Holds the NFTs created via the `NFTsMarketplaceFactory.sol`. Users can buy any NFT they are interested in, as long as it is available for sale and they provide the required ETH.
 
-### Test
+---
 
-```shell
-$ forge test
-```
+## Roles
 
-### Format
+1. **Marketplace owner:** Deploys the `NFTsMarketplaceFactory` and can withdraw the `3%` fee from each NFT purchase and collection sale.
+2. **Collection owner:** Creates NFT collections, mints NFTs, and can list or delist any token from their collection. However, they cannot prevent the buying or selling of tokens once listed.
+3. **User:** Buys NFTs using the `buy` function by paying the required amount of ETH.
 
-```shell
-$ forge fmt
-```
+---
 
-### Gas Snapshots
+## Policy
 
-```shell
-$ forge snapshot
-```
+The `NFTsCollection` owner can delist any token from their collection at any time (for example, for reputation purposes). Delisted tokens will not be displayed on the client side. However, the collection owner cannot stop users from buying or selling NFTs unless they are the owner of that specific token.
 
-### Anvil
+---
 
-```shell
-$ anvil
-```
+## Revenue Model
 
-### Deploy
+`NFTsMarketplaceFactory` charges a `3%` fee on each NFT purchase, paid by the buyer. When a collection is sold, the same `3%` fee is charged on the `msg.value`.
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
+---
 
-### Cast
+## Audit
 
-```shell
-$ cast <subcommand>
-```
+- **Tools:** Manual Audit & Slither
 
-### Help
+  - Reentrancy protection implemented via `ReentrancyGuard`.
+  - Proper adherence to the Checks-Effects-Interactions (CEI) pattern.
 
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+---

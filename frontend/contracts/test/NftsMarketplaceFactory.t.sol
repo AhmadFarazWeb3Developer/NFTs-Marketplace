@@ -30,6 +30,7 @@ contract NftsMarketplaceFactory is UtilsTest {
         vm.startPrank(collectionOwner);
         _;
     }
+
     function test_BuyCollection() public onlyCollectionOwner {
         boardApesCollection.mint("first/uri", 1 ether);
         boardApesCollection.mint("seconf/uri", 5 ether);
@@ -45,8 +46,14 @@ contract NftsMarketplaceFactory is UtilsTest {
         boardApesCollection.updateSaleStatus(tokenId, true);
         vm.stopPrank();
 
+        boardApesCollection.ownerOf(tokenId);
+
         vm.startPrank(nftBuyer);
         boardApesCollection.buy{value: 15 ether}(tokenId);
         vm.stopPrank();
+
+        // withdraw funds to factory
+        vm.startPrank(factoryOwner);
+        factory.withdrawFees();
     }
 }

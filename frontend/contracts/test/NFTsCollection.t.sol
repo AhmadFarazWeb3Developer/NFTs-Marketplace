@@ -75,7 +75,7 @@ contract NFTsCollectionTest is UtilsTest {
         assertEq(boardApesCollection.ownerOf(tokenId), buyer);
     }
 
-    function test_UpdateListingStatusForToken() public onlyCollectionOwner {
+    function test_UpdateTokenListingStatus() public onlyCollectionOwner {
         uint256 tokenId = boardApesCollection.mint("first/uri", 1 ether);
         // list on marketplace
         boardApesCollection.updateTokenListingStatus(tokenId, true);

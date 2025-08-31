@@ -10,6 +10,9 @@ import {NFTsMarketplaceFactory} from "./NFTsMarketplaceFactory.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
+import {console} from "forge-std/console.sol";
+// import{console} from  "hardhat/console.sol";
+
 // @note Every ERC-721 compliant contract must implement the ERC721 and ERC165 interfaces
 contract NFTsCollection is Ownable, ReentrancyGuard, IERC165, ERC721 {
     // -----------------------------------------------------------------------
@@ -70,17 +73,17 @@ contract NFTsCollection is Ownable, ReentrancyGuard, IERC165, ERC721 {
     // -----------------------------------------------------------------------
 
     /**
-     * @param _name Name of the collection
-     * @param _symbol Symbol of the collection
+     * @param  name Name of the collection
+     * @param  symbol Symbol of the collection
      * @param _owner Address of the collection owner
      * @param _factoryAddress Address of the NFTsMarketplaceFactory
      */
     constructor(
-        string memory _name,
-        string memory _symbol,
+        string memory name,
+        string memory symbol,
         address _owner,
         address _factoryAddress
-    ) ERC721(_name, _symbol) Ownable(_owner) {
+    ) ERC721(name, symbol) Ownable(_owner) {
         factoryAddress = payable(_factoryAddress);
     }
 
@@ -95,20 +98,20 @@ contract NFTsCollection is Ownable, ReentrancyGuard, IERC165, ERC721 {
         _;
     }
 
-    modifier isTokenExists(uint256 _tokenId) {
-        _requireOwned(_tokenId);
+    modifier isTokenExists(uint256 tokenId_) {
+        _requireOwned(tokenId_);
         _;
     }
 
-    modifier isTokenListed(uint256 _tokenId) {
-        if (!(isListed[_tokenId])) revert TokenIdNotListed(_tokenId);
+    modifier isTokenListed(uint256 tokenId_) {
+        if (!(isListed[tokenId_])) revert TokenIdNotListed(tokenId_);
         _;
     }
 
-    modifier onlyTokenOwner(uint256 _tokenId) {
-        address tokenOwner = _ownerOf(_tokenId);
+    modifier onlyTokenOwner(uint256 tokenId_) {
+        address tokenOwner = _ownerOf(tokenId_);
         if (tokenOwner != _msgSender()) {
-            revert ERC721IncorrectOwner(_msgSender(), _tokenId, tokenOwner);
+            revert ERC721IncorrectOwner(_msgSender(), tokenId_, tokenOwner);
         }
         _;
     }
@@ -124,20 +127,22 @@ contract NFTsCollection is Ownable, ReentrancyGuard, IERC165, ERC721 {
     // -----------------------------------------------------------------------
 
     /**
-     * @param _tokenURI comes from IPFS
-     * @param _tokenPrice initial price of token
+     * @param tokenURI_ comes from IPFS
+     * @param tokenPrice_ initial price of token
      * @return tokenId
      */
     function mint(
-        string memory _tokenURI,
-        uint256 _tokenPrice
-    ) public onlyOwner checkURI(_tokenURI) returns (uint256) {
+        string memory tokenURI_,
+        uint256 tokenPrice_
+    ) public onlyOwner checkURI(tokenURI_) returns (uint256) {
+        // Effects
+        tokenURIs[tokenId] = tokenURI_;
+        updateTokenPrice(tokenId, tokenPrice_);
+        tokenId++;
+
+        // Interactions
         _safeMint(owner(), tokenId);
 
-        tokenURIs[tokenId] = _tokenURI;
-        updateTokenPrice(tokenId, _tokenPrice);
-
-        tokenId++;
         return tokenId - 1;
     }
 
@@ -145,18 +150,18 @@ contract NFTsCollection is Ownable, ReentrancyGuard, IERC165, ERC721 {
      * @notice no same URI Entered
      * Mint and list at a time in one transaction
      *
-     * @param _tokenURI uri from IPFS
-     * @param _tokenPrice initial price
+     * @param tokenURI_ uri from IPFS
+     * @param tokenPrice_ initial price
      * @return tokenId
      */
     function mintAndListOnMarketplace(
-        string memory _tokenURI,
-        uint256 _tokenPrice
-    ) external onlyOwner checkURI(_tokenURI) returns (uint256) {
+        string memory tokenURI_,
+        uint256 tokenPrice_
+    ) external onlyOwner checkURI(tokenURI_) returns (uint256) {
         _safeMint(owner(), tokenId);
 
-        tokenURIs[tokenId] = _tokenURI;
-        updateTokenPrice(tokenId, _tokenPrice);
+        tokenURIs[tokenId] = tokenURI_;
+        updateTokenPrice(tokenId, tokenPrice_);
         updateTokenListingStatus(tokenId, true);
 
         tokenId++;
@@ -168,50 +173,52 @@ contract NFTsCollection is Ownable, ReentrancyGuard, IERC165, ERC721 {
     // -----------------------------------------------------------------------
 
     /**
-     * @param _tokenId which id to list/delist
-     * @param _status true/false
+     * @param tokenId_ which id to list/delist
+     * @param status_ true/false
      */
     function updateTokenListingStatus(
-        uint256 _tokenId,
-        bool _status
-    ) public onlyOwner isTokenExists(_tokenId) {
-        isListed[_tokenId] = _status;
-        emit TokenListingStatusUpdated(_tokenId, _status);
+        uint256 tokenId_,
+        bool status_
+    ) public onlyOwner isTokenExists(tokenId_) {
+        isListed[tokenId_] = status_;
+        emit TokenListingStatusUpdated(tokenId_, status_);
     }
 
     /**
      * Anyone can buy any token if isForSale is true
      *
-     * @param _tokenId enter token id to buy
+     * @param tokenId_ enter token id to buy
      */
     function buy(
-        uint256 _tokenId
-    ) public payable nonReentrant isTokenExists(_tokenId) {
-        uint256 requiredETH = tokenPrice[_tokenId];
+        uint256 tokenId_
+    ) public payable nonReentrant isTokenExists(tokenId_) {
+        uint256 requiredETH = tokenPrice[tokenId_];
 
         // -------- Checks --------
-        if (!isForSale[_tokenId]) revert NotForSale(_tokenId);
+        if (!isForSale[tokenId_]) revert NotForSale(tokenId_);
         if (msg.value < requiredETH)
             revert InsufficientETH(msg.value, requiredETH);
 
-        address seller = ownerOf(_tokenId);
+        address seller = ownerOf(tokenId_);
 
         uint256 sellFee = NFTsMarketplaceFactory(factoryAddress).SELL_FEE();
         uint256 marketplaceFee = (msg.value * sellFee) / 1e18;
         uint256 sellerAmount = msg.value - marketplaceFee;
 
         // -------- Effects --------
-        updateSaleStatus(_tokenId, false);
+
+        isForSale[tokenId_] = false; // disable instant sell, depends on business logic
+        emit TokenIdSaleStatusUpdated(_msgSender(), tokenId_, false);
 
         // -------- Interactions --------
-        _safeTransfer(seller, _msgSender(), _tokenId);
+        _safeTransfer(seller, _msgSender(), tokenId_);
 
         (bool success, ) = payable(seller).call{value: sellerAmount}("");
         require(success, "Payment to seller failed");
 
         (bool sent, ) = payable(factoryAddress).call{value: marketplaceFee}("");
         require(sent, "Payment of fee failed");
-        emit TokenBought(_msgSender(), seller, _tokenId, requiredETH);
+        emit TokenBought(_msgSender(), seller, tokenId_, requiredETH);
     }
 
     /**
@@ -219,22 +226,22 @@ contract NFTsCollection is Ownable, ReentrancyGuard, IERC165, ERC721 {
      */
 
     function updateSaleStatus(
-        uint256 _tokenId,
-        bool _status
-    ) public isTokenExists(_tokenId) onlyTokenOwner(_tokenId) {
-        isForSale[_tokenId] = _status;
-        emit TokenIdSaleStatusUpdated(_msgSender(), _tokenId, _status);
+        uint256 tokenId_,
+        bool status_
+    ) public isTokenExists(tokenId_) onlyTokenOwner(tokenId_) {
+        isForSale[tokenId_] = status_;
+        emit TokenIdSaleStatusUpdated(_msgSender(), tokenId_, status_);
     }
     /**
      * update token price
      */
     function updateTokenPrice(
-        uint256 _tokenId,
-        uint256 _newPrice
-    ) public isTokenExists(_tokenId) onlyTokenOwner(_tokenId) {
-        uint256 oldPrice = tokenPrice[_tokenId];
-        tokenPrice[_tokenId] = _newPrice;
-        emit TokenPriceUpdated(_tokenId, oldPrice, _newPrice);
+        uint256 tokenId_,
+        uint256 newPrice_
+    ) public isTokenExists(tokenId_) onlyTokenOwner(tokenId_) {
+        uint256 oldPrice = tokenPrice[tokenId_];
+        tokenPrice[tokenId_] = newPrice_;
+        emit TokenPriceUpdated(tokenId_, oldPrice, newPrice_);
     }
 
     // -----------------------------------------------------------------------
@@ -245,17 +252,17 @@ contract NFTsCollection is Ownable, ReentrancyGuard, IERC165, ERC721 {
      * @notice Returns the metadata URI for a given token ID.
      * @dev Uses the `baseURI` + `tokenURIs[_tokenId]` if `baseURI` is set.
      *      Reverts if the token does not exist.
-     * @param _tokenId The ID of the token whose URI is being queried.
+     * @param tokenId_ The ID of the token whose URI is being queried.
      * @return The full token metadata URI.
      */
 
     function tokenURI(
-        uint256 _tokenId
+        uint256 tokenId_
     ) public view override returns (string memory) {
-        _requireOwned(_tokenId);
+        _requireOwned(tokenId_);
         return
             bytes(baseURI).length > 0
-                ? string.concat(baseURI, tokenURIs[_tokenId])
+                ? string.concat(baseURI, tokenURIs[tokenId_])
                 : "";
     }
 
@@ -263,15 +270,15 @@ contract NFTsCollection is Ownable, ReentrancyGuard, IERC165, ERC721 {
      * @notice Updates the base URI for all tokens in this collection.
      * @dev Can only be called by the contract owner.
      *      Ensures the new URI is not empty through `checkURI` modifier.
-     * @param _baseURI The new base URI to be set.
+     * @param baseURI_ The new base URI to be set.
      *
      * Emits a {BaseURIUpdated} event.
      */
     function updateBaseURI(
-        string memory _baseURI
-    ) external onlyOwner checkURI(_baseURI) {
+        string memory baseURI_
+    ) external onlyOwner checkURI(baseURI_) {
         string memory _oldBaseURI = baseURI;
-        baseURI = _baseURI;
+        baseURI = baseURI_;
         emit BaseURIUpdated(_oldBaseURI, baseURI);
     }
 
@@ -283,22 +290,22 @@ contract NFTsCollection is Ownable, ReentrancyGuard, IERC165, ERC721 {
      * @notice Transfers contract ownership and all tokens owned by the current owner to a new owner.
      * @dev Can only be called by the factory contract (`onlyFactory`), when this collection is sold to new owner
      *      Iterates through all minted token IDs and transfers those owned by the current owner.
-     * @param _newOwner The address that will become the new owner of the contract and tokens.
+     * @param newOwner_ The address that will become the new owner of the contract and tokens.
      */
 
     function transferOwnershipFromFactory(
-        address _newOwner
+        address newOwner_
     ) external onlyFactory {
         address currentOwner = owner();
         uint256 maxLength = tokenId;
 
         for (uint256 id = 0; id < maxLength; id++) {
             if (ownerOf(id) == currentOwner) {
-                _safeTransfer(currentOwner, _newOwner, id);
+                _safeTransfer(currentOwner, newOwner_, id);
             }
         }
 
-        _transferOwnership(_newOwner);
+        _transferOwnership(newOwner_);
     }
 
     // -----------------------------------------------------------------------

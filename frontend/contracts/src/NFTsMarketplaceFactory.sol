@@ -6,43 +6,68 @@ import {NFTsCollection} from "./NFTsCollection.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 contract NFTsMarketplaceFactory is Ownable, ReentrancyGuard {
-    // Taking collectionId, beacuase there can be multiple collections at same addres then it will vanish oldone
+    // -----------------------------------------------------------------------
+    // State Variables
+    // -----------------------------------------------------------------------
 
     uint256 public collectionId;
-
-    uint256 public immutable SELL_FEE = 3e16; //  charging 3% the eth amount of token
+    uint256 public immutable SELL_FEE = 3e16; // 3% fee
 
     mapping(uint256 => mapping(address => address)) public collections; // id => owner => collection
     mapping(address => address) private ownerOfCollection; // collection => owner
     mapping(uint256 => bool) public isForSale; // id => true/false
-    mapping(uint256 => uint256) public collectionPrice; // id => 5 ETH
+    mapping(uint256 => uint256) public collectionPrice; // id => price in ETH
+
+    // -----------------------------------------------------------------------
+    // Errors
+    // -----------------------------------------------------------------------
 
     error CollectionIsNotForSale(uint256 collectionId, address collection);
     error UnauthorizedCollectionOwner(address caller, address owner);
     error InsufficientETH(uint256 sent, uint256 required);
+
+    // -----------------------------------------------------------------------
+    // Events
+    // -----------------------------------------------------------------------
 
     event CollectionSaleStatusUpdated(
         uint256 indexed collectionId,
         address indexed by,
         bool indexed isAllowed
     );
+
     event CollectionPriceUpdated(
         uint256 indexed collectionId,
         uint256 indexed oldPrice,
         uint256 indexed newPrice
     );
 
+    // -----------------------------------------------------------------------
+    // Constructor
+    // -----------------------------------------------------------------------
+
+    /** Initialize marketplace and set owner */
     constructor() Ownable(_msgSender()) {
         transferOwnership(_msgSender());
     }
 
+    // -----------------------------------------------------------------------
+    // External / Public Functions
+    // -----------------------------------------------------------------------
+
+    /**
+     * @notice Create a new NFTsCollection
+     * @param collectionName_ name of collection
+     * @param collectionSymbol_ symbol of collection
+     * @return collection id
+     */
     function createCollection(
-        string calldata collectionName,
-        string calldata collectionSymbol
+        string calldata collectionName_,
+        string calldata collectionSymbol_
     ) public returns (uint256) {
         NFTsCollection collection = new NFTsCollection(
-            collectionName,
-            collectionSymbol,
+            collectionName_,
+            collectionSymbol_,
             _msgSender(),
             address(this)
         );
@@ -54,70 +79,101 @@ contract NFTsMarketplaceFactory is Ownable, ReentrancyGuard {
         return collectionId - 1;
     }
 
-    function _checkCollectionStatus(
-        uint256 _collectionId,
-        address _of
-    ) internal {
-        if (!isForSale[_collectionId]) {
-            revert CollectionIsNotForSale(
-                _collectionId,
-                collections[_collectionId][_of]
-            );
-        }
-    }
-
+    /**
+     * @notice Buy a full collection from a seller
+     * @param collectionId_ id of collection
+     * @param of_ seller address
+     */
     function BuyCollection(
-        uint256 _collectionId,
-        address _of
+        uint256 collectionId_,
+        address of_
     ) public payable nonReentrant {
-        // CHECKS
         NFTsCollection collection = NFTsCollection(
-            payable(collections[_collectionId][_of])
+            payable(collections[collectionId_][of_])
         );
 
-        _checkCollectionStatus(_collectionId, _of);
+        _checkCollectionStatus(collectionId_, of_);
 
-        uint256 requiredETH = collectionPrice[_collectionId];
+        uint256 requiredETH = collectionPrice[collectionId_];
         if (msg.value < requiredETH) {
             revert InsufficientETH(msg.value, requiredETH);
         }
 
-        uint256 numberOfTokens = collection.balanceOf(_of);
+        uint256 numberOfTokens = collection.balanceOf(of_);
         if (numberOfTokens == 0) {
-            revert("Seller has no tokens"); // safety check
+            revert("Seller has no tokens");
         }
 
-        // EFFECTS
-
-        // Calculate fees before interactions
-        uint256 pricePerToken = msg.value / numberOfTokens;
-        uint256 feePerToken = (pricePerToken * SELL_FEE) / 1e18;
-        uint256 marketplaceFee = feePerToken * numberOfTokens;
+        uint256 marketplaceFee = (msg.value * SELL_FEE) / 1e18;
         uint256 sellerAmount = msg.value - marketplaceFee;
 
-        // Update storage before external calls
-        collections[_collectionId][_msgSender()] = address(collection);
-        delete collections[_collectionId][_of];
+        collections[collectionId_][_msgSender()] = address(collection);
+        delete collections[collectionId_][of_];
         ownerOfCollection[address(collection)] = _msgSender();
 
-        // INTERACTIONS
-
-        // Pay seller
-        (bool success, ) = payable(_of).call{value: sellerAmount}("");
+        (bool success, ) = payable(of_).call{value: sellerAmount}("");
         require(success, "Seller payment failed");
 
-        // rest of the amount set in the contract automatically
-
-        // Transfer ownership of collection
         collection.transferOwnershipFromFactory(_msgSender());
     }
 
-    // check Collection Owner
-    function _validateCollectionOwner(uint256 _collectionId) internal {
-        address _collection = collections[_collectionId][_msgSender()];
+    /**
+     * @notice Update collection price and sale status
+     * @param collectionId_ id of collection
+     * @param newPrice_ new price in ETH
+     * @param status_ sale status (true/false)
+     */
+    function UpdateCollectionStatus(
+        uint256 collectionId_,
+        uint256 newPrice_,
+        bool status_
+    ) external {
+        _validateCollectionOwner(collectionId_);
+        isForSale[collectionId_] = status_;
+        uint256 _oldPrice = collectionPrice[collectionId_];
+        collectionPrice[collectionId_] = newPrice_;
 
-        NFTsCollection collection = NFTsCollection(payable(_collection));
+        emit CollectionPriceUpdated(collectionId_, _oldPrice, newPrice_);
+        emit CollectionSaleStatusUpdated(collectionId_, _msgSender(), status_);
+    }
 
+    /**
+     * @notice Withdraw collected fees
+     */
+    function withdrawFees() external onlyOwner {
+        (bool success, ) = payable(owner()).call{value: address(this).balance}(
+            ""
+        );
+        require(success, "withdraw failed");
+    }
+
+    // -----------------------------------------------------------------------
+    // Internal / Private Functions
+    // -----------------------------------------------------------------------
+
+    /**
+     * @notice Check if collection is for sale
+     * @param collectionId_ id of collection
+     * @param of_ owner address
+     */
+    function _checkCollectionStatus(
+        uint256 collectionId_,
+        address of_
+    ) internal view {
+        if (!isForSale[collectionId_]) {
+            revert CollectionIsNotForSale(
+                collectionId_,
+                collections[collectionId_][of_]
+            );
+        }
+    }
+
+    /**
+     * @notice Validate that msg.sender owns the collection
+     * @param collectionId_ id of collection
+     */
+    function _validateCollectionOwner(uint256 collectionId_) internal view {
+        address _collection = collections[collectionId_][_msgSender()];
         if (_msgSender() != ownerOfCollection[_collection]) {
             revert UnauthorizedCollectionOwner(
                 _msgSender(),
@@ -126,33 +182,14 @@ contract NFTsMarketplaceFactory is Ownable, ReentrancyGuard {
         }
     }
 
-    // update the price and status
-    function UpdateCollectionStatus(
-        uint256 _collectionId,
-        uint256 _newPrice,
-        bool _status
-    ) external {
-        _validateCollectionOwner(_collectionId);
-        isForSale[_collectionId] = _status;
-        uint256 _oldPrice = collectionPrice[_collectionId];
+    // -----------------------------------------------------------------------
+    // Fallbacks
+    // -----------------------------------------------------------------------
 
-        collectionPrice[_collectionId] = _newPrice;
-
-        emit CollectionPriceUpdated(_collectionId, _oldPrice, _newPrice);
-        emit CollectionSaleStatusUpdated(_collectionId, _msgSender(), _status);
-    }
-
-    function withdrawFees() external onlyOwner {
-        (bool success, ) = payable(owner()).call{value: address(this).balance}(
-            ""
-        );
-        require(success, "withdraw faild");
-    }
-
-    // Accept plain ETH only
+    /** Accept plain ETH */
     receive() external payable {}
 
-    // Reject bad function selectors
+    /** Reject invalid function calls */
     fallback() external payable {
         revert("Invalid function call");
     }
