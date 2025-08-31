@@ -1,6 +1,6 @@
 # Dream NFT Marketplace
 
-![alt](Image.png)
+![alt](frontend/Image.png)
 
 **Description:** `Dream NFT Marketplace` is an open NFT marketplace for buyers and sellers.
 
