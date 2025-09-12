@@ -1,22 +1,29 @@
 @import url("https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Lalezar&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Istok+Web:ital,wght@0,400;0,700;1,400;1,700&family=Lalezar&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=Istok+Web:ital,wght@0,400;0,700;1,400;1,700&family=Lalezar&family=Michroma&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=Istok+Web:ital,wght@0,400;0,700;1,400;1,700&family=Lalezar&family=Michroma&family=Unbounded:wght@200..900&display=swap");
+
 @import "tailwindcss";
 
 @theme {
   --color-primary-black: #201f1f;
   --color-dark-black: #000000;
   --color-action-btn-green: #bfff6b;
+  --color-paragraph: #c0c0c0;
 
-  --font-sans: "Unbounded", sans-serif;
   --font-unbounded: "Unbounded", sans-serif;
   --font-lalezar: "Lalezar", cursive;
-  --font-istokWeb: "IstokWeb";
+  --font-istokWeb: "IstokWeb", sans-serif;
+  --font-michroma: "Michroma", sans-serif;
 }
 
-h1 {
-  -webkit-text-stroke: 0.01em rgb(248, 246, 246);
-  /* color: #fff; */
-  /* font-stretch: 0%; */
-  /* font-weight: 200; */
+#hero-heading {
+  font-weight: 400;
+  font-style: normal;
+}
+#line {
+  background-color: #747474;
+  width: 20rem;
+  height: 1px;
 }

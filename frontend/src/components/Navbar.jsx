@@ -11,7 +11,7 @@ const Navbar = () => {
           <h2 class="font-bold font-unbounded ">Dream NFT Marketplace</h2>
         </div>
 
-        <ul class=" decoration-0 flex justify-center gap-10 items-center text-sm text-stroke-3">
+        <ul class=" decoration-0 flex justify-center gap-10 items-center text-sm text-stroke-3 text-paragraph">
           <li class="">CREATE COLLECTION</li>
           <li>EXPLORE</li>
         </ul>
