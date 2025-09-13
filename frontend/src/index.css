@@ -28,3 +28,12 @@
 #card {
   background-color: rgb(131, 131, 131, 0.1);
 }
+
+th {
+  font-weight: normal;
+}
+
+.collection-card:hover {
+  background-color: rgb(131, 131, 131, 0.1);
+  cursor: pointer;
+}
