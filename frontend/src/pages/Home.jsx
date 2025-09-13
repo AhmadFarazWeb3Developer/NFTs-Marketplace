@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import Footer from "../components/Footer";
 import TopCollections from "../components/TopCollections";
+import CollectionStatistics from "../components/CollectionStatistics";
 
 const Home = () => {
   return (
@@ -14,7 +15,8 @@ const Home = () => {
         <Hero />
 
         <TopCollections />
-        {/* <Footer /> */}
+        <CollectionStatistics />
+        <Footer />
       </div>
     </>
   );

@@ -28,6 +28,9 @@ const CollectionCard = () => {
             <th scope="col" className="px-2 py-3">
               REMAINING
             </th>
+            <th scope="col" className="px-2 py-3">
+              FOR SALE
+            </th>
           </tr>
         </thead>
         <tbody className="font-unbounded font-light">
@@ -50,6 +53,7 @@ const CollectionCard = () => {
             <td className="px-2 py-4">654</td>
             <td className="px-2 py-4">428</td>
             <td className="px-2 py-4">12</td>
+            <td className="px-2 py-4">Active</td>
           </tr>
 
           {/* Second collection */}
@@ -71,6 +75,7 @@ const CollectionCard = () => {
             <td className="px-2 py-4">900</td>
             <td className="px-2 py-4">567</td>
             <td className="px-2 py-4">234</td>
+            <td className="px-2 py-4">Active</td>
           </tr>
 
           {/* Third collection */}
@@ -92,6 +97,7 @@ const CollectionCard = () => {
             <td className="px-2 py-4">1,200</td>
             <td className="px-2 py-4">890</td>
             <td className="px-2 py-4">310</td>
+            <td className="px-2 py-4">Active</td>
           </tr>
 
           {/* Fourth collection */}
@@ -113,6 +119,7 @@ const CollectionCard = () => {
             <td className="px-2 py-4">800</td>
             <td className="px-2 py-4">650</td>
             <td className="px-2 py-4">178</td>
+            <td className="px-2 py-4">Active</td>
           </tr>
 
           {/* Fifth collection */}
@@ -134,6 +141,7 @@ const CollectionCard = () => {
             <td className="px-2 py-4">2,500</td>
             <td className="px-2 py-4">1,340</td>
             <td className="px-2 py-4">420</td>
+            <td className="px-2 py-4">Active</td>
           </tr>
         </tbody>
       </table>
