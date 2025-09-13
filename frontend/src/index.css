@@ -8,6 +8,7 @@
   --color-action-btn-green: #bfff6b;
   --color-paragraph: #c0c0c0;
   --color-card: #838383;
+  --color-card-gray: #4e4b4b;
 
   --font-unbounded: sans-serif, "Unbounded";
   --font-unbounded: "Unbounded", sans-serif;
@@ -36,4 +37,12 @@ th {
 .collection-card:hover {
   background-color: rgb(131, 131, 131, 0.1);
   cursor: pointer;
+}
+
+.circle {
+  width: 500px;
+  height: 500px;
+  filter: blur(250px);
+  right: 0;
+  opacity: 0.7;
 }
