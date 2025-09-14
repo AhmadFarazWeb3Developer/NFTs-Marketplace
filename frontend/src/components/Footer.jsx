@@ -12,8 +12,8 @@ import {
 const Footer = () => {
   return (
     <>
-      <div className="footer flex bg-black  text-white px-12 py-6 w-full">
-        <div className="left font-unbounded">
+      <div className="footer flex bg-black  text-white px-12 py-6 w-full ">
+        <div className="left font-unbounded ">
           <h1 className="text-action-btn-green text-2xl font-medium">
             BUYING <span className="text-white">POLICY</span>{" "}
           </h1>
@@ -26,7 +26,7 @@ const Footer = () => {
           </h2>
         </div>
 
-        <div className="right ml-12 font-michroma font-normal">
+        <div className="right ml-12 font-michroma font-normal ">
           <div>
             <h1>JOIN THE COMMUNITY</h1>
 

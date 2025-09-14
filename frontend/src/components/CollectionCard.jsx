@@ -2,9 +2,9 @@ import React from "react";
 
 const CollectionCard = () => {
   return (
-    <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
+    <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table className="w-full table-fixed text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
-        <thead className="text-xs  uppercase dark:text-gray-500 font-unbounded font-light">
+        <thead className="text-xs uppercase dark:text-gray-500 font-unbounded font-light">
           <tr>
             <th scope="col" className="px-2 py-3 w-[120px]">
               COLLECTION

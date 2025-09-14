@@ -1,4 +1,5 @@
-import React from "react";
+import { Routes, Route, Link } from "react-router-dom";
+import Explore from "../pages/Explore";
 
 const Navbar = () => {
   return (
@@ -12,14 +13,23 @@ const Navbar = () => {
         </div>
 
         <ul class=" decoration-0 flex justify-center gap-10 items-center text-xs text-stroke-3 text-paragraph">
-          <li className="">CREATE COLLECTION</li>
-          <li>EXPLORE</li>
+          <Link to="create-collection">
+            <li className="cursor-pointer">CREATE COLLECTION</li>
+          </Link>
+          <Link to="explore">
+            <li className="cursor-pointer">EXPLORE</li>
+          </Link>
         </ul>
 
         <button class=" py-2 px-4 rounded-3xl bg-action-btn-green text-black font-unbounded text-xs  font-semibold">
           Connect Wallet
         </button>
       </div>
+
+      <Routes>
+        <Route path="/create-collection"></Route>
+        <Route path="/explore" element={<Explore />}></Route>
+      </Routes>
     </>
   );
 };

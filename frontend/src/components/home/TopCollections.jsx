@@ -1,5 +1,5 @@
 import React from "react";
-import CollectionCard from "./CollectionCard";
+import CollectionCard from "../CollectionCard";
 const TopCollections = () => {
   return (
     <>

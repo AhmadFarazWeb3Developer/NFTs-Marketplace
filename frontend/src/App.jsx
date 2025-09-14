@@ -1,10 +1,16 @@
 import "./App.css";
+import { BrowserRouter } from "react-router-dom";
+
+import Explore from "./pages/Explore";
 
 import Home from "./pages/Home";
 function App() {
   return (
     <>
-      <Home />
+      <BrowserRouter>
+        <Home />
+        <Explore />
+      </BrowserRouter>
     </>
   );
 }
