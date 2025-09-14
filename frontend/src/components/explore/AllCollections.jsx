@@ -2,7 +2,7 @@ import CollectionCard from "../CollectionCard";
 import Navbar from "../Navbar";
 
 import { LucideSortAsc } from "lucide-react";
-import { MdOutlineNavigateNext, MdOutlineNavigateBefore } from "react-icons/md";
+
 import { GrNext, GrPrevious } from "react-icons/gr";
 const AllCollections = () => {
   return (

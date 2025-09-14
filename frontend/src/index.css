@@ -79,17 +79,30 @@ input[type="radio"] {
   cursor: pointer;
 }
 
-/* Change color when selected */
 input[type="radio"]:checked {
-  /* background-color: --var(action-btn-green); */
   border-color: #bfff6b;
   border: 1 solid #bfff6b;
   background-color: none;
 }
 
-/* Optional: Add focus styles */
 input[type="radio"]:focus {
   outline: none;
   box-shadow: 0 0 0 2px rgba(191, 255, 107, 0.4);
 }
 
+.nft-card th {
+  font-size: 11px;
+}
+
+.nft-card tr {
+  font-size: 12px;
+}
+
+.search-owner-icon {
+  color: #888c83;
+}
+
+.search-owner-input {
+  color: #888c83;
+  font-size: 12px;
+}
