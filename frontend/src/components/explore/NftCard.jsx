@@ -1,4 +1,8 @@
+import { Navigate, useNavigate } from "react-router-dom";
+
 const NftCard = () => {
+  const navigateTo = useNavigate();
+
   return (
     <div className="nft-card relative overflow-x-auto shadow-md rounded-sm border border-white/5">
       <table className="w-full table-fixed text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -29,7 +33,10 @@ const NftCard = () => {
         </thead>
         <tbody className="font-unbounded font-light">
           {/* Rich Lizard */}
-          <tr className="collection-card border-b border-gray-700 text-white hover:border-none">
+          <tr
+            className="collection-card border-b border-gray-700 text-white hover:border-none"
+            onClick={() => navigateTo("/explore/buyNft")}
+          >
             <td className="px-2 py-3">
               <div className="w-14 h-14">
                 <img

@@ -5,11 +5,12 @@ import { LucideSortAsc } from "lucide-react";
 
 import { GrNext, GrPrevious } from "react-icons/gr";
 import { FiSearch } from "react-icons/fi";
+import Footer from "../Footer";
 
 const AllNFTs = () => {
   return (
     <>
-      <div className="all-nfts flex flex-col items-center bg-primary-black px-10  ">
+      <div className="all-nfts flex flex-col items-center bg-primary-black px-10  border-1 ">
         <div className="w-full border-t-1 border-white/10 mb-10"></div>
 
         <div className="flex  w-full ">
@@ -71,7 +72,21 @@ const AllNFTs = () => {
           </div>
           <NftCard />
         </div>
+
+        <div className="next-previous-btns flex flex-row items-center justify-center py-4 text-sm gap-5  font-unbounded font-extralight  w-full  text-action-btn-green">
+          <div className=" cursor-pointer">
+            <GrPrevious />
+          </div>
+          <div className="">0</div>
+          <span>/</span>
+          <div>901</div>
+          <div className="flex justify-center items-center cursor-pointer">
+            <GrNext />
+          </div>
+        </div>
       </div>
+
+      <Footer />
     </>
   );
 };
