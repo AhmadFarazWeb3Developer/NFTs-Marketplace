@@ -9,19 +9,6 @@ import Explore from "./pages/Explore.jsx";
 import BuyNFT from "./pages/BuyNFT.jsx";
 
 const router = createBrowserRouter([
-  // {
-  //   path: "/",
-  //   element: <Home />,
-  // },
-  // {
-  //   path: "/explore",
-  //   element: <Explore />,
-  // },
-
-  // {
-  //   path: "explore/BuyNft",
-  //   element: <BuyNFT />,
-  // },
   {
     path: "/",
     element: <App />,
@@ -44,6 +31,6 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router}>{/* <App /> */}</RouterProvider>
+    <RouterProvider router={router}></RouterProvider>
   </StrictMode>
 );
