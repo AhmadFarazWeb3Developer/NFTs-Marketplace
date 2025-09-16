@@ -106,3 +106,7 @@ input[type="radio"]:focus {
   color: #888c83;
   font-size: 12px;
 }
+
+.small-paragraph {
+  font-size: 10px;
+}
