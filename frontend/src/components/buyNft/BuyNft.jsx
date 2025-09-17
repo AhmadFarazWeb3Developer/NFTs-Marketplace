@@ -44,7 +44,7 @@ const BuyNft = () => {
           </div>
 
           {/* Price & Buy */}
-          <div className="border border-gray-700 rounded-md p-4 my-4">
+          <div className="border border-gray-700 rounded-md p-4 my-4 bg-black/20">
             <p className="font-light text-paragraph text-xs">BUY FOR</p>
             <h2 className="text-lg my-4 font-medium">
               50.00 ETH{" "}
@@ -57,7 +57,7 @@ const BuyNft = () => {
 
           {/* Tabs */}
           <div>
-            <div className="flex gap-6 border-b border-gray-700 pb-1 text-xs">
+            <div className="flex gap-6 border-b border-gray-700 pb-1 text-xs ">
               <button
                 onClick={() => setActiveTab("traits")}
                 className={`cursor-pointer font-light ${
@@ -72,8 +72,8 @@ const BuyNft = () => {
                 onClick={() => setActiveTab("activity")}
                 className={`cursor-pointer font-light ${
                   activeTab === "activity"
-                    ? "text-action-btn-green font-medium"
-                    : "text-paragraph hover:text-action-btn-green"
+                    ? "text-action-btn-green font-medium "
+                    : "text-paragraph hover:text-action-btn-green "
                 }`}
               >
                 Activity
@@ -81,7 +81,7 @@ const BuyNft = () => {
             </div>
 
             {/* Tab content */}
-            <div className="mt-4 border border-gray-700 rounded-sm p-4 font-light text-xs">
+            <div className="mt-4 border border-gray-700 rounded-sm p-4 font-light text-xs bg-black/20">
               {activeTab === "traits" && (
                 <div>
                   <p className="small-paragraph ">Power: Legendary</p>

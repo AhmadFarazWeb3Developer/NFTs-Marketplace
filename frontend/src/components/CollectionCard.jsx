@@ -1,6 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const CollectionCard = () => {
+  const navigateTo = useNavigate();
+
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table className="w-full table-fixed text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
@@ -35,7 +38,12 @@ const CollectionCard = () => {
         </thead>
         <tbody className="font-unbounded font-light">
           {/* First collection */}
-          <tr className="collection-card border-b border-gray-700 text-white hover:border-none">
+          <tr
+            className="collection-card border-b border-gray-700 text-white hover:border-none"
+            onClick={() => {
+              navigateTo("/explore/collection");
+            }}
+          >
             <td className="px-6 py-4">
               <div className="w-14 h-14">
                 <img
