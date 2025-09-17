@@ -1,5 +1,5 @@
 import React from "react";
-import SingleCollectionsCard from "../components/singleCollectionsCard/SingleCollectionsCard";
+import SingleCollectionsCard from "../components/single-collections-card/SingleCollectionsCard";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -67,7 +67,7 @@ const SingleCollection = () => {
             <input
               type="search"
               placeholder="Search NFT by name or Id"
-              className="placeholder:text-xs placeholder:font-extralight placeholder:text-paragraph/70 "
+              className="placeholder:text-xs placeholder:font-extralight placeholder:text-paragraph/70  "
             />
             <CiSearch className="text-paragraph/70" />
           </div>
@@ -76,7 +76,9 @@ const SingleCollection = () => {
             <MdOutlineTableRows size={24} className="text-paragraph/70" />
           </div>
         </div>
-        <div className="nft-cards py-4 flex gap-4 ">
+        <div className="nft-cards py-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 ">
+          <SingleCollectionsCard />
+          <SingleCollectionsCard />
           <SingleCollectionsCard />
           <SingleCollectionsCard />
           <SingleCollectionsCard />

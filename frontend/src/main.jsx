@@ -8,6 +8,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Explore from "./pages/Explore.jsx";
 import BuyNFT from "./pages/BuyNFT.jsx";
 import SingleCollection from "./pages/SingleCollection.jsx";
+import CreateCollection from "./pages/CreateCollection.jsx";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
       {
         path: "/explore",
         element: <Explore />,
+      },
+      {
+        path: "/create-collection",
+        element: <CreateCollection />,
       },
       {
         path: "/explore/buyNft",
