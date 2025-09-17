@@ -9,6 +9,7 @@ import { SiEthereum } from "react-icons/si";
 import { CiGrid41 } from "react-icons/ci";
 import { MdOutlineTableRows } from "react-icons/md";
 import { CiSearch } from "react-icons/ci";
+import MintNFT from "./MintNFT";
 
 const SingleCollection = () => {
   return (
@@ -82,6 +83,9 @@ const SingleCollection = () => {
           <SingleCollectionsCard />
           <SingleCollectionsCard />
           <SingleCollectionsCard />
+        </div>
+        <div className="border-1   flex items-center justify-center">
+          <MintNFT />
         </div>
       </div>
 

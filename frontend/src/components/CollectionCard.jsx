@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import MintNFT from "../pages/MintNFT";
 
 const CollectionCard = () => {
   const navigateTo = useNavigate();
@@ -153,6 +154,8 @@ const CollectionCard = () => {
           </tr>
         </tbody>
       </table>
+
+    
     </div>
   );
 };

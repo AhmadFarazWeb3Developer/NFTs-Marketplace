@@ -1,7 +1,8 @@
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import Explore from "../pages/Explore";
 
 const Navbar = () => {
+  const navigateTo = useNavigate("");
   return (
     <>
       <div
@@ -21,7 +22,12 @@ const Navbar = () => {
           </Link>
         </ul>
 
-        <button class=" py-2 px-4 rounded-3xl bg-action-btn-green text-black font-unbounded text-xs  font-semibold">
+        <button
+          class=" py-2 px-4 rounded-3xl bg-action-btn-green text-black font-unbounded text-xs  font-semibold cursor-pointer"
+          onClick={() => {
+            navigateTo("/dashboard");
+          }}
+        >
           Connect Wallet
         </button>
       </div>

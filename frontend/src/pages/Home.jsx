@@ -10,7 +10,6 @@ const Home = () => {
   return (
     <>
       <div className="home-page" class=" h-screen bg-primary-black">
-      
         <Navbar />
         <Hero />
 

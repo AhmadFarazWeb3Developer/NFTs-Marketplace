@@ -9,6 +9,7 @@ import Explore from "./pages/Explore.jsx";
 import BuyNFT from "./pages/BuyNFT.jsx";
 import SingleCollection from "./pages/SingleCollection.jsx";
 import CreateCollection from "./pages/CreateCollection.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,8 @@ const router = createBrowserRouter([
         path: "/create-collection",
         element: <CreateCollection />,
       },
+
+      { path: "/dashboard", element: <Dashboard /> },
       {
         path: "/explore/buyNft",
         element: <BuyNFT />,
