@@ -51,11 +51,11 @@ createAppKit({
   //   "--w3m-color": "#bfff6b",
   //   "--w3m-accent": "#bfff6b",
 
-    "--w3m-font-family": "var(--font-unbounded)",
+  "--w3m-font-family": "var(--font-unbounded)",
   // },
 });
 
-const Web3Provider = ({ children }) => {
+const ReownAppKit = ({ children }) => {
   return (
     <WagmiProvider config={wagmiAdapter.wagmiConfig}>
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
@@ -63,4 +63,4 @@ const Web3Provider = ({ children }) => {
   );
 };
 
-export default Web3Provider;
+export default ReownAppKit;

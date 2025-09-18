@@ -1,10 +1,21 @@
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import Explore from "../pages/Explore";
-
 import { AppKitAccountButton, AppKitConnectButton } from "@reown/appkit/react";
+
+import { useAccount } from "wagmi";
+import { ConnectKitButton } from "connectkit";
+import { useEffect } from "react";
+import CustomConnectButton from "../blockchain-interaction/CustomConnectButton";
 
 const Navbar = () => {
   const navigateTo = useNavigate("");
+
+  const { isConnected, isConnecting, isDisconnected } = useAccount();
+
+  useEffect(() => {
+    console.log(isConnected);
+  }, [isConnected, isConnecting, isDisconnected]);
+
   return (
     <>
       <div
@@ -14,7 +25,6 @@ const Navbar = () => {
         <div className="logo" class="font-bold ">
           <h2 class="font-medium text-xs font-unbounded">Dream NFTs</h2>
         </div>
-
         <ul class=" decoration-0 flex justify-center gap-10 items-center text-xs text-stroke-3 text-paragraph">
           <Link to="create-collection">
             <li className="cursor-pointer">CREATE COLLECTION</li>
@@ -24,20 +34,9 @@ const Navbar = () => {
           </Link>
         </ul>
 
-        {/* <div className="relative border-1 ">
-          <p className="absolute text-black">Connect Wallet</p>
-          <AppKitConnectButton
-            className="connect-button absolute "
-            size="sm"
-            loadingLabel="Connecting..."
-          />
-        </div> */}
+        {/* <ConnectKitButton /> */}
 
-        <AppKitConnectButton
-          className="connect-button"
-          size="md"
-          loadingLabel="Connecting..."
-        />
+        <CustomConnectButton />
       </div>
 
       <Routes>
