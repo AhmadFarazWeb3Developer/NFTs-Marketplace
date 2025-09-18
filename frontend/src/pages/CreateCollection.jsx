@@ -1,19 +1,37 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { UploadIcon } from "lucide-react";
+import { Upload } from "lucide-react";
 
 const CreateCollection = () => {
+  const [name, setName] = useState("");
+  const [symbol, setSymbol] = useState("");
+  const [image, setImage] = useState("");
+
+  const createCollection = (event) => {
+    event.preventDefault();
+  };
+
+  const uploadCollectionImage = (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      setImage(file);
+    }
+  };
+
   return (
     <>
       <Navbar />
-      <div className="create-collection flex w-full justify-center items-center gap-10 flex-col bg-primary-black px-10 py-10 font-unbounded text-white">
-        <h1 className="text-action-btn-green font-semibold text-3xl ">
+      <div className="create-collection flex w-full justify-center items-center gap-10 flex-col bg-primary-black px-10 py-8 font-unbounded text-white">
+        <h1 className="text-action-btn-green font-semibold text-2xl ">
           CREATE <span className="text-white">COLLECTION</span>
         </h1>
 
         <form
           action=""
-          className="border-1 border-paragraph/50 rounded-md px-10  w-1/2 flex flex-col gap-6 py-10"
+          className="border-1 border-paragraph/60 rounded-md px-10  w-1/2 flex flex-col gap-6 py-10"
         >
           <div className="flex flex-col gap-1 w-full">
             <label htmlFor="" className="font-light ">
@@ -22,7 +40,8 @@ const CreateCollection = () => {
             <input
               type="text"
               placeholder="Board Apes etc."
-              className="w-full border-1 border-paragraph/70 px-2 py-2 rounded-sm focus:border-action-btn-green"
+              className="w-full border border-paragraph/70 px-2 py-2 rounded-sm focus:border-action-btn-green"
+              onChange={(e) => setName(e.target.value)}
             />
           </div>
           <div className="flex flex-col gap-1 w-full">
@@ -32,15 +51,40 @@ const CreateCollection = () => {
             <input
               type="text"
               placeholder="BA etc"
-              className="w-full border-1 border-paragraph/70 px-2 py-2 rounded-md"
+              className="w-full border border-paragraph/70 px-2 py-2 rounded-md"
+              onChange={(e) => setSymbol(e.target.value)}
             />
           </div>
 
+          <div className="w-full rounded-md border border-paragraph/50 p-6 flex flex-col items-center justify-center gap-3 bg-black/10 hover:bg-black/20 transition-colors cursor-pointer">
+            <input
+              type="file"
+              id="file-upload"
+              className="hidden"
+              onChange={uploadCollectionImage}
+            />
+
+            <label
+              htmlFor="file-upload"
+              className="flex flex-col items-center justify-center cursor-pointer"
+            >
+              <div className=" flex items-center justify-center w-16 h-16 rounded-full bg-action-btn-green/20 hover:bg-action-btn-green/30 transition-colors">
+                <Upload className="w-8 h-8 text-action-btn-green" />
+              </div>
+              <p className="mt-2 text-sm font-medium text-paragraph">
+                Upload Image
+              </p>
+              <p className="text-xs text-paragraph/70">PNG, JPG up to 5MB</p>
+            </label>
+          </div>
           <div
             className="flex flex-col gap-2 w-full
           "
           >
-            <button className="w-full bg-action-btn-green py-2  rounded-sm text-black">
+            <button
+              className="w-full bg-action-btn-green py-2  rounded-sm text-black"
+              onClick={createCollection}
+            >
               CREATE
             </button>
             <span className=" font-extralight text-xs  text-red-600/90">

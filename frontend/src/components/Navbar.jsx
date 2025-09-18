@@ -1,20 +1,16 @@
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import Explore from "../pages/Explore";
-import { AppKitAccountButton, AppKitConnectButton } from "@reown/appkit/react";
 
 import { useAccount } from "wagmi";
-import { ConnectKitButton } from "connectkit";
-import { useEffect } from "react";
+
 import CustomConnectButton from "../blockchain-interaction/CustomConnectButton";
+
+import { LiaUserCircleSolid } from "react-icons/lia";
 
 const Navbar = () => {
   const navigateTo = useNavigate("");
 
-  const { isConnected, isConnecting, isDisconnected } = useAccount();
-
-  useEffect(() => {
-    console.log(isConnected);
-  }, [isConnected, isConnecting, isDisconnected]);
+  const { isConnected } = useAccount();
 
   return (
     <>
@@ -34,9 +30,16 @@ const Navbar = () => {
           </Link>
         </ul>
 
-        {/* <ConnectKitButton /> */}
-
-        <CustomConnectButton />
+        <div className="flex flex-row items-center gap-3">
+          <CustomConnectButton />
+          {isConnected && (
+            <LiaUserCircleSolid
+              size={32}
+              className=" text-action-btn-green cursor-pointer"
+              onClick={() => navigateTo("/dashboard")}
+            />
+          )}
+        </div>
       </div>
 
       <Routes>

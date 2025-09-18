@@ -12,7 +12,7 @@ const CustomConnectButton = () => {
               font-unbounded text-xs font-medium
               hover:bg-[#aaff4d]  cursor-pointer
               transition-colors duration-200
-              border-2 border-transparent hover:border-[#bfff6b]
+              border-2 border-transparent bg-action-btn-green
             `}
           >
             {isConnected

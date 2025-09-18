@@ -63,7 +63,7 @@ const SingleCollection = () => {
           </div>
         </div>
 
-        <div className="search-layout border-b-1 border-paragraph/50 flex gap-4 items-center w-full py-4">
+        <div className="search-layout border-b-1 border-paragraph/50 flex gap-4 items-center w-full  py-4 ">
           <div className="search border-1  border-paragraph/50 w-1/3 flex items-center justify-between px-2  rounded-sm">
             <input
               type="search"
@@ -76,6 +76,12 @@ const SingleCollection = () => {
             <CiGrid41 size={24} className="text-paragraph/70" />
             <MdOutlineTableRows size={24} className="text-paragraph/70" />
           </div>
+
+          <div className="w-full  flex items-center justify-end">
+            <button className="bg-action-btn-green text-xs px-4 py-1 rounded-full text-black font-light cursor-pointer">
+              Mint NFT
+            </button>
+          </div>
         </div>
         <div className="nft-cards py-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 ">
           <SingleCollectionsCard />
@@ -84,7 +90,7 @@ const SingleCollection = () => {
           <SingleCollectionsCard />
           <SingleCollectionsCard />
         </div>
-        <div className="border-1   flex items-center justify-center">
+        <div className=" border rounded-md border-paragraph/40 mt-2">
           <MintNFT />
         </div>
       </div>

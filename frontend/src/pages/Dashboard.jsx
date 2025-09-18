@@ -4,8 +4,11 @@ import Footer from "../components/Footer";
 import AllCollections from "../components/explore/AllCollections";
 import CollectionCard from "../components/CollectionCard";
 import MintNFT from "./MintNFT";
+import { useAccount } from "wagmi";
 
 const Dashboard = () => {
+  const { address } = useAccount();
+
   return (
     <>
       <Navbar />
@@ -28,9 +31,7 @@ const Dashboard = () => {
 
               <div className=" flex flex-row gap-2  font-extralight text-xs">
                 <div className="py-1 px-2 flex items-center border-1 border-paragraph/70 rounded-sm bg-paragraph/30 gap-1 text-white ">
-                  <p className="text-white">
-                    0x4838B106FCe9647Bdf1E7877BF73cE8B0BAD5f97
-                  </p>
+                  <p className="text-white">{address}</p>
                 </div>
               </div>
             </div>
