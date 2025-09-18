@@ -1,22 +1,29 @@
-import React from "react";
+import React, { useRef } from "react";
 import SingleCollectionsCard from "../components/single-collections-card/SingleCollectionsCard";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 import { Copy } from "lucide-react";
-
 import { SiEthereum } from "react-icons/si";
-import { CiGrid41 } from "react-icons/ci";
+import { CiGrid41, CiSearch } from "react-icons/ci";
 import { MdOutlineTableRows } from "react-icons/md";
-import { CiSearch } from "react-icons/ci";
 import MintNFT from "./MintNFT";
 
 const SingleCollection = () => {
+  // ref for the MintNFT section
+  const mintNFTSectionRef = useRef(null);
+
+  // Function to scroll to MintNFT
+  const handleScrollToMintNFT = () => {
+    mintNFTSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <>
       <Navbar />
 
-      <div className="single-collection  bg-primary-black text-white px-10 pt-4 font-unbounded">
+      <div className="single-collection bg-primary-black text-white px-10 pt-4 font-unbounded">
+        {/* Profile Section */}
         <div className="profile border-1 border-paragraph/40 rounded-sm flex w-full p-4">
           <div className="left w-1/2 flex flex-row ">
             <div className="w-16 h-16 rounded-full border-1 border-paragraph/50">
@@ -78,11 +85,15 @@ const SingleCollection = () => {
           </div>
 
           <div className="w-full  flex items-center justify-end">
-            <button className="bg-action-btn-green text-xs px-4 py-1 rounded-full text-black font-light cursor-pointer">
+            <button
+              className="bg-action-btn-green text-xs px-4 py-1 rounded-full text-black font-light cursor-pointer"
+              onClick={handleScrollToMintNFT}
+            >
               Mint NFT
             </button>
           </div>
         </div>
+
         <div className="nft-cards py-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 ">
           <SingleCollectionsCard />
           <SingleCollectionsCard />
@@ -90,7 +101,11 @@ const SingleCollection = () => {
           <SingleCollectionsCard />
           <SingleCollectionsCard />
         </div>
-        <div className=" border rounded-md border-paragraph/40 mt-2">
+
+        <div
+          ref={mintNFTSectionRef}
+          className=" border rounded-md border-paragraph/40 "
+        >
           <MintNFT />
         </div>
       </div>
