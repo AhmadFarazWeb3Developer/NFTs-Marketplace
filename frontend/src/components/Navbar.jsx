@@ -1,6 +1,8 @@
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import Explore from "../pages/Explore";
 
+import { AppKitAccountButton, AppKitConnectButton } from "@reown/appkit/react";
+
 const Navbar = () => {
   const navigateTo = useNavigate("");
   return (
@@ -22,14 +24,20 @@ const Navbar = () => {
           </Link>
         </ul>
 
-        <button
-          class=" py-2 px-4 rounded-3xl bg-action-btn-green text-black font-unbounded text-xs  font-semibold cursor-pointer"
-          onClick={() => {
-            navigateTo("/dashboard");
-          }}
-        >
-          Connect Wallet
-        </button>
+        {/* <div className="relative border-1 ">
+          <p className="absolute text-black">Connect Wallet</p>
+          <AppKitConnectButton
+            className="connect-button absolute "
+            size="sm"
+            loadingLabel="Connecting..."
+          />
+        </div> */}
+
+        <AppKitConnectButton
+          className="connect-button"
+          size="md"
+          loadingLabel="Connecting..."
+        />
       </div>
 
       <Routes>

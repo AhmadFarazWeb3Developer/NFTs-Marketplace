@@ -27,8 +27,10 @@ const Dashboard = () => {
               </h3>
 
               <div className=" flex flex-row gap-2  font-extralight text-xs">
-                <div className="py-1 px-2 flex items-center border-1 border-paragraph/70 rounded-sm bg-paragraph/30 gap-1 ">
-                  <p>40x4838B106FCe9647Bdf1E7877BF73cE8B0BAD5f97</p>
+                <div className="py-1 px-2 flex items-center border-1 border-paragraph/70 rounded-sm bg-paragraph/30 gap-1 text-white ">
+                  <p className="text-white">
+                    0x4838B106FCe9647Bdf1E7877BF73cE8B0BAD5f97
+                  </p>
                 </div>
               </div>
             </div>

@@ -11,6 +11,8 @@ import SingleCollection from "./pages/SingleCollection.jsx";
 import CreateCollection from "./pages/CreateCollection.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 
+import AppKitProvider from "./blockchain-interaction/AppKitProvider.jsx";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -44,6 +46,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router}></RouterProvider>
+    <AppKitProvider>
+      <RouterProvider router={router}></RouterProvider>
+    </AppKitProvider>
   </StrictMode>
 );

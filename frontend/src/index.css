@@ -110,3 +110,9 @@ input[type="radio"]:focus {
 .small-paragraph {
   font-size: 10px;
 }
+
+appkit-connect-button::part(button) {
+  background-color: #bfff6b !important; /* green bg */
+  color: #000000 !important; /* black text */
+  border-radius: 9999px !important; /* pill */
+}
