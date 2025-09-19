@@ -1,25 +1,23 @@
 import express from "express";
 import connectDB from "./DB/db.config.js";
 import cors from "cors";
-
 import dotenv from "dotenv";
+import createCollectionRouter from "./routes/createCollection.route.js";
 
 dotenv.config();
-
-import createCollectionRouter from "./routes/createCollection.route.js";
-import { configDotenv } from "dotenv";
-
 const app = express();
-
 const PORT = 3000;
 
-app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }));
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+// app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }));
+
+app.use(express.json());
 
 app.use("/api/v1", createCollectionRouter);
 
 connectDB()
   .then(() => {
-    app.listen(PORT, () => {
+    app.listen(PORT, (e) => {
       console.log("Post is Listening");
     });
   })

@@ -5,6 +5,6 @@ const createCollectionRouter = Router();
 
 // createCollectionRouter.get("/create-collection");
 
-createCollectionRouter.post("/create-collection", createCollection);
+createCollectionRouter.post("/store-collection", createCollection);
 
 export default createCollectionRouter;

@@ -1,23 +1,46 @@
 import React, { useRef, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { UploadIcon } from "lucide-react";
+
 import { Upload } from "lucide-react";
 
 const CreateCollection = () => {
-  const [name, setName] = useState("");
-  const [symbol, setSymbol] = useState("");
-  const [image, setImage] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    symbol: "",
+    image: null,
+  });
 
-  const createCollection = (event) => {
+  const createCollection = async (event) => {
     event.preventDefault();
+
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/v1/store-collection",
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      const data = await response.json();
+      console.log("Server Response:", data);
+    } catch (error) {
+      console.error("Error sending request:", error);
+    }
+
+    // console.log("response ", response);
   };
 
   const uploadCollectionImage = (event) => {
     const file = event.target.files[0];
 
     if (file) {
-      setImage(file);
+      setFormData({ ...formData, image: file.name });
     }
   };
 
@@ -41,7 +64,9 @@ const CreateCollection = () => {
               type="text"
               placeholder="Board Apes etc."
               className="w-full border border-paragraph/70 px-2 py-2 rounded-sm focus:border-action-btn-green"
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
             />
           </div>
           <div className="flex flex-col gap-1 w-full">
@@ -52,7 +77,9 @@ const CreateCollection = () => {
               type="text"
               placeholder="BA etc"
               className="w-full border border-paragraph/70 px-2 py-2 rounded-md"
-              onChange={(e) => setSymbol(e.target.value)}
+              onChange={(e) =>
+                setFormData({ ...formData, symbol: e.target.value })
+              }
             />
           </div>
 
