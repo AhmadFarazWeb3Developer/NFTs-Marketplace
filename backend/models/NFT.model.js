@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+import mongoose, { modelNames } from "mongoose";
 
-const collectionSchema = mongoose.Schema({
+const NFTSchema = new mongoose.Schema({
   accountAddress: {
     type: String,
     required: true,
@@ -20,36 +20,29 @@ const collectionSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  symbol: {
-    type: String,
-    required: true,
-  },
 
   id: {
     type: Number,
     require: true,
   },
 
-  items: {
-    type: Number,
-    require: true,
-  },
-  owners: {
-    type: Number,
-    require: true,
-  },
-  remaining: {
+  owner: {
     type: Number,
     require: true,
   },
 
-  forSale: {
+  CollectionName: {
+    type: Number,
+    require: true,
+  },
+
+  status: {
     type: String,
-    enum: ["active", "notActive"],
-    default: "active",
+    enum: ["For Sale", "Sold", "Not For Sale"],
+    default: "Not For Sale",
   },
 });
 
-const CollectionModel = mongoose.model("collections", collectionSchema);
+const NftModel = mongoose.model("NFT", NFTSchema);
 
-export default CollectionModel;
+export default NftModel;
