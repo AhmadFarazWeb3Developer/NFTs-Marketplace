@@ -5,8 +5,6 @@ import { localhost } from "wagmi/chains";
 
 const contractAddress = deployment.transactions[0].contractAddress;
 
-console.log("local host", localhost);
-
 const useReadContractInstance = (functionName, args = []) => {
   return useReadContract({
     address: contractAddress,

@@ -1,22 +1,20 @@
 const createCollection = (req, res) => {
   try {
-    const { name, symbol } = req.body;
-    const image = req.file;
+    const { collectionName, collectionSymbol } = req.body;
+    const collectionImage = req.file;
 
-    console.log("Name:", name);
-    console.log("Symbol:", symbol);
-    console.log("Image:", image);
-
-    if (!name || !symbol) {
+    if (!collectionName || !collectionSymbol) {
       return res.status(400).json({ error: "Name and symbol are required" });
     }
 
     res.status(201).json({
       message: "Collection created",
       data: {
-        name,
-        symbol,
-        image: image ? image.filename : "No image uploaded",
+        collectionName,
+        collectionSymbol,
+        collectionImage: collectionImage
+          ? collectionImage.filename
+          : "No image uploaded",
       },
     });
   } catch (error) {
