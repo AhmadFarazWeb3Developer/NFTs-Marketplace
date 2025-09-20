@@ -1,18 +1,20 @@
-import { useContractWrite } from "wagmi";
+import { useReadContract } from "wagmi";
 import deployment from "../../../contracts/broadcast/NftsMarketPlace.s.sol/31337/run-latest.json";
 import abi from "../../../contracts/out/NFTsMarketplaceFactory.sol/NFTsMarketplaceFactory.json";
 import { localhost } from "wagmi/chains";
 
 const contractAddress = deployment.transactions[0].contractAddress;
 
-const useCreateCollection = (name, symbol) => {
-  return useContractWrite({
+console.log("local host", localhost);
+
+const useReadContractInstance = (functionName, args = []) => {
+  return useReadContract({
     address: contractAddress,
     abi: abi.abi,
-    functionName: "createCollection",
-    args: [name, symbol],
-    chainId: localhost.id,
+    functionName,
+    args,
+    chainId: 31337,
   });
 };
 
-export default useCreateCollection;
+export default useReadContractInstance;

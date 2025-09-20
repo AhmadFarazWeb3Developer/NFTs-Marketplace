@@ -8,7 +8,7 @@ const uploadCollectionImage = multer({ dest: "uploads/collections" });
 
 createCollectionRouter.post(
   "/add-create-collection",
-  uploadCollectionImage.single("image"),
+  uploadCollectionImage.single("collectionImage"),
   createCollection
 );
 

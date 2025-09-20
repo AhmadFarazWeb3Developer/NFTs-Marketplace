@@ -1,5 +1,5 @@
 import { Router } from "express";
-import mintNFT from "../controllers/mintNft.controller.js";
+import mintNFT from "../controllers/mintNFT.controller.js";
 import multer from "multer";
 
 const mintNFTRouter = Router();

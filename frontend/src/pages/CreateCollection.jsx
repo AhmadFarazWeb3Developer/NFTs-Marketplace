@@ -3,31 +3,39 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 import { Upload } from "lucide-react";
+import useCreateCollection from "../blockchain-interaction/hooks/useCreateCollection";
 
 const CreateCollection = () => {
   const [formData, setFormData] = useState({
-    name: "",
-    symbol: "",
-    image: null,
+    collectionName: "",
+    collectionSymbol: "",
+    collectionImage: null,
   });
 
   const uploadCollectionImage = (event) => {
     const file = event.target.files[0];
 
     if (file) {
-      setFormData({ ...formData, image: file });
+      setFormData({ ...formData, collectionImage: file });
     }
   };
+
+  const {
+    write: createCollectionOnChain,
+    isLoading,
+    isSuccess,
+    error,
+  } = useCreateCollection(formData.collectionName, formData.collectionSymbol);
 
   const createCollection = async (event) => {
     event.preventDefault();
 
     try {
       const form = new FormData();
-      form.append("name", formData.name);
-      form.append("symbol", formData.symbol);
-      if (formData.image) {
-        form.append("image", formData.image); // Use file object, not file name
+      form.append("collectionName", formData.collectionName);
+      form.append("collectionSymbol", formData.collectionSymbol);
+      if (formData.collectionImage) {
+        form.append("image", formData.collectionImage); // Use file object, not file name
       }
 
       const response = await fetch(
@@ -40,6 +48,8 @@ const CreateCollection = () => {
 
       const data = await response.json();
       console.log("Server Response:", data);
+
+      console.log("success : ", isSuccess);
     } catch (error) {
       console.error("Error sending request:", error);
     }
@@ -67,7 +77,7 @@ const CreateCollection = () => {
               placeholder="Board Apes etc."
               className="w-full border border-paragraph/70 px-2 py-2 rounded-sm focus:border-action-btn-green"
               onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
+                setFormData({ ...formData, collectionName: e.target.value })
               }
             />
           </div>
@@ -80,7 +90,7 @@ const CreateCollection = () => {
               placeholder="BA etc"
               className="w-full border border-paragraph/70 px-2 py-2 rounded-md"
               onChange={(e) =>
-                setFormData({ ...formData, symbol: e.target.value })
+                setFormData({ ...formData, collectionSymbol: e.target.value })
               }
             />
           </div>

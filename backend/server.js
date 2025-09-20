@@ -4,7 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 import createCollectionRouter from "./routes/createCollection.route.js";
-import mintNFTRouter from "./routes/mintNft.route.js";
+import mintNFTRouter from "./routes/mintNFT.route.js";
 
 dotenv.config();
 const app = express();
