@@ -1,10 +1,15 @@
 import { Router } from "express";
 import createCollection from "../controllers/createCollection.controller.js";
+import multer from "multer";
 
 const createCollectionRouter = Router();
 
-// createCollectionRouter.get("/create-collection");
+const uploadCollectionImage = multer({ dest: "uploads/collections" });
 
-createCollectionRouter.post("/store-collection", createCollection);
+createCollectionRouter.post(
+  "/add-create-collection",
+  uploadCollectionImage.single("image"),
+  createCollection
+);
 
 export default createCollectionRouter;

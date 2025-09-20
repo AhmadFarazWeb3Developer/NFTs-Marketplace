@@ -11,19 +11,30 @@ const CreateCollection = () => {
     image: null,
   });
 
+  const uploadCollectionImage = (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      setFormData({ ...formData, image: file });
+    }
+  };
+
   const createCollection = async (event) => {
     event.preventDefault();
 
     try {
+      const form = new FormData();
+      form.append("name", formData.name);
+      form.append("symbol", formData.symbol);
+      if (formData.image) {
+        form.append("image", formData.image); // Use file object, not file name
+      }
+
       const response = await fetch(
-        "http://localhost:3000/api/v1/store-collection",
+        "http://localhost:3000/api/v1/add-create-collection",
         {
           method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
+          body: form,
         }
       );
 
@@ -31,16 +42,6 @@ const CreateCollection = () => {
       console.log("Server Response:", data);
     } catch (error) {
       console.error("Error sending request:", error);
-    }
-
-    // console.log("response ", response);
-  };
-
-  const uploadCollectionImage = (event) => {
-    const file = event.target.files[0];
-
-    if (file) {
-      setFormData({ ...formData, image: file.name });
     }
   };
 
@@ -54,6 +55,7 @@ const CreateCollection = () => {
 
         <form
           action=""
+          onSubmit={createCollection}
           className="border-1 border-paragraph/60 rounded-md px-10  w-1/2 flex flex-col gap-6 py-10"
         >
           <div className="flex flex-col gap-1 w-full">
@@ -108,10 +110,7 @@ const CreateCollection = () => {
             className="flex flex-col gap-2 w-full
           "
           >
-            <button
-              className="w-full bg-action-btn-green py-2  rounded-sm text-black"
-              onClick={createCollection}
-            >
+            <button className="w-full bg-action-btn-green py-2  rounded-sm text-black cursor-pointer">
               CREATE
             </button>
             <span className=" font-extralight text-xs  text-red-600/90">
