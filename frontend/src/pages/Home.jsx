@@ -8,9 +8,9 @@ import CollectionStatistics from "../components/home/CollectionStatistics";
 import useCollectionId from "../blockchain-interaction/hooks/useCollectionId";
 
 const Home = () => {
-  const { data, error, isLoading, isError } = useCollectionId();
+  const { collectionId, error, isLoading, isError } = useCollectionId();
 
-  console.log("data", data);
+  console.log("collectionId", collectionId);
   console.log("error", error);
   console.log("is loading", isLoading);
   console.log("is error", isError);

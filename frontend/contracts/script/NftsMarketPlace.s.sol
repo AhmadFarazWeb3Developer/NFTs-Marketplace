@@ -5,8 +5,7 @@ import {Script} from "forge-std/Script.sol";
 import {NFTsMarketplaceFactory} from "../src/NFTsMarketplaceFactory.sol";
 import {NFTsCollection} from "../src/NFTsCollection.sol";
 
-contract NftsMarketPlaceScript is Script {
-    address factoryOwner = makeAddr("factory owner");
+contract NFTsMarketplace is Script {
 
     function run() public {
         NFTsMarketplaceFactory factory;
