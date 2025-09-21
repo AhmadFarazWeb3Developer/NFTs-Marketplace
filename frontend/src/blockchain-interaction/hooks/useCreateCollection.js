@@ -1,8 +1,7 @@
 import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-import deployment from "../../../contracts/broadcast/NftsMarketPlace.s.sol/31337/run-latest.json";
-import abi from "../../../contracts/out/NFTsMarketplaceFactory.sol/NFTsMarketplaceFactory.json";
+import useConstants from "./useConstants";
 
-const contractAddress = deployment.transactions[0].contractAddress;
+const { contractAddress, contractABI, anvilChainId } = useConstants();
 
 const useCreateCollection = () => {
   const {
@@ -11,6 +10,7 @@ const useCreateCollection = () => {
     error,
     isPending,
   } = useWriteContract();
+
   const {
     isLoading: isConfirming,
     isSuccess,
@@ -20,20 +20,15 @@ const useCreateCollection = () => {
   });
 
   const createCollectionOnChain = async (name, symbol) => {
-    console.log("createCollectionOnChain called with:", {
-      name,
-      symbol,
-      contractAddress,
-    });
     try {
       const tx = await writeContractAsync({
         address: contractAddress,
-        abi: abi.abi,
+        abi: contractABI,
         functionName: "createCollection",
         args: [name, symbol],
-        chainId: 31337, // Anvil's default chainId
+        chainId: anvilChainId,
       });
-      console.log("Transaction sent:", tx);
+
       return tx;
     } catch (err) {
       console.error("Blockchain transaction error:", err);

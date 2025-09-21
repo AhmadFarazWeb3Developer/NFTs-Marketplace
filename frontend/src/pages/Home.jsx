@@ -5,17 +5,16 @@ import Hero from "../components/home/Hero";
 import Footer from "../components/Footer";
 import TopCollections from "../components/home/TopCollections";
 import CollectionStatistics from "../components/home/CollectionStatistics";
-import useReadContractInstance from "../blockchain-interaction/hooks/utils";
-// import { useReadContract } from "wagmi";
-// import { contractAddress, Abi } from "../blockchain-interaction/hooks/utils";
+import useCollectionId from "../blockchain-interaction/hooks/useCollectionId";
 
 const Home = () => {
-  const [contractResult, setContractResult] = useState(null);
+  const { data, error, isLoading, isError } = useCollectionId();
 
-  const { data, error, isLoading } = useReadContractInstance("collectionId");
-  console.log("data : ", data);
-  console.log("error : ", error);
-  console.log("is loading : ", isLoading);
+  console.log("data", data);
+  console.log("error", error);
+  console.log("is loading", isLoading);
+  console.log("is error", isError);
+
   return (
     <>
       <div className="home-page" class=" h-screen bg-primary-black">

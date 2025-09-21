@@ -10,7 +10,7 @@ const CreateCollection = () => {
     collectionSymbol: "",
     collectionImage: null,
   });
-  const [errorMessage, setErrorMessage] = useState(""); // For form validation errors
+  const [errorMessage, setErrorMessage] = useState("");
 
   const {
     createCollectionOnChain,
@@ -93,7 +93,7 @@ const CreateCollection = () => {
     };
 
     sendApiRequest();
-  }, [isSuccess, txHash, formData]); // Run when isSuccess or txHash changes
+  }, [isSuccess, txHash, formData]);
 
   return (
     <>
