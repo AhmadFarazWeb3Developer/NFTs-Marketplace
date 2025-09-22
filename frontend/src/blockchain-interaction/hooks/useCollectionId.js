@@ -1,43 +1,51 @@
 import { useEffect, useState } from "react";
+import { useAppKit } from "@reown/appkit/react";
 import useConstants from "./useConstants.js";
-import { getReadContract } from "../helpers/contractHelper.js";
 
 const useCollectionId = () => {
   const { contractAddress, contractABI } = useConstants();
+  const { callContract } = useAppKit(); // AppKit function to call read-only contract functions
+
   const [collectionId, setCollectionId] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    let mounted = true;
+  const fetchCollectionId = async () => {
+    setIsLoading(true);
+    setIsError(false);
+    setError(null);
 
-    async function fetchCollectionId() {
-      try {
-        const contract = getReadContract(contractAddress, contractABI);
-        const id = await contract.collectionId();
-        if (mounted) {
-          setCollectionId(id.toString()); // cast BigInt to string
-          setIsLoading(false);
-        }
-      } catch (err) {
-        console.error("Error reading collectionId:", err);
-        if (mounted) {
-          setError(err);
-          setIsError(true);
-          setIsLoading(false);
-        }
-      }
+    try {
+      const result = await callContract({
+        to: contractAddress,
+        abi: contractABI,
+        functionName: "collectionId",
+        args: [], // no args needed
+      });
+
+      // Convert BigInt to string if necessary
+      setCollectionId(result?.toString());
+    } catch (err) {
+      console.error("Error fetching collectionId:", err);
+      setIsError(true);
+      setError(err);
+    } finally {
+      setIsLoading(false);
     }
+  };
 
+  useEffect(() => {
     fetchCollectionId();
+  }, []);
 
-    return () => {
-      mounted = false;
-    };
-  }, [contractAddress, contractABI]);
-
-  return { collectionId, isLoading, isError, error };
+  return {
+    collectionId,
+    isLoading,
+    isError,
+    error,
+    refetch: fetchCollectionId,
+  };
 };
 
 export default useCollectionId;

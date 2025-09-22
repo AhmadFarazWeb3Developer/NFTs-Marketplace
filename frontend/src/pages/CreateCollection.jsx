@@ -1,8 +1,9 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Upload } from "lucide-react";
 import useCreateCollection from "../blockchain-interaction/hooks/useCreateCollection";
+import { useAppKitAccount } from "@reown/appkit/react";
 
 const CreateCollection = () => {
   const [formData, setFormData] = useState({
@@ -12,11 +13,11 @@ const CreateCollection = () => {
   });
   const [errorMessage, setErrorMessage] = useState("");
 
+  const { address } = useAppKitAccount();
   const {
     createCollectionOnChain,
     txHash,
     isPending,
-    isConfirming,
     isSuccess,
     isError,
     error,
@@ -38,27 +39,27 @@ const CreateCollection = () => {
     event.preventDefault();
     setErrorMessage("");
 
-    // Form validation
     if (!formData.collectionName || !formData.collectionSymbol) {
       setErrorMessage("Please fill in both Name and Symbol fields.");
       return;
     }
 
+    if (!address) {
+      setErrorMessage("Wallet not connected");
+      return;
+    }
+
     try {
-      // Step 1: Call the blockchain function to create the collection
       await createCollectionOnChain(
         formData.collectionName,
         formData.collectionSymbol
       );
-    } catch (error) {
-      console.error("Blockchain transaction failed:", error);
-      setErrorMessage(
-        error.message || "Failed to create collection on blockchain."
-      );
+    } catch (err) {
+      setErrorMessage(err.message || "Failed to create collection.");
     }
   };
 
-  // Step 2: Effect to handle API call after transaction confirmation
+  // Optional: call API after tx confirmed
   useEffect(() => {
     const sendApiRequest = async () => {
       if (isSuccess && txHash) {
@@ -78,15 +79,13 @@ const CreateCollection = () => {
             }
           );
 
-          if (!response.ok) {
-            throw new Error("API request failed");
-          }
+          if (!response.ok) throw new Error("API request failed");
 
           const data = await response.json();
           console.log("Server Response:", data);
           console.log("Transaction Success:", isSuccess);
-        } catch (error) {
-          console.error("Error sending API request:", error);
+        } catch (err) {
+          console.error("Error sending API request:", err);
           setErrorMessage("Failed to save collection to server.");
         }
       }
@@ -156,13 +155,14 @@ const CreateCollection = () => {
               <p className="text-xs text-paragraph/70">PNG, JPG up to 5MB</p>
             </label>
           </div>
+
           <div className="flex flex-col gap-2 w-full">
             <button
               type="submit"
               className="w-full bg-action-btn-green py-2 rounded-sm text-black cursor-pointer disabled:opacity-50"
-              disabled={isPending || isConfirming}
+              disabled={isPending}
             >
-              {isPending || isConfirming ? "Processing..." : "CREATE"}
+              {isPending ? "Processing..." : "CREATE"}
             </button>
             <span className="font-extralight text-xs text-red-600/90">
               *Note: Name and Symbol cannot be changed in future
