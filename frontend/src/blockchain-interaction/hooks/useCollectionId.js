@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
-import { useAppKit } from "@reown/appkit/react";
-import useConstants from "./useConstants.js";
+import useReadContract from "./useReadContract.js";
 
 const useCollectionId = () => {
-  const { contractAddress, contractABI } = useConstants();
-  const { callContract } = useAppKit(); // AppKit function to call read-only contract functions
+  const { factoryInstance } = useReadContract();
 
   const [collectionId, setCollectionId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -12,19 +10,17 @@ const useCollectionId = () => {
   const [error, setError] = useState(null);
 
   const fetchCollectionId = async () => {
+    if (!factoryInstance) {
+      return;
+    }
+
     setIsLoading(true);
     setIsError(false);
     setError(null);
 
     try {
-      const result = await callContract({
-        to: contractAddress,
-        abi: contractABI,
-        functionName: "collectionId",
-        args: [], // no args needed
-      });
+      const result = await factoryInstance.collectionId();
 
-      // Convert BigInt to string if necessary
       setCollectionId(result?.toString());
     } catch (err) {
       console.error("Error fetching collectionId:", err);
@@ -36,8 +32,10 @@ const useCollectionId = () => {
   };
 
   useEffect(() => {
-    fetchCollectionId();
-  }, []);
+    if (factoryInstance) {
+      fetchCollectionId();
+    }
+  }, [factoryInstance]);
 
   return {
     collectionId,

@@ -6,14 +6,18 @@ import Footer from "../components/Footer";
 import TopCollections from "../components/home/TopCollections";
 import CollectionStatistics from "../components/home/CollectionStatistics";
 import useCollectionId from "../blockchain-interaction/hooks/useCollectionId";
+import useReadContract from "../blockchain-interaction/hooks/useReadContract";
 
 const Home = () => {
   const { collectionId, error, isLoading, isError } = useCollectionId();
 
-  console.log("collectionId", collectionId);
-  console.log("error", error);
-  console.log("is loading", isLoading);
-  console.log("is error", isError);
+  useEffect(() => {
+    console.log("collectionId:", collectionId);
+
+    // console.log("error", error);
+    // console.log("is loading", isLoading);
+    // console.log("is error", isError);
+  }, [collectionId]);
 
   return (
     <>

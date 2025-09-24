@@ -1,12 +1,9 @@
-// import deployment from "../../../ignition/deployments/localhost/NFTsMarketplaceFactoryModule.json";
-import abi from "../../../artifacts/contracts/NFTsMarketplaceFactory.sol/NFTsMarketplaceFactory.json";
-
-import hr from "hardhat";
-
-const { ether } = hr;
+import deployment from "../../../ignition/deployments/chain-31337/deployed_addresses.json";
+import abi from "../../../artifacts/onchain/NFTsMarketplaceFactory.sol/NFTsMarketplaceFactory.json";
 
 const useConstants = () => {
-  const contractAddress = deployment.contracts.NFTsMarketplaceFactory.address;
+  const contractAddress =
+    deployment["NFTsMarketplaceFactoryModule#NFTsMarketplaceFactory"];
 
   const contractABI = abi.abi;
 
