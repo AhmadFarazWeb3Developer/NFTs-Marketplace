@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import { FaCloudUploadAlt, FaCheckCircle } from "react-icons/fa";
+import useMintNFT from "../blockchain-interaction/hooks/nft/write/useMintNFT";
+import useReadSingleCollection from "../blockchain-interaction/hooks/nft/read/useReadSingleCollection";
+import useReadAllCollections from "../blockchain-interaction/hooks/collection/read/useReadAllCollections";
 
 const MintNFT = () => {
+  const { getNFTCollectionInstance } = useReadSingleCollection();
+  const { collections } = useReadAllCollections();
+
+  const { mintNFTOnChain } = useMintNFT();
+
   const [formData, setFormData] = useState({
     nftPrice: "",
     nftImage: null,
@@ -18,6 +26,10 @@ const MintNFT = () => {
     }
 
     try {
+      const collectionInstance = await getNFTCollectionInstance(collections[0]);
+
+      await mintNFTOnChain(collectionInstance, formData.nftPrice);
+
       const response = await fetch(
         "http://localhost:3000/api/v1/add-mint-nft",
         {

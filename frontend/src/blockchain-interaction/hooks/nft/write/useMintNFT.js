@@ -1,23 +1,90 @@
 import { ethers } from "ethers";
-import { tokenURI } from "../../../helpers/IPFS";
 import useAuthenticate from "../../../helpers/Auth";
+import NFTsCollectionABI from "../../../../../artifacts/onchain/NFTsCollection.sol/NFTsCollection.json";
+import { tokenURI } from "../../../helpers/IPFS";
 
 const useMintNFT = () => {
-  const { error, signer } = useAuthenticate();
+  const { error } = useAuthenticate();
 
-  const mintNFTOnChain = async (collectionAddress, tokenPrice) => {
+  const mintNFTOnChain = async (collectionInstance, tokenPrice) => {
     if (error) {
       console.log(error);
-
-      return;
+      throw new Error("Authentication error: " + error);
     }
 
-    const result = await collectionAddress.mint(tokenURI, tokenPrice); // tokenURL and token price
+    if (!collectionInstance) {
+      throw new Error("Collection instance is null or undefined");
+    }
 
-    await result.wait();
+    if (!tokenURI) {
+      throw new Error("Token URI is required");
+    }
+
+    console.log("collection instance ", collectionInstance);
+    console.log("minting with params:", { tokenURI, tokenPrice });
+
+    try {
+      // Validate inputs
+      const priceInWei = ethers.parseEther(tokenPrice.toString());
+      if (!priceInWei || priceInWei <= 0) {
+        throw new Error("Invalid token price");
+      }
+
+      // Send transaction with proper error handling
+      const tx = await collectionInstance.mint(
+        tokenURI, // Use the passed tokenURI parameter
+        priceInWei,
+        {
+          gasLimit: 500_000,
+          // Remove gasPrice to let ethers handle it automatically
+        }
+      );
+
+      console.log("Transaction sent:", tx.hash);
+      const receipt = await tx.wait();
+      console.log("Transaction confirmed:", receipt);
+
+      return receipt;
+    } catch (err) {
+      console.error("Transaction error:", err);
+
+      // Enhanced error decoding
+      if (err?.data || err?.error?.data) {
+        try {
+          const iface = new ethers.Interface(NFTsCollectionABI.abi);
+          const errorData = err.data || err.error.data;
+
+          // Handle both hex string and object formats
+          const errorHex =
+            typeof errorData === "string"
+              ? errorData
+              : errorData?.data || errorData;
+
+          if (errorHex && errorHex !== "0x") {
+            const decoded = iface.parseError(errorHex);
+            console.error("Decoded custom error:", decoded);
+            throw new Error(`Smart contract error: ${decoded.name}`);
+          }
+        } catch (decodeErr) {
+          console.error("Error decoding failed:", decodeErr);
+          // Continue with original error
+        }
+      }
+
+      // Handle common errors
+      if (err.code === "INSUFFICIENT_FUNDS") {
+        throw new Error("Insufficient funds for transaction");
+      }
+
+      if (err.message?.includes("user rejected")) {
+        throw new Error("Transaction rejected by user");
+      }
+
+      throw new Error(err.reason || err.message || "Transaction failed");
+    }
   };
 
-  return mintNFTOnChain;
+  return { mintNFTOnChain };
 };
 
 export default useMintNFT;

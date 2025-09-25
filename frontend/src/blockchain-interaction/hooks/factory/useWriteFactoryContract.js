@@ -9,7 +9,8 @@ const useWriteFactoryContract = () => {
   const [factoryWriteInstance, setFactoryWriteInstance] = useState(null);
 
   const [isLoading, setIsLoading] = useState(false);
-  const { error, signer } = Authenticate();
+  const { error, signer, isConnected, walletProvider, address } =
+    Authenticate();
 
   useEffect(() => {
     const initContract = async () => {

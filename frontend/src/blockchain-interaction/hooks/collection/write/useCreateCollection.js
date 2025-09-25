@@ -1,5 +1,5 @@
 import { useState } from "react";
-import useWriteFactoryContract from "./useWriteFactoryContract";
+import useWriteFactoryContract from "../../factory/useWriteFactoryContract";
 
 const useCreateCollection = () => {
   const { factoryWriteInstance, isLoading } = useWriteFactoryContract();
@@ -39,7 +39,6 @@ const useCreateCollection = () => {
     try {
       console.log("Creating collection with:", { name, symbol });
 
-      // Send transaction
       const tx = await factoryWriteInstance.createCollection(name, symbol);
       console.log("Transaction sent:", tx.hash);
       setTxHash(tx.hash);

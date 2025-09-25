@@ -138,10 +138,11 @@ contract NFTsCollection is Ownable, ReentrancyGuard, IERC165, ERC721 {
         // Effects
         tokenURIs[tokenId] = tokenURI_;
         updateTokenPrice(tokenId, tokenPrice_);
-        tokenId++;
 
         // Interactions
         _safeMint(owner(), tokenId);
+        
+        tokenId++;
 
         return tokenId - 1;
     }
