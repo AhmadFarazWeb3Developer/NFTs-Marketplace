@@ -20,7 +20,7 @@ const Home = () => {
 
   return (
     <>
-      <div className="home-page" class=" h-screen bg-primary-black">
+      <div className="home-page h-screen bg-primary-black">
         <Navbar />
         <Hero />
 

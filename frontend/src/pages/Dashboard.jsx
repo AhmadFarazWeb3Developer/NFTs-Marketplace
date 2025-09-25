@@ -4,8 +4,10 @@ import Footer from "../components/Footer";
 import AllCollections from "../components/explore/AllCollections";
 import CollectionCard from "../components/CollectionCard";
 import MintNFT from "./MintNFT";
+import { useAppKitAccount } from "@reown/appkit/react";
 
 const Dashboard = () => {
+  const { address, isConnected } = useAppKitAccount();
   return (
     <>
       <Navbar />
@@ -28,7 +30,7 @@ const Dashboard = () => {
 
               <div className=" flex flex-row gap-2  font-extralight text-xs">
                 <div className="py-1 px-2 flex items-center border-1 border-paragraph/70 rounded-sm bg-paragraph/30 gap-1 text-white ">
-                  <p className="text-white">0xasdasd</p>
+                  {isConnected && <p className="text-white">{address}</p>}
                 </div>
               </div>
             </div>
@@ -38,6 +40,8 @@ const Dashboard = () => {
       <div className="collections px-10 bg-primary-black text-white  font-unbounded">
         <h1 className="text-action-btn-green font-bold"> COLLECTIONS</h1>
         <CollectionCard />
+
+        <MintNFT />
       </div>
 
       <Footer />

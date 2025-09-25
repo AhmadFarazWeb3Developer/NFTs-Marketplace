@@ -154,8 +154,6 @@ const CollectionCard = () => {
           </tr>
         </tbody>
       </table>
-
-    
     </div>
   );
 };

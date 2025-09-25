@@ -33,11 +33,11 @@ createAppKit({
   features: {
     analytics: true,
   },
-  themeMode: "dark", // This will match your dark app background
+  themeMode: "dark",
   themeVariables: {
-    "--w3m-accent": "#00FF00", // your action button color
-    "--w3m-background": "#0a0a0a", // optional, matches dark background
-    "--w3m-font-color": "#ffffff", // optional, ensures text is visible
+    "--w3m-font-family": "var(--font-unbounded)",
+    "--w3m-font-size-master": "10",
+    "--w3m-border-radius-master": "10",
   },
 });
 

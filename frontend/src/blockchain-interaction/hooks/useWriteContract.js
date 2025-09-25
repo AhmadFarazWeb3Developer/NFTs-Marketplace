@@ -4,7 +4,7 @@ import useConstants from "./useConstants";
 import { useAppKitProvider, useAppKitAccount } from "@reown/appkit/react";
 
 const useWriteContract = () => {
-  const { contractAddress, contractABI } = useConstants();
+  const { contractAddress, factoryABI } = useConstants();
 
   const [factoryWriteInstance, setFactoryWriteInstance] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -26,17 +26,9 @@ const useWriteContract = () => {
         const provider = new ethers.BrowserProvider(walletProvider);
         const signer = await provider.getSigner();
 
-        // Verify signer address matches connected address
-        const signerAddress = await signer.getAddress();
-        console.log("Signer address:", signerAddress);
-
-        if (signerAddress.toLowerCase() !== address.toLowerCase()) {
-          throw new Error("Signer address doesn't match connected address");
-        }
-
         const contract = new ethers.Contract(
           contractAddress,
-          contractABI,
+          factoryABI,
           signer
         );
 
@@ -51,7 +43,7 @@ const useWriteContract = () => {
     };
 
     initContract();
-  }, [isConnected, walletProvider, address, contractAddress, contractABI]);
+  }, [isConnected, walletProvider, address, contractAddress, factoryABI]);
 
   return { factoryWriteInstance, isLoading };
 };

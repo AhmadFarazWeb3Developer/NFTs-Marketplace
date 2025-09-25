@@ -1,6 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import CollectionCard from "../CollectionCard";
+import useReadNFTsCollection from "../../blockchain-interaction/hooks/useReadNFTsCollection";
+import useReadCollections from "../../blockchain-interaction/hooks/useReadCollections";
 const TopCollections = () => {
+  const { getNFTsCollection } = useReadNFTsCollection();
+  const { collections } = useReadCollections();
+
+  useEffect(() => {
+    const init = async () => {
+      for (let i = 0; i < collections.length; i++) {
+        const collection = getNFTsCollection(collections[i]);
+        console.log("NFTCollection : ", await collection);
+      }
+    };
+
+    init();
+  }, [collections]);
+
   return (
     <>
       <div className="collections-section px-10 bg-primary-black">

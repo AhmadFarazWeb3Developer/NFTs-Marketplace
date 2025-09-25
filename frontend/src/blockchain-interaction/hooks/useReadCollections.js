@@ -1,30 +1,35 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useReadContract from "./useReadContract";
 import useCollectionId from "./useCollectionId";
 
 const useReadCollections = () => {
   const { factoryReadInstance } = useReadContract();
   const { collectionId } = useCollectionId();
+  const [collections, setCollections] = useState([]);
 
   useEffect(() => {
     if (!factoryReadInstance || collectionId === null) return;
 
     const init = async () => {
-      for (let i = 0; i < collectionId; i++) {
-        try {
+      try {
+        const results = [];
+        for (let i = 0; i < collectionId; i++) {
           const collection = await factoryReadInstance.collections(
             i,
             "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266"
           );
-          console.log(`Collection ${i}:`, collection);
-        } catch (err) {
-          console.error(`Error reading collection ${i}:`, err);
+          results.push(collection);
         }
+        setCollections(results);
+      } catch (err) {
+        console.error("Error reading collections:", err);
       }
     };
 
     init();
   }, [factoryReadInstance, collectionId]);
+
+  return { collections };
 };
 
 export default useReadCollections;

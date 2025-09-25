@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 import useConstants from "./useConstants";
 
 const useReadContract = () => {
-  const { contractAddress, contractABI } = useConstants();
+  const { contractAddress, factoryABI } = useConstants();
   const [factoryReadInstance, setFactoryReadInstance] = useState(null);
   const [provider, setProvider] = useState(null);
 
@@ -21,7 +21,7 @@ const useReadContract = () => {
 
       const contract = new ethers.Contract(
         contractAddress,
-        contractABI,
+        factoryABI,
         _provider
       );
 
@@ -30,7 +30,7 @@ const useReadContract = () => {
     };
 
     init();
-  }, [contractAddress, contractABI]);
+  }, [contractAddress, factoryABI]);
 
   return { provider, factoryReadInstance };
 };
