@@ -1,30 +1,24 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
-import useConstants from "./useConstants";
-import { useAppKitProvider, useAppKitAccount } from "@reown/appkit/react";
+import useConstants from "../../helpers/useConstants";
+import Authenticate from "../../helpers/Auth";
 
-const useWriteContract = () => {
+const useWriteFactoryContract = () => {
   const { contractAddress, factoryABI } = useConstants();
 
   const [factoryWriteInstance, setFactoryWriteInstance] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
 
-  // Use the correct chain namespace (eip155 for EVM chains)
-  const { walletProvider } = useAppKitProvider("eip155");
-  const { address, isConnected } = useAppKitAccount();
+  const [isLoading, setIsLoading] = useState(false);
+  const { error, signer } = Authenticate();
 
   useEffect(() => {
-    if (!isConnected || !walletProvider) {
-      console.log("Wallet not connected or provider unavailable");
-      setFactoryWriteInstance(null);
-      return;
-    }
-
     const initContract = async () => {
       setIsLoading(true);
       try {
-        const provider = new ethers.BrowserProvider(walletProvider);
-        const signer = await provider.getSigner();
+        if (error) {
+          console.log(error);
+          return;
+        }
 
         const contract = new ethers.Contract(
           contractAddress,
@@ -48,4 +42,4 @@ const useWriteContract = () => {
   return { factoryWriteInstance, isLoading };
 };
 
-export default useWriteContract;
+export default useWriteFactoryContract;

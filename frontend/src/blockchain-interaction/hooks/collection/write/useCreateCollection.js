@@ -1,8 +1,8 @@
 import { useState } from "react";
-import useWriteContract from "./useWriteContract";
+import useWriteFactoryContract from "./useWriteFactoryContract";
 
 const useCreateCollection = () => {
-  const { factoryWriteInstance, isLoading } = useWriteContract();
+  const { factoryWriteInstance, isLoading } = useWriteFactoryContract();
 
   const [isPending, setIsPending] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);

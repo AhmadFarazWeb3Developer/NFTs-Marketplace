@@ -22,7 +22,7 @@ const Hero = () => {
           </div>
 
           <div className="lower-glass absolute bottom-2 flex flex-row items-center justify-between w-sm rounded-full px-4 py-3 bg-white/20 backdrop-blur-md">
-            <div className="lower-left" class="flex flex-row gap-2">
+            <div className="lower-left flex flex-row gap-2">
               <div className="w-12 rounded-full">
                 <img src="nida.jpg" alt="nida" className="rounded-full" />
               </div>

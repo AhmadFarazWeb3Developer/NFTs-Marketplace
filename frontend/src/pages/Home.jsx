@@ -5,14 +5,14 @@ import Hero from "../components/home/Hero";
 import Footer from "../components/Footer";
 import TopCollections from "../components/home/TopCollections";
 import CollectionStatistics from "../components/home/CollectionStatistics";
-import useCollectionId from "../blockchain-interaction/hooks/useCollectionId";
-import useWriteContract from "../blockchain-interaction/hooks/useWriteContract";
-import useReadCollections from "../blockchain-interaction/hooks/useReadCollections";
+import useCollectionId from "../blockchain-interaction/hooks/factory/read/useCollectionId";
+import useWriteFactoryContract from "../blockchain-interaction/hooks/factory/write/useWriteFactoryContract";
+import useReadCollections from "../blockchain-interaction/hooks/factory/read/useReadCollections";
 
 const Home = () => {
   const { collectionId } = useCollectionId();
   useReadCollections();
-  useWriteContract();
+  useWriteFactoryContract();
 
   useEffect(() => {
     console.log("collectionId:", collectionId);

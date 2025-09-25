@@ -1,3 +1,15 @@
+const originalWarn = console.warn;
+console.warn = (...args) => {
+  if (
+    typeof args[0] === "string" &&
+    (args[0].includes("Lit is in dev mode") ||
+      args[0].includes("w3m-router-container scheduled an update"))
+  ) {
+    return; // ignore only these Lit warnings
+  }
+  originalWarn(...args);
+};
+
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
-import useConstants from "./useConstants";
+import useConstants from "../../helpers/useConstants";
 
-const useReadContract = () => {
+const useReadFactoryContract = () => {
   const { contractAddress, factoryABI } = useConstants();
   const [factoryReadInstance, setFactoryReadInstance] = useState(null);
   const [provider, setProvider] = useState(null);
@@ -35,4 +35,4 @@ const useReadContract = () => {
   return { provider, factoryReadInstance };
 };
 
-export default useReadContract;
+export default useReadFactoryContract;

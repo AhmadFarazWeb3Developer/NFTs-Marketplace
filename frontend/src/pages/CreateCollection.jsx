@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Upload } from "lucide-react";
-import useCreateCollection from "../blockchain-interaction/hooks/useCreateCollection";
+import useCreateCollection from "../blockchain-interaction/hooks/factory/write/useCreateCollection";
 import { useAppKitAccount } from "@reown/appkit/react";
 
 const CreateCollection = () => {

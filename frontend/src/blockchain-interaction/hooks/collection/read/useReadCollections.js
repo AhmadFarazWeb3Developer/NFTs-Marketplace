@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import useReadContract from "./useReadContract";
+import useReadFactoryContract from "../../factory/useReadFactoryContract";
 import useCollectionId from "./useCollectionId";
 
 const useReadCollections = () => {
-  const { factoryReadInstance } = useReadContract();
+  const { factoryReadInstance } = useReadFactoryContract();
   const { collectionId } = useCollectionId();
   const [collections, setCollections] = useState([]);
 

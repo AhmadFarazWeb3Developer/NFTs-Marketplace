@@ -1,12 +1,14 @@
 import React, { useEffect } from "react";
 import CollectionCard from "../CollectionCard";
-import useReadNFTsCollection from "../../blockchain-interaction/hooks/useReadNFTsCollection";
-import useReadCollections from "../../blockchain-interaction/hooks/useReadCollections";
+import useReadNFTsCollection from "../../blockchain-interaction/hooks/nft/read/useReadNFTsCollection";
+import useReadCollections from "../../blockchain-interaction/hooks/factory/read/useReadCollections";
 const TopCollections = () => {
-  const { getNFTsCollection } = useReadNFTsCollection();
   const { collections } = useReadCollections();
 
+  const { getNFTsCollection } = useReadNFTsCollection();
+
   useEffect(() => {
+    console.log(collections);
     const init = async () => {
       for (let i = 0; i < collections.length; i++) {
         const collection = getNFTsCollection(collections[i]);
