@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 import Navbar from "../components/Navbar";
 import Hero from "../components/home/Hero";
@@ -6,17 +6,16 @@ import Footer from "../components/Footer";
 import TopCollections from "../components/home/TopCollections";
 import CollectionStatistics from "../components/home/CollectionStatistics";
 import useCollectionId from "../blockchain-interaction/hooks/useCollectionId";
-import useReadContract from "../blockchain-interaction/hooks/useReadContract";
+import useWriteContract from "../blockchain-interaction/hooks/useWriteContract";
+import useReadCollections from "../blockchain-interaction/hooks/useReadCollections";
 
 const Home = () => {
-  const { collectionId, error, isLoading, isError } = useCollectionId();
+  const { collectionId } = useCollectionId();
+  useReadCollections();
+  useWriteContract();
 
   useEffect(() => {
     console.log("collectionId:", collectionId);
-
-    // console.log("error", error);
-    // console.log("is loading", isLoading);
-    // console.log("is error", isError);
   }, [collectionId]);
 
   return (

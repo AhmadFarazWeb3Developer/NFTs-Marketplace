@@ -2,46 +2,32 @@ import { useEffect, useState } from "react";
 import useReadContract from "./useReadContract.js";
 
 const useCollectionId = () => {
-  const { factoryInstance } = useReadContract();
+  const { factoryReadInstance } = useReadContract();
 
   const [collectionId, setCollectionId] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [error, setError] = useState(null);
 
   const fetchCollectionId = async () => {
-    if (!factoryInstance) {
+    if (!factoryReadInstance) {
       return;
     }
 
-    setIsLoading(true);
-    setIsError(false);
-    setError(null);
-
     try {
-      const result = await factoryInstance.collectionId();
+      const result = await factoryReadInstance.collectionId();
 
       setCollectionId(result?.toString());
     } catch (err) {
       console.error("Error fetching collectionId:", err);
-      setIsError(true);
-      setError(err);
-    } finally {
-      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    if (factoryInstance) {
+    if (factoryReadInstance) {
       fetchCollectionId();
     }
-  }, [factoryInstance]);
+  }, [factoryReadInstance]);
 
   return {
     collectionId,
-    isLoading,
-    isError,
-    error,
     refetch: fetchCollectionId,
   };
 };

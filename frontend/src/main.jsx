@@ -12,23 +12,23 @@ import Dashboard from "./pages/Dashboard.jsx";
 import Home from "./pages/Home.jsx";
 
 // ----- Reown AppKit Setup -----
-import { createAppKit } from "@reown/appkit/react";
+import { AppKitProvider, createAppKit } from "@reown/appkit/react";
 import { EthersAdapter } from "@reown/appkit-adapter-ethers";
-import { anvil } from "@reown/appkit/networks";
+// import { hardhat } from "@reown/appkit/networks";
 
 const projectId = import.meta.env.VITE_CONNECT_PROJECT_ID;
-const networks = [anvil];
-const metadata = {
-  name: "My Website",
-  description: "My Website description",
-  url: "https://mywebsite.com",
-  icons: ["https://avatars.mywebsite.com/"],
+
+const hardhat = {
+  id: 31337,
+  name: "Hardhat",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: { default: { http: ["http://127.0.0.1:8545"] } },
+  blockExplorers: { default: { name: "Hardhat", url: "" } },
 };
-// Initialize AppKit BEFORE rendering React
+
 createAppKit({
   adapters: [new EthersAdapter()],
-  networks,
-  metadata,
+  networks: [hardhat],
   projectId,
   features: {
     analytics: true,
@@ -60,6 +60,8 @@ const router = createBrowserRouter([
 // ----- Render -----
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AppKitProvider>
+      <RouterProvider router={router} />
+    </AppKitProvider>
   </StrictMode>
 );

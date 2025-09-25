@@ -1,291 +1,111 @@
-// // // // import { useState } from "react";
-// // // // import { useAppKit, useAppKitAccount } from "@reown/appkit/react";
-// // // // import useConstants from "./useConstants";
-
-// // // // const useCreateCollection = () => {
-// // // //   const { contractAddress, contractABI } = useConstants();
-// // // //   const { address } = useAppKitAccount(); // connected wallet
-// // // //   const { sendTransaction } = useAppKit(); // AppKit function to send tx
-
-// // // //   const [isPending, setIsPending] = useState(false);
-// // // //   const [isSuccess, setIsSuccess] = useState(false);
-// // // //   const [error, setError] = useState(null);
-// // // //   const [txHash, setTxHash] = useState(null);
-
-// // // //   const createCollectionOnChain = async (name, symbol) => {
-// // // //     if (!address) {
-// // // //       setError(new Error("Wallet not connected"));
-// // // //       return;
-// // // //     }
-
-// // // //     setIsPending(true);
-// // // //     setIsSuccess(false);
-// // // //     setError(null);
-// // // //     setTxHash(null);
-
-// // // //     try {
-// // // //       const tx = await sendTransaction({
-// // // //         to: contractAddress,
-// // // //         abi: contractABI,
-// // // //         functionName: "createCollection",
-// // // //         args: [name, symbol],
-// // // //         // optional: gas limit or value if needed
-// // // //       });
-
-// // // //       setTxHash(tx);
-// // // //       setIsPending(false);
-// // // //       setIsSuccess(true);
-// // // //     } catch (err) {
-// // // //       console.error("Error creating collection:", err);
-// // // //       setError(err);
-// // // //       setIsPending(false);
-// // // //     }
-// // // //   };
-
-// // // //   return {
-// // // //     createCollectionOnChain,
-// // // //     txHash,
-// // // //     isPending,
-// // // //     isSuccess,
-// // // //     isError: !!error,
-// // // //     error,
-// // // //   };
-// // // // };
-
-// // // // export default useCreateCollection;
-// // // import { useState } from "react";
-// // // import { useAppKit } from "@reown/appkit/react";
-// // // import useConstants from "./useConstants.js";
-
-// // // const useCreateCollection = () => {
-// // //   const { contractAddress, contractABI } = useConstants();
-// // //   const { walletClient } = useAppKit(); // Get connected wallet
-
-// // //   const [isPending, setIsPending] = useState(false);
-// // //   const [isSuccess, setIsSuccess] = useState(false);
-// // //   const [error, setError] = useState(null);
-// // //   const [txHash, setTxHash] = useState(null);
-
-// // //   const createCollectionOnChain = async (name, symbol) => {
-// // //     if (!walletClient) {
-// // //       setError(new Error("Wallet not connected"));
-// // //       return;
-// // //     }
-
-// // //     setIsPending(true);
-// // //     setIsSuccess(false);
-// // //     setError(null);
-// // //     setTxHash(null);
-
-// // //     try {
-// // //       const hash = await walletClient.writeContract({
-// // //         address: contractAddress,
-// // //         abi: contractABI,
-// // //         functionName: "createCollection",
-// // //         args: [name, symbol],
-// // //       });
-
-// // //       setTxHash(hash);
-// // //       setIsPending(false);
-// // //       setIsSuccess(true);
-// // //     } catch (err) {
-// // //       console.error("Error creating collection:", err);
-// // //       setError(err);
-// // //       setIsPending(false);
-// // //     }
-// // //   };
-
-// // //   return {
-// // //     createCollectionOnChain,
-// // //     txHash,
-// // //     isPending,
-// // //     isSuccess,
-// // //     isError: !!error,
-// // //     error,
-// // //   };
-// // // };
-
-// // // export default useCreateCollection;
-
-// // import { useState } from "react";
-// // import { useAppKit, useAppKitAccount } from "@reown/appkit/react";
-// // import useConstants from "./useConstants.js";
-
-// // const useCreateCollection = () => {
-// //   const { contractAddress, contractABI } = useConstants();
-// //   const { walletClient } = useAppKit();
-// //   const { address } = useAppKitAccount(); // detect connected wallet
-
-// //   const [isPending, setIsPending] = useState(false);
-// //   const [isSuccess, setIsSuccess] = useState(false);
-// //   const [error, setError] = useState(null);
-// //   const [txHash, setTxHash] = useState(null);
-
-// //   const createCollectionOnChain = async (name, symbol) => {
-// //     if (!address) {
-// //       // <-- use 'address' to check
-// //       setError(new Error("Wallet not connected"));
-// //       return;
-// //     }
-
-// //     setIsPending(true);
-// //     setIsSuccess(false);
-// //     setError(null);
-// //     setTxHash(null);
-
-// //     try {
-// //       const hash = await walletClient.writeContract({
-// //         address: contractAddress,
-// //         abi: contractABI,
-// //         functionName: "createCollection",
-// //         args: [name, symbol],
-// //       });
-
-// //       setTxHash(hash);
-// //       setIsPending(false);
-// //       setIsSuccess(true);
-// //     } catch (err) {
-// //       console.error("Error creating collection:", err);
-// //       setError(err);
-// //       setIsPending(false);
-// //     }
-// //   };
-
-// //   return {
-// //     createCollectionOnChain,
-// //     txHash,
-// //     isPending,
-// //     isSuccess,
-// //     isError: !!error,
-// //     error,
-// //   };
-// // };
-
-// // export default useCreateCollection;
-
-// import { useState } from "react";
-// import { useAppKit, useAppKitAccount } from "@reown/appkit/react";
-// import useConstants from "./useConstants.js";
-
-// const useCreateCollection = () => {
-//   const { contractAddress, contractABI } = useConstants();
-//   const { walletClient } = useAppKit();
-//   const { address } = useAppKitAccount(); // connected wallet
-
-//   const [isPending, setIsPending] = useState(false);
-//   const [isSuccess, setIsSuccess] = useState(false);
-//   const [error, setError] = useState(null);
-//   const [txHash, setTxHash] = useState(null);
-
-//   const createCollectionOnChain = async (name, symbol) => {
-//     if (!address) {
-//       setError(new Error("Wallet not connected"));
-//       return;
-//     }
-
-//     if (!walletClient || !walletClient.writeContract) {
-//       setError(new Error("Wallet client not ready yet"));
-//       return;
-//     }
-
-//     setIsPending(true);
-//     setIsSuccess(false);
-//     setError(null);
-//     setTxHash(null);
-
-//     try {
-//       const hash = await walletClient.writeContract({
-//         address: contractAddress,
-//         abi: contractABI,
-//         functionName: "createCollection",
-//         args: [name, symbol],
-//       });
-
-//       setTxHash(hash);
-//       setIsPending(false);
-//       setIsSuccess(true);
-//     } catch (err) {
-//       console.error("Error creating collection:", err);
-//       setError(err);
-//       setIsPending(false);
-//     }
-//   };
-
-//   return {
-//     createCollectionOnChain,
-//     txHash,
-//     isPending,
-//     isSuccess,
-//     isError: !!error,
-//     error,
-//   };
-// };
-
-// export default useCreateCollection;
-
-import { useState, useEffect } from "react";
-import { useAppKit, useAppKitAccount } from "@reown/appkit/react";
-import useConstants from "./useConstants.js";
+import { useState } from "react";
+import useWriteContract from "./useWriteContract";
 
 const useCreateCollection = () => {
-  const { contractAddress, contractABI } = useConstants();
-  const { walletClient } = useAppKit();
-  const { address } = useAppKitAccount();
+  const { factoryWriteInstance, isLoading } = useWriteContract();
 
   const [isPending, setIsPending] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState(null);
   const [txHash, setTxHash] = useState(null);
-
-  // Optional: track whether client is ready
-  const [clientReady, setClientReady] = useState(false);
-
-  useEffect(() => {
-    if (walletClient) setClientReady(true);
-  }, [walletClient]);
+  const [collectionId, setCollectionId] = useState(null);
 
   const createCollectionOnChain = async (name, symbol) => {
-    if (!address) {
-      setError(new Error("Wallet not connected"));
-      return;
-    }
-
-    if (!clientReady) {
-      setError(new Error("Wallet client not ready yet. Please wait."));
-      return;
-    }
-
+    // Reset state
     setIsPending(true);
     setIsSuccess(false);
     setError(null);
     setTxHash(null);
+    setCollectionId(null);
+
+    if (isLoading) {
+      setError(new Error("Contract is initializing, please wait"));
+      setIsPending(false);
+      return;
+    }
+
+    if (!factoryWriteInstance) {
+      setError(new Error("Wallet not connected or contract not available"));
+      setIsPending(false);
+      return;
+    }
+
+    if (!name || !symbol) {
+      setError(new Error("Collection name and symbol are required"));
+      setIsPending(false);
+      return;
+    }
 
     try {
-      const hash = await walletClient.writeContract({
-        address: contractAddress,
-        abi: contractABI,
-        functionName: "createCollection",
-        args: [name, symbol],
-      });
+      console.log("Creating collection with:", { name, symbol });
 
-      setTxHash(hash);
-      setIsPending(false);
+      // Send transaction
+      const tx = await factoryWriteInstance.createCollection(name, symbol);
+      console.log("Transaction sent:", tx.hash);
+      setTxHash(tx.hash);
+
+      // Wait for confirmation
+      const receipt = await tx.wait();
+      console.log("Transaction confirmed:", receipt);
+
+      // Parse CollectionCreated event to get collectionId
+      const event = receipt.events?.find(
+        (e) => e.event === "CollectionCreated"
+      );
+      if (event && event.args?.collectionId !== undefined) {
+        const newId = event.args.collectionId.toNumber
+          ? event.args.collectionId.toNumber()
+          : Number(event.args.collectionId);
+        setCollectionId(newId);
+        console.log("New collectionId:", newId);
+      }
+
       setIsSuccess(true);
     } catch (err) {
       console.error("Error creating collection:", err);
-      setError(err);
+
+      if (err.code === "ACTION_REJECTED") {
+        setError(new Error("Transaction was rejected by user"));
+      } else if (err.reason) {
+        setError(new Error(`Contract error: ${err.reason}`));
+      } else if (err.data?.message) {
+        setError(new Error(`Contract revert: ${err.data.message}`));
+      } else if (err.message.includes("revert")) {
+        const revertMatch = err.message.match(
+          /revert with reason string '(.*)'/
+        );
+        if (revertMatch)
+          setError(new Error(`Transaction reverted: ${revertMatch[1]}`));
+        else
+          setError(
+            new Error("Transaction reverted. Check contract requirements.")
+          );
+      } else {
+        setError(err);
+      }
+    } finally {
       setIsPending(false);
     }
   };
 
+  const reset = () => {
+    setIsPending(false);
+    setIsSuccess(false);
+    setError(null);
+    setTxHash(null);
+    setCollectionId(null);
+  };
+
   return {
     createCollectionOnChain,
+    reset,
     txHash,
+    collectionId,
     isPending,
     isSuccess,
     isError: !!error,
     error,
-    clientReady,
+    isLoading,
   };
 };
 
