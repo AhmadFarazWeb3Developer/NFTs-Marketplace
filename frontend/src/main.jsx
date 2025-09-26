@@ -39,9 +39,11 @@ const hardhat = {
 };
 
 createAppKit({
+  autoConnnect: false,
   adapters: [new EthersAdapter()],
   networks: [hardhat],
   projectId,
+
   features: {
     analytics: true,
   },

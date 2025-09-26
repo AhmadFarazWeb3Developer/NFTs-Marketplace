@@ -2,6 +2,7 @@ import { ethers } from "ethers";
 import useAuthenticate from "../../../helpers/Auth";
 import NFTsCollectionABI from "../../../../../artifacts/onchain/NFTsCollection.sol/NFTsCollection.json";
 import { tokenURI } from "../../../helpers/IPFS";
+import { cloneElement } from "react";
 
 const useMintNFT = () => {
   const { error } = useAuthenticate();
@@ -33,16 +34,20 @@ const useMintNFT = () => {
       // Send transaction with proper error handling
       const tx = await collectionInstance.mint(
         tokenURI, // Use the passed tokenURI parameter
-        priceInWei,
-        {
-          gasLimit: 500_000,
-          // Remove gasPrice to let ethers handle it automatically
-        }
+        priceInWei
+        // {
+        // gasLimit: 500_000,
+        // Remove gasPrice to let ethers handle it automatically
+        // }
       );
 
-      console.log("Transaction sent:", tx.hash);
+      // console.log("Transaction sent:", tx.hash);
       const receipt = await tx.wait();
-      console.log("Transaction confirmed:", receipt);
+
+      const tokenId = await collectionInstance.tokenId();
+
+      console.log("token Id :", tokenId);
+      // console.log("Transaction confirmed:", receipt);
 
       return receipt;
     } catch (err) {

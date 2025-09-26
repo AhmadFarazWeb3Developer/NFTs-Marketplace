@@ -5,9 +5,11 @@ import AllCollections from "../components/explore/AllCollections";
 import CollectionCard from "../components/CollectionCard";
 import MintNFT from "./MintNFT";
 import { useAppKitAccount } from "@reown/appkit/react";
+import useReadSingleCollection from "../blockchain-interaction/hooks/nft/read/useReadSingleCollection";
 
 const Dashboard = () => {
   const { address, isConnected } = useAppKitAccount();
+
   return (
     <>
       <Navbar />

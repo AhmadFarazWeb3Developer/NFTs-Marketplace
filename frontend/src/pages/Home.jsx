@@ -8,13 +8,17 @@ import CollectionStatistics from "../components/home/CollectionStatistics";
 import useCollectionId from "../blockchain-interaction/hooks/collection/read/useCollectionId";
 import useWriteFactoryContract from "../blockchain-interaction/hooks/factory/useWriteFactoryContract";
 import useReadAllCollections from "../blockchain-interaction/hooks/collection/read/useReadAllCollections";
+import { useAppKitAccount } from "@reown/appkit/react";
 
 const Home = () => {
   const { collectionId } = useCollectionId();
   useReadAllCollections();
   useWriteFactoryContract();
 
+  const { address, isConnected } = useAppKitAccount();
   useEffect(() => {
+    console.log("is connected", isConnected);
+
     console.log("collectionId:", collectionId);
   }, [collectionId]);
 

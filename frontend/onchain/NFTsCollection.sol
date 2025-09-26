@@ -3,15 +3,13 @@ pragma solidity ^0.8.13;
 
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {IERC165} from "@openzeppelin/contracts/interfaces/IERC165.sol";
-import {IERC721Metadata} from  "@openzeppelin/contracts/interfaces/IERC721Metadata.sol";
+import {IERC721Metadata} from "@openzeppelin/contracts/interfaces/IERC721Metadata.sol";
 import {IERC721Receiver} from "@openzeppelin/contracts/interfaces/IERC721Receiver.sol";
 import {NFTsMarketplaceFactory} from "./NFTsMarketplaceFactory.sol";
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-// 
-
-
+//
 
 // @note Every ERC-721 compliant contract must implement the ERC721 and ERC165 interfaces
 contract NFTsCollection is Ownable, ReentrancyGuard, IERC165, ERC721 {
@@ -135,16 +133,18 @@ contract NFTsCollection is Ownable, ReentrancyGuard, IERC165, ERC721 {
         string memory tokenURI_,
         uint256 tokenPrice_
     ) public onlyOwner checkURI(tokenURI_) returns (uint256) {
-        // Effects
-        tokenURIs[tokenId] = tokenURI_;
-        updateTokenPrice(tokenId, tokenPrice_);
+        uint256 newId = tokenId;
 
-        // Interactions
-        _safeMint(owner(), tokenId);
-        
+        // Mint first
+        _safeMint(owner(), newId);
+
+        // Set metadata and price
+        tokenURIs[newId] = tokenURI_;
+        updateTokenPrice(newId, tokenPrice_);
+
         tokenId++;
 
-        return tokenId - 1;
+        return newId;
     }
 
     /**

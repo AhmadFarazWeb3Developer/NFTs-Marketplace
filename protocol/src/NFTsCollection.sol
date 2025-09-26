@@ -10,9 +10,6 @@ import {NFTsMarketplaceFactory} from "./NFTsMarketplaceFactory.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-import {console} from "forge-std/console.sol";
-// import{console} from  "hardhat/console.sol";
-
 // @note Every ERC-721 compliant contract must implement the ERC721 and ERC165 interfaces
 contract NFTsCollection is Ownable, ReentrancyGuard, IERC165, ERC721 {
     // -----------------------------------------------------------------------
@@ -134,16 +131,19 @@ contract NFTsCollection is Ownable, ReentrancyGuard, IERC165, ERC721 {
     function mint(
         string memory tokenURI_,
         uint256 tokenPrice_
-    ) public onlyOwner checkURI(tokenURI_) returns (uint256) {
-        // Effects
-        tokenURIs[tokenId] = tokenURI_;
-        updateTokenPrice(tokenId, tokenPrice_);
+    ) public onlyOwner checkURI(tokenURI_) nonReentrant returns (uint256) {
+        uint256 newId = tokenId;
+
+        // Mint first
+        _safeMint(owner(), newId);
+
+        // Set metadata and price
+        tokenURIs[newId] = tokenURI_;
+        updateTokenPrice(newId, tokenPrice_);
+
         tokenId++;
 
-        // Interactions
-        _safeMint(owner(), tokenId);
-
-        return tokenId - 1;
+        return newId;
     }
 
     /**
