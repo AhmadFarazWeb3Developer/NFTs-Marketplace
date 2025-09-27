@@ -1,7 +1,15 @@
 import React, { useState } from "react";
+import useBuyNFT from "../../blockchain-interaction/hooks/nft/write/useBuyNFT";
 
 const BuyNft = () => {
   const [activeTab, setActiveTab] = useState("");
+  const [tokenId, setTokenId] = useState(0); // updated later
+
+  const { buyNFT } = useBuyNFT();
+
+  const BuyingNFT = async () => {
+    await buyNFT(tokenId);
+  };
 
   return (
     <div className="buyNft-section border bg-primary-black">
@@ -50,7 +58,10 @@ const BuyNft = () => {
               50.00 ETH{" "}
               <span className="text-xs text-paragraph">($230.3k)</span>
             </h2>
-            <button className="mt-3 w-full bg-action-btn-green text-black py-2 rounded-md font-normal cursor-pointer hover:bg-action-btn-green/80">
+            <button
+              onClick={BuyingNFT}
+              className="mt-3 w-full bg-action-btn-green text-black py-2 rounded-md font-normal cursor-pointer hover:bg-action-btn-green/80"
+            >
               Buy now
             </button>
           </div>

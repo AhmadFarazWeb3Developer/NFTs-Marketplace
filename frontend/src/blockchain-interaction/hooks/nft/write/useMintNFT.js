@@ -2,7 +2,6 @@ import { ethers } from "ethers";
 import useAuthenticate from "../../../helpers/Auth";
 import NFTsCollectionABI from "../../../../../artifacts/onchain/NFTsCollection.sol/NFTsCollection.json";
 import { tokenURI } from "../../../helpers/IPFS";
-import { cloneElement } from "react";
 
 const useMintNFT = () => {
   const { error } = useAuthenticate();
