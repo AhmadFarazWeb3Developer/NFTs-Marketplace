@@ -24,30 +24,6 @@ const collectionSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-
-  id: {
-    type: Number,
-    require: true,
-  },
-
-  items: {
-    type: Number,
-    require: true,
-  },
-  owners: {
-    type: Number,
-    require: true,
-  },
-  remaining: {
-    type: Number,
-    require: true,
-  },
-
-  forSale: {
-    type: String,
-    enum: ["active", "notActive"],
-    default: "active",
-  },
 });
 
 const CollectionModel = mongoose.model("collections", collectionSchema);

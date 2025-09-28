@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useWriteFactoryContract from "../../factory/useWriteFactoryContract";
 
 const useCreateCollection = () => {
@@ -10,6 +10,7 @@ const useCreateCollection = () => {
   const [txHash, setTxHash] = useState(null);
   const [collectionId, setCollectionId] = useState(null);
 
+  useEffect(() => {}, [factoryWriteInstance]);
   const createCollectionOnChain = async (name, symbol) => {
     // Reset state
     setIsPending(true);

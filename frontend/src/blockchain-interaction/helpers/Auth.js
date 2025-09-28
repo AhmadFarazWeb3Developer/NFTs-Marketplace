@@ -26,8 +26,8 @@ const useAuthenticate = () => {
       if (!provider) {
         setError("Provider not available");
       }
-
       const signer = await provider.getSigner();
+
       if (!signer) {
         setError("Signer not available");
       }

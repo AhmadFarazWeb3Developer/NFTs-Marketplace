@@ -17,6 +17,7 @@ contract NFTsMarketplaceFactory is Ownable, ReentrancyGuard {
     mapping(address => address) private ownerOfCollection; // collection => owner
     mapping(uint256 => bool) public isForSale; // id => true/false
     mapping(uint256 => uint256) public collectionPrice; // id => price in ETH
+    mapping(address => uint256) public collectionAddressToId;
 
     // -----------------------------------------------------------------------
     // Errors
@@ -78,6 +79,7 @@ contract NFTsMarketplaceFactory is Ownable, ReentrancyGuard {
             address(this)
         );
 
+        collectionAddressToId[address(collection)] = collectionId;
         collections[collectionId][_msgSender()] = address(collection);
         ownerOfCollection[address(collection)] = _msgSender();
 

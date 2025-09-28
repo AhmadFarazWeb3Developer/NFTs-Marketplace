@@ -1,41 +1,61 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import CollectionCard from "../CollectionCard";
 import useReadSingleCollection from "../../blockchain-interaction/hooks/nft/read/useReadSingleCollection";
 import useReadAllCollections from "../../blockchain-interaction/hooks/collection/read/useReadAllCollections";
+import useReadFactoryContract from "../../blockchain-interaction/hooks/factory/useReadFactoryContract";
 
 const TopCollections = () => {
+  const [collectionsData, setCollectionsData] = useState([
+    { collectioId: "", collection: "" },
+  ]);
   const { collections } = useReadAllCollections();
 
   const { getNFTCollectionInstance } = useReadSingleCollection();
+  const { factoryReadInstance } = useReadFactoryContract();
 
   useEffect(() => {
-    // console.log(collections);
-    const init = async () => {
-      for (let i = 0; i < collections.length; i++) {
-        const collection = getNFTCollectionInstance(collections[i]);
-        // console.log("NFTCollection : ", await collection);
-      }
+    const loadCollections = async () => {
+      const data = await Promise.all(
+        collections.map(async (collectionAddr) => {
+          const instance = await getNFTCollectionInstance(collectionAddr);
+
+          console.log(collectionAddr);
+          const id = await factoryReadInstance.collectionAddressToId(
+            collectionAddr
+          );
+
+          return { collectionId: id, collection: instance };
+        })
+      );
+
+      setCollectionsData(data);
     };
 
-    init();
+    if (collections.length > 0) {
+      loadCollections();
+    }
   }, [collections]);
 
   return (
-    <>
-      <div className="collections-section px-10 bg-primary-black">
-        <h1 className="text-white text-3xl font-unbounded font-semibold">
-          <span className="text-action-btn-green">TOP</span> COLLECTIONS
-        </h1>
+    <div className="collections-section px-10 bg-primary-black">
+      <h1 className="text-white text-3xl font-unbounded font-semibold">
+        <span className="text-action-btn-green">TOP</span> COLLECTIONS
+      </h1>
 
-        <CollectionCard />
+      {collectionsData.map(({ collectionId, collection }) => (
+        <CollectionCard
+          key={collectionId}
+          collectionId={collectionId}
+          collection={collection}
+        />
+      ))}
 
-        <div className="w-full flex justify-center py-5">
-          <button className="bg-action-btn-green py-2 px-10 rounded-full cursor-pointer">
-            VIEW ALL
-          </button>
-        </div>
+      <div className="w-full flex justify-center py-5">
+        <button className="bg-action-btn-green py-2 px-10 rounded-full cursor-pointer">
+          VIEW ALL
+        </button>
       </div>
-    </>
+    </div>
   );
 };
 

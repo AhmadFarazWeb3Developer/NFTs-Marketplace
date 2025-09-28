@@ -1,15 +1,3 @@
-// const originalWarn = console.warn;
-// console.warn = (...args) => {
-//   if (
-//     typeof args[0] === "string" &&
-//     (args[0].includes("Lit is in dev mode") ||
-//       args[0].includes("w3m-router-container scheduled an update"))
-//   ) {
-//     return; // ignore only these Lit warnings
-//   }
-//   originalWarn(...args);
-// };
-
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -33,17 +21,21 @@ const projectId = import.meta.env.VITE_CONNECT_PROJECT_ID;
 const hardhat = {
   id: 31337,
   name: "Hardhat",
+  caipNetworkId: "eip155:31337",
+  chainNamespace: "eip155",
   nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
-  rpcUrls: { default: { http: ["http://127.0.0.1:8545"] } },
+  rpcUrls: {
+    default: { http: ["http://127.0.0.1:8545"] },
+    public: { http: ["http://127.0.0.1:8545"] },
+  },
   blockExplorers: { default: { name: "Hardhat", url: "" } },
 };
 
 createAppKit({
-  autoConnnect: false,
+  autoConnect: false,
   adapters: [new EthersAdapter()],
   networks: [hardhat],
   projectId,
-  // enableReconnect: false,
   features: {
     analytics: true,
   },

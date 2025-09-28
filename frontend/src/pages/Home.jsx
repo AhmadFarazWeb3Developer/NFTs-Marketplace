@@ -11,17 +11,6 @@ import useReadAllCollections from "../blockchain-interaction/hooks/collection/re
 import { useAppKitAccount } from "@reown/appkit/react";
 
 const Home = () => {
-  const { collectionId } = useCollectionId();
-  useReadAllCollections();
-  useWriteFactoryContract();
-
-  const { address, isConnected } = useAppKitAccount();
-  useEffect(() => {
-    console.log("is connected", isConnected);
-
-    console.log("collectionId:", collectionId);
-  }, [collectionId]);
-
   return (
     <>
       <div className="home-page h-screen bg-primary-black">

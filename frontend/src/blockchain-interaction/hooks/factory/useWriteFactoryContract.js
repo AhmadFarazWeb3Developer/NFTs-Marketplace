@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import useConstants from "../../helpers/useConstants";
 import Authenticate from "../../helpers/Auth";
+import useAuthenticate from "../../helpers/Auth";
 
 const useWriteFactoryContract = () => {
   const { contractAddress, factoryABI } = useConstants();
@@ -9,8 +10,9 @@ const useWriteFactoryContract = () => {
   const [factoryWriteInstance, setFactoryWriteInstance] = useState(null);
 
   const [isLoading, setIsLoading] = useState(false);
+
   const { error, signer, isConnected, walletProvider, address } =
-    Authenticate();
+    useAuthenticate();
 
   useEffect(() => {
     const initContract = async () => {
