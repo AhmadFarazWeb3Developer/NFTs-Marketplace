@@ -3,8 +3,8 @@ import connectDB from "./DB/db.config.js";
 import cors from "cors";
 import dotenv from "dotenv";
 
-import createCollectionRouter from "./routes/createCollection.route.js";
-import mintNFTRouter from "./routes/mintNFT.route.js";
+import CollectionRouter from "./routes/collection.route.js";
+import NFTRouter from "./routes/NFT.route.js";
 
 dotenv.config();
 const app = express();
@@ -16,8 +16,8 @@ app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api/v1", createCollectionRouter);
-app.use("/api/v1", mintNFTRouter);
+app.use("/api/v1", CollectionRouter);
+app.use("/api/v1", NFTRouter);
 
 connectDB()
   .then(() => {

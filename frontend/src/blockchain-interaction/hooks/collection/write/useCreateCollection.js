@@ -9,10 +9,12 @@ const useCreateCollection = () => {
   const [error, setError] = useState(null);
   const [txHash, setTxHash] = useState(null);
   const [collectionId, setCollectionId] = useState(null);
+  const [contractAddress, setContractAddress] = useState(null);
+  const [accountAddress, setAccountAddress] = useState(null);
 
   useEffect(() => {}, [factoryWriteInstance]);
+
   const createCollectionOnChain = async (name, symbol) => {
-    // Reset state
     setIsPending(true);
     setIsSuccess(false);
     setError(null);
@@ -38,28 +40,48 @@ const useCreateCollection = () => {
     }
 
     try {
-      console.log("Creating collection with:", { name, symbol });
-
       const tx = await factoryWriteInstance.createCollection(name, symbol);
-      console.log("Transaction sent:", tx.hash);
       setTxHash(tx.hash);
 
-      // Wait for confirmation
       const receipt = await tx.wait();
-      console.log("Transaction confirmed:", receipt);
+      // console.log("Transaction confirmed:", receipt);
 
-      // Parse CollectionCreated event to get collectionId
-      const event = receipt.events?.find(
-        (e) => e.event === "CollectionCreated"
-      );
-      if (event && event.args?.collectionId !== undefined) {
-        const newId = event.args.collectionId.toNumber
-          ? event.args.collectionId.toNumber()
-          : Number(event.args.collectionId);
-        setCollectionId(newId);
-        console.log("New collectionId:", newId);
+      let collectionCreatedEvent = null;
+
+      for (const log of receipt.logs) {
+        try {
+          const parsedLog = factoryWriteInstance.interface.parseLog(log);
+
+          if (parsedLog && parsedLog.name === "CollectionCreated") {
+            collectionCreatedEvent = parsedLog;
+            break;
+          }
+        } catch (error) {
+          continue;
+        }
       }
 
+      if (!collectionCreatedEvent) {
+        throw new Error(
+          "CollectionCreated event not found in transaction logs"
+        );
+      }
+
+      const {
+        collectionId: newCollectionId,
+        owner,
+        collectionAddress,
+      } = collectionCreatedEvent.args;
+
+      // Convert BigInt to number if safe, otherwise keep as BigInt
+      const safeId =
+        newCollectionId <= Number.MAX_SAFE_INTEGER
+          ? Number(newCollectionId)
+          : newCollectionId;
+
+      setCollectionId(safeId);
+      setAccountAddress(owner);
+      setContractAddress(collectionAddress);
       setIsSuccess(true);
     } catch (err) {
       console.error("Error creating collection:", err);
@@ -101,6 +123,8 @@ const useCreateCollection = () => {
     reset,
     txHash,
     collectionId,
+    contractAddress,
+    accountAddress,
     isPending,
     isSuccess,
     isError: !!error,

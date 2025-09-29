@@ -40,7 +40,14 @@ const useWriteFactoryContract = () => {
     };
 
     initContract();
-  }, [isConnected, walletProvider, address, contractAddress, factoryABI]);
+  }, [
+    isConnected,
+    walletProvider,
+    address,
+    contractAddress,
+    factoryABI,
+    signer,
+  ]);
 
   return { factoryWriteInstance, isLoading };
 };

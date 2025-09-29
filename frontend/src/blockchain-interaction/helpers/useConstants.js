@@ -2,14 +2,14 @@ import deployment from "../../../ignition/deployments/chain-31337/deployed_addre
 import NFTsMarketplaceFactoryABI from "../../../artifacts/onchain/NFTsMarketplaceFactory.sol/NFTsMarketplaceFactory.json";
 
 const useConstants = () => {
-  const contractAddress =
+  const factoryAddress =
     deployment["NFTsMarketplaceFactoryModule#NFTsMarketplaceFactory"];
 
   const factoryABI = NFTsMarketplaceFactoryABI.abi;
 
   const hardhatChainId = 31337;
 
-  return { contractAddress, factoryABI, hardhatChainId };
+  return { factoryAddress, factoryABI, hardhatChainId };
 };
 
 export default useConstants;

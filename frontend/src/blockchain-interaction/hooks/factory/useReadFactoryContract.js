@@ -1,38 +1,24 @@
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import useConstants from "../../helpers/useConstants";
+import useAuthenticate from "../../helpers/Auth";
 
 const useReadFactoryContract = () => {
-  const { contractAddress, factoryABI } = useConstants();
+  const { factoryAddress, factoryABI } = useConstants();
   const [factoryReadInstance, setFactoryReadInstance] = useState(null);
-  const [provider, setProvider] = useState(null);
 
+  const { signer } = useAuthenticate();
   useEffect(() => {
     const init = async () => {
-      let _provider;
+      const contract = new ethers.Contract(factoryAddress, factoryABI, signer);
 
-      if (window.ethereum == null) {
-        console.log("MetaMask not installed; using read-only defaults");
-        _provider = ethers.getDefaultProvider();
-      } else {
-        // local RPC
-        _provider = new ethers.JsonRpcProvider("http://127.0.0.1:8545");
-      }
-
-      const contract = new ethers.Contract(
-        contractAddress,
-        factoryABI,
-        _provider
-      );
-
-      setProvider(_provider);
       setFactoryReadInstance(contract);
     };
 
     init();
-  }, [contractAddress, factoryABI]);
+  }, [factoryAddress, factoryABI, signer]);
 
-  return { provider, factoryReadInstance };
+  return { signer, factoryReadInstance };
 };
 
 export default useReadFactoryContract;

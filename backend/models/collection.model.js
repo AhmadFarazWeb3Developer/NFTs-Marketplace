@@ -11,16 +11,15 @@ const collectionSchema = mongoose.Schema({
     required: true,
   },
 
-  image: {
-    type: String,
-    required: true,
-  },
-
   name: {
     type: String,
     required: true,
   },
   symbol: {
+    type: String,
+    required: true,
+  },
+  image: {
     type: String,
     required: true,
   },

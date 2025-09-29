@@ -6,25 +6,23 @@ import useReadFactoryContract from "../../blockchain-interaction/hooks/factory/u
 
 const TopCollections = () => {
   const [collectionsData, setCollectionsData] = useState([
-    { collectioId: "", collection: "" },
+    { collectioId: "", collection: "", accountAddress: "" },
   ]);
-  const { collections } = useReadAllCollections();
-
+  const { collections, accountAddresses } = useReadAllCollections();
   const { getNFTCollectionInstance } = useReadSingleCollection();
   const { factoryReadInstance } = useReadFactoryContract();
 
   useEffect(() => {
     const loadCollections = async () => {
       const data = await Promise.all(
-        collections.map(async (collectionAddr) => {
+        collections.map(async (collectionAddr, index) => {
           const instance = await getNFTCollectionInstance(collectionAddr);
-
-          console.log(collectionAddr);
           const id = await factoryReadInstance.collectionAddressToId(
             collectionAddr
           );
+          const accountAddress = accountAddresses[index];
 
-          return { collectionId: id, collection: instance };
+          return { collectionId: id, collection: instance, accountAddress };
         })
       );
 
@@ -42,11 +40,12 @@ const TopCollections = () => {
         <span className="text-action-btn-green">TOP</span> COLLECTIONS
       </h1>
 
-      {collectionsData.map(({ collectionId, collection }) => (
+      {collectionsData.map(({ collectionId, collection, accountAddress }) => (
         <CollectionCard
           key={collectionId}
           collectionId={collectionId}
           collection={collection}
+          accountAddress={accountAddress}
         />
       ))}
 

@@ -7,13 +7,13 @@ import { useAppKitAccount } from "@reown/appkit/react";
 
 const CreateCollection = () => {
   const [formData, setFormData] = useState({
-    collectionName: "",
-    collectionSymbol: "",
-    collectionImage: null,
+    name: "",
+    symbol: "",
+    image: null,
   });
   const [errorMessage, setErrorMessage] = useState("");
-
   const { address } = useAppKitAccount();
+
   const {
     createCollectionOnChain,
     txHash,
@@ -21,6 +21,8 @@ const CreateCollection = () => {
     isSuccess,
     isError,
     error,
+    contractAddress,
+    accountAddress,
   } = useCreateCollection();
 
   const uploadCollectionImage = (event) => {
@@ -30,7 +32,7 @@ const CreateCollection = () => {
       return;
     }
     if (file) {
-      setFormData({ ...formData, collectionImage: file });
+      setFormData({ ...formData, image: file });
       setErrorMessage("");
     }
   };
@@ -39,7 +41,7 @@ const CreateCollection = () => {
     event.preventDefault();
     setErrorMessage("");
 
-    if (!formData.collectionName || !formData.collectionSymbol) {
+    if (!formData.name || !formData.symbol) {
       setErrorMessage("Please fill in both Name and Symbol fields.");
       return;
     }
@@ -50,25 +52,25 @@ const CreateCollection = () => {
     }
 
     try {
-      await createCollectionOnChain(
-        formData.collectionName,
-        formData.collectionSymbol
-      );
+      await createCollectionOnChain(formData.name, formData.symbol);
     } catch (err) {
       setErrorMessage(err.message || "Failed to create collection.");
     }
   };
 
-  // Optional: call API after tx confirmed
   useEffect(() => {
     const sendApiRequest = async () => {
-      if (isSuccess && txHash) {
+      if (isSuccess && txHash && contractAddress && accountAddress) {
         try {
           const form = new FormData();
-          form.append("collectionName", formData.collectionName);
-          form.append("collectionSymbol", formData.collectionSymbol);
-          if (formData.collectionImage) {
-            form.append("collectionImage", formData.collectionImage);
+
+          form.append("accountAddress", accountAddress);
+          form.append("contractAddress", contractAddress);
+          form.append("name", formData.name);
+          form.append("symbol", formData.symbol);
+
+          if (formData.image) {
+            form.append("image", formData.image);
           }
 
           const response = await fetch(
@@ -82,6 +84,7 @@ const CreateCollection = () => {
           if (!response.ok) throw new Error("API request failed");
 
           const data = await response.json();
+
           console.log("Server Response:", data);
           console.log("Transaction Success:", isSuccess);
         } catch (err) {
@@ -92,7 +95,7 @@ const CreateCollection = () => {
     };
 
     sendApiRequest();
-  }, [isSuccess, txHash, formData]);
+  }, [isSuccess, txHash, contractAddress, accountAddress]);
 
   return (
     <>
@@ -114,9 +117,9 @@ const CreateCollection = () => {
               type="text"
               placeholder="Board Apes etc."
               className="w-full border border-paragraph/70 px-2 py-2 rounded-sm focus:border-action-btn-green"
-              value={formData.collectionName}
+              value={formData.name}
               onChange={(e) =>
-                setFormData({ ...formData, collectionName: e.target.value })
+                setFormData({ ...formData, name: e.target.value })
               }
             />
           </div>
@@ -128,9 +131,9 @@ const CreateCollection = () => {
               type="text"
               placeholder="BA etc"
               className="w-full border border-paragraph/70 px-2 py-2 rounded-md"
-              value={formData.collectionSymbol}
+              value={formData.symbol}
               onChange={(e) =>
-                setFormData({ ...formData, collectionSymbol: e.target.value })
+                setFormData({ ...formData, symbol: e.target.value })
               }
             />
           </div>

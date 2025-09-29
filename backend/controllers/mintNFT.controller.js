@@ -3,9 +3,6 @@ const mintNFT = (req, res) => {
     const { nftPrice } = req.body;
     const nftImage = req.file;
 
-    // console.log("NFT Price:", nftPrice);
-    // console.log("NFT Image:", nftImage);
-
     if (!nftPrice) {
       return res.status(400).json({ error: "Name Price is required" });
     }

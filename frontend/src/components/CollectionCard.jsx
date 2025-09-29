@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import useReadFactoryContract from "../blockchain-interaction/hooks/factory/useReadFactoryContract";
 import { formatEther } from "ethers";
 
-const CollectionCard = ({ collectionId, collection }) => {
+const CollectionCard = ({ collectionId, collection, accountAddress }) => {
   const navigateTo = useNavigate();
   const { factoryReadInstance } = useReadFactoryContract();
   const [collectionDetails, setCollectionDetails] = useState({
@@ -34,9 +34,7 @@ const CollectionCard = ({ collectionId, collection }) => {
       const symbol = await collection.symbol();
       const avgPrice = await calculateAvgPrice();
       const totalItems = await collection.tokenId();
-      const remaining = await collection.balanceOf(
-        "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266"
-      );
+      const remaining = await collection.balanceOf(accountAddress);
 
       const owners = totalItems - remaining;
 

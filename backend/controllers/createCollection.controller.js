@@ -1,20 +1,36 @@
-const createCollection = (req, res) => {
-  try {
-    const { collectionName, collectionSymbol } = req.body;
-    const collectionImage = req.file;
+import CollectionModel from "../models/collection.model.js";
 
-    if (!collectionName || !collectionSymbol) {
-      return res.status(400).json({ error: "Name and symbol are required" });
+const createCollection = async (req, res) => {
+  try {
+    const { accountAddress, contractAddress, name, symbol } = req.body;
+
+    const image = req.file;
+
+    if (!accountAddress || !contractAddress || !name || !symbol || !image) {
+      return res.status(400).json({
+        error:
+          "account address, contract address, name, symbol and image are required",
+      });
     }
+
+    const newCollection = new CollectionModel({
+      accountAddress,
+      contractAddress,
+      name,
+      symbol,
+      image: image.filename,
+    });
+    const savedCollection = await newCollection.save();
+    console.log("Collection saved to database:", savedCollection);
 
     res.status(201).json({
       message: "Collection created",
       data: {
-        collectionName,
-        collectionSymbol,
-        collectionImage: collectionImage
-          ? collectionImage.filename
-          : "No image uploaded",
+        accountAddress,
+        contractAddress,
+        name,
+        symbol,
+        image: image ? image.filename : "No image uploaded",
       },
     });
   } catch (error) {
