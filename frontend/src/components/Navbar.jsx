@@ -5,7 +5,7 @@ import { AppKitButton, useAppKitAccount } from "@reown/appkit/react";
 
 const Navbar = () => {
   const navigateTo = useNavigate();
-  const { address, isConnected } = useAppKitAccount(); // Wallet info
+  const { address, isConnected } = useAppKitAccount();
 
   return (
     <div className="navbar flex justify-between items-center text-white flex-row py-4 px-10 bg-dark-black font-unbounded tracking-wide">

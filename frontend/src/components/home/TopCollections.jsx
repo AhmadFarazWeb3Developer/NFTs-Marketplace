@@ -44,14 +44,16 @@ const TopCollections = () => {
         <span className="text-action-btn-green">TOP</span> COLLECTIONS
       </h1>
 
-      {collectionsData.map(({ collectionId, collection, accountAddress }) => (
-        <CollectionCard
-          key={collectionId + accountAddress}
-          collectionId={collectionId}
-          collection={collection}
-          accountAddress={accountAddress}
-        />
-      ))}
+      {collectionsData.map(
+        ({ index, collectionId, collection, accountAddress }) => (
+          <CollectionCard
+            key={index}
+            collectionId={collectionId}
+            collection={collection}
+            accountAddress={accountAddress}
+          />
+        )
+      )}
 
       <div className="w-full flex justify-center py-5">
         <button className="bg-action-btn-green py-2 px-10 rounded-full cursor-pointer">

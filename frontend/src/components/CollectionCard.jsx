@@ -3,11 +3,18 @@ import { useNavigate } from "react-router-dom";
 import { formatEther } from "ethers";
 import useReadFactoryInstanceStore from "../blockchain-interaction/stores/useReadFactoryInstanceStore.store";
 import useReadFactoryContract from "../blockchain-interaction/hooks/factory/useReadFactoryContract";
+import useExploreCollection from "../blockchain-interaction/hooks/collection/read/useExploreCollection";
 
 const CollectionCard = ({ collectionId, collection, accountAddress }) => {
-  useReadFactoryContract();
   const navigateTo = useNavigate();
+
+  // console.log(collectionId);
+  // console.log(collection);
+  // console.log(accountAddress);
+
+  useReadFactoryContract();
   const { factoryReadInstance } = useReadFactoryInstanceStore();
+
   const [collectionDetails, setCollectionDetails] = useState({
     symbol: "",
     avgPrice: "",
@@ -53,7 +60,7 @@ const CollectionCard = ({ collectionId, collection, accountAddress }) => {
     };
 
     fetchCollectionsDetails();
-  }, [collection]);
+  }, [collection, factoryReadInstance]);
 
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -88,7 +95,7 @@ const CollectionCard = ({ collectionId, collection, accountAddress }) => {
           <tr
             className="collection-card border-b border-gray-700 text-white hover:border-none"
             onClick={() => {
-              navigateTo("/explore/collection");
+              navigateTo(`/explore/collection/${collection.target}`);
             }}
           >
             <td className="px-6 py-4">

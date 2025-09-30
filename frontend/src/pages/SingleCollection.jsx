@@ -7,16 +7,10 @@ import { Copy } from "lucide-react";
 import { SiEthereum } from "react-icons/si";
 import { CiGrid41, CiSearch } from "react-icons/ci";
 import { MdOutlineTableRows } from "react-icons/md";
-import MintNFT from "./MintNFT";
+import useExploreCollection from "../blockchain-interaction/hooks/collection/read/useExploreCollection";
 
 const SingleCollection = () => {
-  // ref for the MintNFT section
-  const mintNFTSectionRef = useRef(null);
-
-  // Function to scroll to MintNFT
-  const handleScrollToMintNFT = () => {
-    mintNFTSectionRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  const { collection } = useExploreCollection();
 
   return (
     <>
@@ -83,15 +77,6 @@ const SingleCollection = () => {
             <CiGrid41 size={24} className="text-paragraph/70" />
             <MdOutlineTableRows size={24} className="text-paragraph/70" />
           </div>
-
-          <div className="w-full  flex items-center justify-end">
-            <button
-              className="bg-action-btn-green text-xs px-4 py-1 rounded-full text-black font-light cursor-pointer"
-              onClick={handleScrollToMintNFT}
-            >
-              Mint NFT
-            </button>
-          </div>
         </div>
 
         <div className="nft-cards py-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 ">
@@ -102,12 +87,10 @@ const SingleCollection = () => {
           <SingleCollectionsCard />
         </div>
 
-        <div
-          ref={mintNFTSectionRef}
+        {/* <div
+          ref={}
           className=" border rounded-md border-paragraph/40 "
-        >
-          <MintNFT />
-        </div>
+        ></div> */}
       </div>
 
       <Footer />

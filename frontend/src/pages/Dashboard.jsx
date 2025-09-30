@@ -1,14 +1,22 @@
-import React from "react";
+import React, { useRef } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import AllCollections from "../components/explore/AllCollections";
 import CollectionCard from "../components/CollectionCard";
 import MintNFT from "./MintNFT";
 import { useAppKitAccount } from "@reown/appkit/react";
-import useReadSingleCollection from "../blockchain-interaction/hooks/nft/read/useReadSingleCollection";
+import useDashboard from "../blockchain-interaction/hooks/collection/read/useDashboard";
 
 const Dashboard = () => {
   const { address, isConnected } = useAppKitAccount();
+
+  const { userCollections } = useDashboard();
+
+  console.log(userCollections);
+  const mintNFTSectionRef = useRef(null);
+
+  const handleScrollToMintNFT = () => {
+    mintNFTSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <>
@@ -36,6 +44,15 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
+          </div>
+
+          <div className="w-full  flex items-center justify-end">
+            <button
+              className="bg-action-btn-green text-xs px-4 py-1 rounded-full text-black font-light cursor-pointer"
+              onClick={handleScrollToMintNFT}
+            >
+              Mint NFT
+            </button>
           </div>
         </div>
       </div>
