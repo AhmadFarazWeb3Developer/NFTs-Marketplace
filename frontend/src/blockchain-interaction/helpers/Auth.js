@@ -6,11 +6,10 @@ const useAuthenticate = () => {
   const { walletProvider } = useAppKitProvider("eip155");
   const { address, isConnected } = useAppKitAccount();
 
-  const [provider, setProvider] = useState(null);
   const [signer, setSigner] = useState(null);
   const [error, setError] = useState(null);
 
-  const Authenticate = useCallback(async () => {
+  const authenticate = useCallback(async () => {
     try {
       if (!isConnected) {
         setError("Wallet not connected");
@@ -22,17 +21,19 @@ const useAuthenticate = () => {
       }
 
       const provider = new ethers.BrowserProvider(walletProvider);
+      const newSigner = await provider.getSigner();
 
-      if (!provider) {
-        setError("Provider not available");
-      }
-      const signer = await provider.getSigner();
-
-      if (!signer) {
+      if (!newSigner) {
         setError("Signer not available");
+        return;
       }
-      setProvider(provider);
-      setSigner(signer);
+
+      // ✅ only set signer if different from previous
+      setSigner((prev) => {
+        if (prev && prev.address === newSigner.address) return prev;
+        return newSigner;
+      });
+
       setError(null);
     } catch (err) {
       console.error("Authentication failed:", err);
@@ -41,10 +42,10 @@ const useAuthenticate = () => {
   }, [isConnected, walletProvider]);
 
   useEffect(() => {
-    Authenticate();
-  }, [Authenticate]);
+    authenticate();
+  }, [authenticate]);
 
-  return { error, signer, isConnected, provider, address };
+  return { error, signer, isConnected, address };
 };
 
 export default useAuthenticate;

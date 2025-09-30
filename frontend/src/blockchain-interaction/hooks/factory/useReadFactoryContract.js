@@ -1,24 +1,21 @@
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { ethers } from "ethers";
 import useConstants from "../../helpers/useConstants";
-import useAuthenticate from "../../helpers/Auth";
 
 const useReadFactoryContract = () => {
   const { factoryAddress, factoryABI } = useConstants();
-  const [factoryReadInstance, setFactoryReadInstance] = useState(null);
 
-  const { signer } = useAuthenticate();
-  useEffect(() => {
-    const init = async () => {
-      const contract = new ethers.Contract(factoryAddress, factoryABI, signer);
+  // useMemo so it doesn’t recreate on every render
+  const provider = useMemo(() => {
+    return new ethers.JsonRpcProvider("http://127.0.0.1:8545");
+  }, []);
 
-      setFactoryReadInstance(contract);
-    };
+  const factoryReadInstance = useMemo(() => {
+    if (!factoryAddress || !factoryABI || !provider) return null;
+    return new ethers.Contract(factoryAddress, factoryABI, provider);
+  }, [factoryAddress, factoryABI, provider]);
 
-    init();
-  }, [factoryAddress, factoryABI, signer]);
-
-  return { signer, factoryReadInstance };
+  return { factoryReadInstance };
 };
 
 export default useReadFactoryContract;

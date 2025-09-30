@@ -5,17 +5,18 @@ import Authenticate from "../../helpers/Auth";
 import useAuthenticate from "../../helpers/Auth";
 
 const useWriteFactoryContract = () => {
-  const { contractAddress, factoryABI } = useConstants();
-
+  const { factoryAddress, factoryABI } = useConstants();
   const [factoryWriteInstance, setFactoryWriteInstance] = useState(null);
-
   const [isLoading, setIsLoading] = useState(false);
-
-  const { error, signer, isConnected, walletProvider, address } =
-    useAuthenticate();
+  const { error, signer, isConnected, address } = useAuthenticate();
 
   useEffect(() => {
     const initContract = async () => {
+      if (!signer) {
+        setFactoryWriteInstance(null);
+        return;
+      }
+
       setIsLoading(true);
       try {
         if (error) {
@@ -24,7 +25,7 @@ const useWriteFactoryContract = () => {
         }
 
         const contract = new ethers.Contract(
-          contractAddress,
+          factoryAddress,
           factoryABI,
           signer
         );
@@ -40,16 +41,9 @@ const useWriteFactoryContract = () => {
     };
 
     initContract();
-  }, [
-    isConnected,
-    walletProvider,
-    address,
-    contractAddress,
-    factoryABI,
-    signer,
-  ]);
+  }, [signer]);
 
-  return { factoryWriteInstance, isLoading };
+  return { factoryWriteInstance, isLoading, signer };
 };
 
 export default useWriteFactoryContract;

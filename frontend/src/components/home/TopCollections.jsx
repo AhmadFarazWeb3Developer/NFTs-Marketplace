@@ -20,13 +20,13 @@ const TopCollections = () => {
           const id = await factoryReadInstance.collectionAddressToId(
             collectionAddr
           );
+
           const accountAddress = accountAddresses[index];
 
           return { collectionId: id, collection: instance, accountAddress };
         })
       );
-
-      setCollectionsData(data);
+      setCollectionsData((prev) => (prev.length ? prev : data)); // don’t overwrite if already set
     };
 
     if (collections.length > 0) {

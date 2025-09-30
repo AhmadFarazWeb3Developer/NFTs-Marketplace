@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import useWriteFactoryContract from "../../factory/useWriteFactoryContract";
 
 const useCreateCollection = () => {
-  const { factoryWriteInstance, isLoading } = useWriteFactoryContract();
+  const { factoryWriteInstance, isLoading, signer } = useWriteFactoryContract();
 
   const [isPending, setIsPending] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -11,8 +11,6 @@ const useCreateCollection = () => {
   const [collectionId, setCollectionId] = useState(null);
   const [contractAddress, setContractAddress] = useState(null);
   const [accountAddress, setAccountAddress] = useState(null);
-
-  useEffect(() => {}, [factoryWriteInstance]);
 
   const createCollectionOnChain = async (name, symbol) => {
     setIsPending(true);
@@ -130,6 +128,7 @@ const useCreateCollection = () => {
     isError: !!error,
     error,
     isLoading,
+    signer,
   };
 };
 
