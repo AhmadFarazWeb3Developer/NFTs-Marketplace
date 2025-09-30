@@ -5,9 +5,10 @@ import Hero from "../components/home/Hero";
 import Footer from "../components/Footer";
 import TopCollections from "../components/home/TopCollections";
 import CollectionStatistics from "../components/home/CollectionStatistics";
-import useReadAllCollections from "../blockchain-interaction/hooks/collection/read/useReadAllCollections";
+import useReadFactoryContract from "../blockchain-interaction/hooks/factory/useReadFactoryContract";
 
 const Home = () => {
+  useReadFactoryContract();
   return (
     <>
       <div className="home-page h-screen bg-primary-black">

@@ -1,11 +1,13 @@
 import React, { cloneElement, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useReadFactoryContract from "../blockchain-interaction/hooks/factory/useReadFactoryContract";
 import { formatEther } from "ethers";
+import useReadFactoryInstanceStore from "../blockchain-interaction/stores/useReadFactoryInstanceStore.store";
+import useReadFactoryContract from "../blockchain-interaction/hooks/factory/useReadFactoryContract";
 
 const CollectionCard = ({ collectionId, collection, accountAddress }) => {
+  useReadFactoryContract();
   const navigateTo = useNavigate();
-  const { factoryReadInstance } = useReadFactoryContract();
+  const { factoryReadInstance } = useReadFactoryInstanceStore();
   const [collectionDetails, setCollectionDetails] = useState({
     symbol: "",
     avgPrice: "",

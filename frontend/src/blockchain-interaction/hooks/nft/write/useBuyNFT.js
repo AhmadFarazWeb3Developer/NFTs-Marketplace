@@ -1,10 +1,10 @@
 import decodeCollectionRevert from "../../../helpers/decodeCollectionRevert";
-import useReadAllCollections from "../../collection/read/useReadAllCollections";
+import useCollectionStore from "../../../stores/useCollectionStore.store";
 import useReadSingleCollection from "../read/useReadSingleCollection";
 
 const useBuyNFT = () => {
   const { getNFTCollectionInstance } = useReadSingleCollection();
-  const { collections } = useReadAllCollections();
+  const { collections } = useCollectionStore();
 
   const buyNFT = async (tokenId) => {
     try {

@@ -2,31 +2,35 @@ import React, { useEffect, useState } from "react";
 import CollectionCard from "../CollectionCard";
 import useReadSingleCollection from "../../blockchain-interaction/hooks/nft/read/useReadSingleCollection";
 import useReadAllCollections from "../../blockchain-interaction/hooks/collection/read/useReadAllCollections";
+import useCollectionStore from "../../blockchain-interaction/stores/useCollectionStore.store";
+import useReadFactoryInstanceStore from "../../blockchain-interaction/stores/useReadFactoryInstanceStore.store";
 import useReadFactoryContract from "../../blockchain-interaction/hooks/factory/useReadFactoryContract";
 
 const TopCollections = () => {
   const [collectionsData, setCollectionsData] = useState([
     { collectioId: "", collection: "", accountAddress: "" },
   ]);
-  const { collections, accountAddresses } = useReadAllCollections();
+  const { collections } = useCollectionStore();
   const { getNFTCollectionInstance } = useReadSingleCollection();
-  const { factoryReadInstance } = useReadFactoryContract();
+  const { factoryReadInstance } = useReadFactoryInstanceStore();
+
+  useReadAllCollections();
+  useReadFactoryContract();
 
   useEffect(() => {
     const loadCollections = async () => {
       const data = await Promise.all(
-        collections.map(async (collectionAddr, index) => {
-          const instance = await getNFTCollectionInstance(collectionAddr);
+        collections.map(async ({ collectionAddress, accountAddress }) => {
+          const instance = await getNFTCollectionInstance(collectionAddress);
           const id = await factoryReadInstance.collectionAddressToId(
-            collectionAddr
+            collectionAddress
           );
-
-          const accountAddress = accountAddresses[index];
 
           return { collectionId: id, collection: instance, accountAddress };
         })
       );
-      setCollectionsData((prev) => (prev.length ? prev : data)); // don’t overwrite if already set
+
+      setCollectionsData(data);
     };
 
     if (collections.length > 0) {
@@ -42,7 +46,7 @@ const TopCollections = () => {
 
       {collectionsData.map(({ collectionId, collection, accountAddress }) => (
         <CollectionCard
-          key={collectionId}
+          key={collectionId + accountAddress}
           collectionId={collectionId}
           collection={collection}
           accountAddress={accountAddress}

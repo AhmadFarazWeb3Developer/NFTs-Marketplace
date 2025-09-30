@@ -20,7 +20,6 @@ const useMintNFT = () => {
       throw new Error("Token URI is required");
     }
 
-    console.log("collection instance ", collectionInstance);
     console.log("minting with params:", { tokenURI, tokenPrice });
 
     try {
@@ -30,23 +29,13 @@ const useMintNFT = () => {
         throw new Error("Invalid token price");
       }
 
-      // Send transaction with proper error handling
-      const tx = await collectionInstance.mint(
-        tokenURI, // Use the passed tokenURI parameter
-        priceInWei
-        // {
-        // gasLimit: 500_000,
-        // Remove gasPrice to let ethers handle it automatically
-        // }
-      );
+      const tx = await collectionInstance.mint(tokenURI, priceInWei);
 
-      // console.log("Transaction sent:", tx.hash);
       const receipt = await tx.wait();
 
       const tokenId = await collectionInstance.tokenId();
 
       console.log("token Id :", tokenId);
-      // console.log("Transaction confirmed:", receipt);
 
       return receipt;
     } catch (err) {
