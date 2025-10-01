@@ -9,6 +9,7 @@ import useReadFactoryContract from "../blockchain-interaction/hooks/factory/useR
 
 const Home = () => {
   useReadFactoryContract();
+
   return (
     <>
       <div className="home-page h-screen bg-primary-black">

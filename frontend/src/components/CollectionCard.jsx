@@ -8,10 +8,6 @@ import useExploreCollection from "../blockchain-interaction/hooks/collection/rea
 const CollectionCard = ({ collectionId, collection, accountAddress }) => {
   const navigateTo = useNavigate();
 
-  // console.log(collectionId);
-  // console.log(collection);
-  // console.log(accountAddress);
-
   useReadFactoryContract();
   const { factoryReadInstance } = useReadFactoryInstanceStore();
 

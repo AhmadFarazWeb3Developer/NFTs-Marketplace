@@ -2,11 +2,18 @@ import CollectionModel from "../models/collection.model.js";
 
 const createCollection = async (req, res) => {
   try {
-    const { accountAddress, contractAddress, name, symbol } = req.body;
+    const { accountAddress, collectionAddress, name, symbol } = req.body;
 
     const image = req.file;
 
-    if (!accountAddress || !contractAddress || !name || !symbol || !image) {
+    if (
+      !accountAddress ||
+      !collectionAddress ||
+      !collectionId ||
+      !name ||
+      !symbol ||
+      !image
+    ) {
       return res.status(400).json({
         error:
           "account address, contract address, name, symbol and image are required",
@@ -15,7 +22,7 @@ const createCollection = async (req, res) => {
 
     const newCollection = new CollectionModel({
       accountAddress,
-      contractAddress,
+      collectionAddress,
       name,
       symbol,
       image: image.filename,
@@ -27,7 +34,7 @@ const createCollection = async (req, res) => {
       message: "Collection created",
       data: {
         accountAddress,
-        contractAddress,
+        collectionAddress,
         name,
         symbol,
         image: image ? image.filename : "No image uploaded",

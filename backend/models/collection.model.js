@@ -6,7 +6,7 @@ const collectionSchema = mongoose.Schema({
     required: true,
   },
 
-  contractAddress: {
+  collectionAddress: {
     type: String,
     required: true,
   },

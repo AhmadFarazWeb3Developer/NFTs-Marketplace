@@ -58,7 +58,10 @@ const Dashboard = () => {
       </div>
       <div className="collections px-10 bg-primary-black text-white  font-unbounded">
         <h1 className="text-action-btn-green font-bold"> COLLECTIONS</h1>
-        <CollectionCard />
+
+        {userCollections.map(({ index, collectionAddress }) => (
+          <CollectionCard key={index} collectionAddress={collectionAddress} />
+        ))}
 
         <MintNFT />
       </div>

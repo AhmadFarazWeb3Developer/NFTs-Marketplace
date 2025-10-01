@@ -8,7 +8,7 @@ const useWriteFactoryContract = () => {
   const { factoryAddress, factoryABI } = useConstants();
   const [factoryWriteInstance, setFactoryWriteInstance] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { error, signer, isConnected, address } = useAuthenticate();
+  const { error, signer } = useAuthenticate();
 
   useEffect(() => {
     const initContract = async () => {

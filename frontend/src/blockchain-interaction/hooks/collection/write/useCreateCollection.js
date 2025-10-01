@@ -9,7 +9,7 @@ const useCreateCollection = () => {
   const [error, setError] = useState(null);
   const [txHash, setTxHash] = useState(null);
   const [collectionId, setCollectionId] = useState(null);
-  const [contractAddress, setContractAddress] = useState(null);
+  const [collectionAddress, setCollectionAddress] = useState(null);
   const [accountAddress, setAccountAddress] = useState(null);
 
   const createCollectionOnChain = async (name, symbol) => {
@@ -79,7 +79,7 @@ const useCreateCollection = () => {
 
       setCollectionId(safeId);
       setAccountAddress(owner);
-      setContractAddress(collectionAddress);
+      setCollectionAddress(collectionAddress);
       setIsSuccess(true);
     } catch (err) {
       console.error("Error creating collection:", err);
@@ -120,8 +120,7 @@ const useCreateCollection = () => {
     createCollectionOnChain,
     reset,
     txHash,
-    collectionId,
-    contractAddress,
+    collectionAddress,
     accountAddress,
     isPending,
     isSuccess,

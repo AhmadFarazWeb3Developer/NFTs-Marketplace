@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, cloneElement } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Upload } from "lucide-react";
@@ -21,7 +21,8 @@ const CreateCollection = () => {
     isSuccess,
     isError,
     error,
-    contractAddress,
+
+    collectionAddress,
     accountAddress,
   } = useCreateCollection();
 
@@ -60,12 +61,12 @@ const CreateCollection = () => {
 
   useEffect(() => {
     const sendApiRequest = async () => {
-      if (isSuccess && txHash && contractAddress && accountAddress) {
+      if (isSuccess && txHash && collectionAddress && accountAddress) {
         try {
           const form = new FormData();
 
           form.append("accountAddress", accountAddress);
-          form.append("contractAddress", contractAddress);
+          form.append("collectionAddress", collectionAddress);
           form.append("name", formData.name);
           form.append("symbol", formData.symbol);
 
@@ -95,7 +96,7 @@ const CreateCollection = () => {
     };
 
     sendApiRequest();
-  }, [isSuccess, txHash, contractAddress, accountAddress]);
+  }, [isSuccess, txHash, collectionAddress, accountAddress]);
 
   return (
     <>
