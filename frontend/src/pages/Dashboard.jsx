@@ -6,18 +6,15 @@ import MintNFT from "./MintNFT";
 import { useAppKitAccount } from "@reown/appkit/react";
 import useDashboard from "../blockchain-interaction/hooks/collection/read/useDashboard";
 
-const Dashboard = () => {
-  const { address, isConnected } = useAppKitAccount();
+import useReadFactoryContract from "../blockchain-interaction/hooks/factory/useReadFactoryContract";
 
+const Dashboard = () => {
+  useReadFactoryContract();
+
+  const { address, isConnected } = useAppKitAccount();
   const { userCollections } = useDashboard();
 
-  console.log(userCollections);
-  const mintNFTSectionRef = useRef(null);
-
-  const handleScrollToMintNFT = () => {
-    mintNFTSectionRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
+  // console.log("user collections ", userCollections);
   return (
     <>
       <Navbar />
@@ -45,25 +42,19 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-
-          <div className="w-full  flex items-center justify-end">
-            <button
-              className="bg-action-btn-green text-xs px-4 py-1 rounded-full text-black font-light cursor-pointer"
-              onClick={handleScrollToMintNFT}
-            >
-              Mint NFT
-            </button>
-          </div>
         </div>
       </div>
       <div className="collections px-10 bg-primary-black text-white  font-unbounded">
         <h1 className="text-action-btn-green font-bold"> COLLECTIONS</h1>
 
-        {userCollections.map(({ index, collectionAddress }) => (
-          <CollectionCard key={index} collectionAddress={collectionAddress} />
+        {userCollections.map(({ collectionId, collection, accountAddress }) => (
+          <CollectionCard
+            key={collectionId}
+            collectionId={collectionId}
+            collection={collection}
+            accountAddress={accountAddress}
+          />
         ))}
-
-        <MintNFT />
       </div>
 
       <Footer />

@@ -1,16 +1,22 @@
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import useReadSingleCollection from "../../nft/read/useReadSingleCollection";
+import { SiTheodinproject } from "react-icons/si";
 
-const useExploreCollection = () => {
+const useCollectionNFTs = () => {
   const { collection } = useParams();
   const { getNFTCollectionInstance } = useReadSingleCollection();
 
-  const fetchCollectionsDetails = async () => {
+  const fetchNFTs = async () => {
     const instance = await getNFTCollectionInstance(collection);
+
+    const tokenId = await instance.tokenId();
+    console.log(tokenId);
   };
 
-  fetchCollectionsDetails();
-  return collection;
+  useEffect(() => {
+    fetchNFTs();
+  });
 };
 
-export default useExploreCollection;
+export default useCollectionNFTs;

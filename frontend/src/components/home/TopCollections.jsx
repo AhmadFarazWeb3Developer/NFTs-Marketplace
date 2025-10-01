@@ -7,15 +7,15 @@ import useReadFactoryInstanceStore from "../../blockchain-interaction/stores/use
 import useReadFactoryContract from "../../blockchain-interaction/hooks/factory/useReadFactoryContract";
 
 const TopCollections = () => {
+  useReadAllCollections();
+  useReadFactoryContract();
+
   const [collectionsData, setCollectionsData] = useState([
     { collectioId: "", collection: "", accountAddress: "" },
   ]);
   const { collections } = useCollectionStore();
   const { getNFTCollectionInstance } = useReadSingleCollection();
   const { factoryReadInstance } = useReadFactoryInstanceStore();
-
-  useReadAllCollections();
-  useReadFactoryContract();
 
   useEffect(() => {
     const loadCollections = async () => {

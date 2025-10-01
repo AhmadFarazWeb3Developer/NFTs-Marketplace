@@ -8,10 +8,18 @@ import { SiEthereum } from "react-icons/si";
 import { CiGrid41, CiSearch } from "react-icons/ci";
 import { MdOutlineTableRows } from "react-icons/md";
 import useExploreCollection from "../blockchain-interaction/hooks/collection/read/useExploreCollection";
+import MintNFT from "./MintNFT";
+import useCollectionNFTs from "../blockchain-interaction/hooks/collection/read/useCollectionNFTs";
 
 const SingleCollection = () => {
   const { collection } = useExploreCollection();
 
+  useCollectionNFTs();
+
+  const mintNFTSectionRef = useRef(null);
+  const handleScrollToMintNFT = () => {
+    mintNFTSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
   return (
     <>
       <Navbar />
@@ -77,8 +85,17 @@ const SingleCollection = () => {
             <CiGrid41 size={24} className="text-paragraph/70" />
             <MdOutlineTableRows size={24} className="text-paragraph/70" />
           </div>
-        </div>
 
+          <div className="w-full  flex items-center justify-end">
+            <button
+              ref={mintNFTSectionRef}
+              className="bg-action-btn-green text-xs px-4 py-1 rounded-full text-black font-light cursor-pointer"
+              onClick={handleScrollToMintNFT}
+            >
+              Mint NFT
+            </button>
+          </div>
+        </div>
         <div className="nft-cards py-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 ">
           <SingleCollectionsCard />
           <SingleCollectionsCard />
@@ -87,10 +104,12 @@ const SingleCollection = () => {
           <SingleCollectionsCard />
         </div>
 
-        {/* <div
-          ref={}
+        <div
+          ref={mintNFTSectionRef}
           className=" border rounded-md border-paragraph/40 "
-        ></div> */}
+        >
+          <MintNFT />
+        </div>
       </div>
 
       <Footer />

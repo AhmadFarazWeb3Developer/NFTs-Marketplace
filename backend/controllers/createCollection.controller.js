@@ -6,14 +6,7 @@ const createCollection = async (req, res) => {
 
     const image = req.file;
 
-    if (
-      !accountAddress ||
-      !collectionAddress ||
-      !collectionId ||
-      !name ||
-      !symbol ||
-      !image
-    ) {
+    if (!accountAddress || !collectionAddress || !name || !symbol || !image) {
       return res.status(400).json({
         error:
           "account address, contract address, name, symbol and image are required",

@@ -10,7 +10,6 @@ const MintNFT = () => {
   useReadAllCollections();
   const { collections } = useCollectionStore();
 
-  console.log(collections);
   const { mintNFTOnChain } = useMintNFT();
 
   const [formData, setFormData] = useState({

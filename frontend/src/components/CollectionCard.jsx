@@ -2,15 +2,14 @@ import React, { cloneElement, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { formatEther } from "ethers";
 import useReadFactoryInstanceStore from "../blockchain-interaction/stores/useReadFactoryInstanceStore.store";
-import useReadFactoryContract from "../blockchain-interaction/hooks/factory/useReadFactoryContract";
-import useExploreCollection from "../blockchain-interaction/hooks/collection/read/useExploreCollection";
 
 const CollectionCard = ({ collectionId, collection, accountAddress }) => {
+  console.log("collection Id ", collectionId);
+  console.log("collection ", collection);
+  console.log("address ", accountAddress);
+
   const navigateTo = useNavigate();
-
-  useReadFactoryContract();
   const { factoryReadInstance } = useReadFactoryInstanceStore();
-
   const [collectionDetails, setCollectionDetails] = useState({
     symbol: "",
     avgPrice: "",
@@ -45,6 +44,13 @@ const CollectionCard = ({ collectionId, collection, accountAddress }) => {
 
       const forSale = await factoryReadInstance.isForSale(collectionId);
 
+      console.log(symbol);
+      console.log(avgPrice);
+      console.log(totalItems);
+      console.log(remaining);
+      console.log(owners);
+      console.log(forSale);
+
       setCollectionDetails({
         symbol,
         avgPrice,
@@ -56,7 +62,7 @@ const CollectionCard = ({ collectionId, collection, accountAddress }) => {
     };
 
     fetchCollectionsDetails();
-  }, [collection, factoryReadInstance]);
+  }, [collection, collectionId]);
 
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">

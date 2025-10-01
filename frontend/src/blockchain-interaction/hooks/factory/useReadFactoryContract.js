@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { ethers } from "ethers";
 import useConstants from "../../helpers/useConstants";
-import useReadFactoryInstance from "../../stores/useReadFactoryInstanceStore.store";
+import useReadFactoryInstanceStore from "../../stores/useReadFactoryInstanceStore.store";
 
 const useReadFactoryContract = () => {
   const { factoryAddress, factoryABI } = useConstants();
-  const { setFactoryReadInstance } = useReadFactoryInstance();
+  const { setFactoryReadInstance } = useReadFactoryInstanceStore();
 
   useEffect(() => {
     if (!factoryAddress || !factoryABI) return;
