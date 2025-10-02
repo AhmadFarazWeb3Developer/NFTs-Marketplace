@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useMintNFT from "../../blockchain-interaction/hooks/nft/write/useMintNFT";
+import useReadFactoryContract from "../../blockchain-interaction/hooks/factory/useReadFactoryContract";
 
-const SingleCollectionsCard = ({ tokenId, tokenPrice }) => {
-  console.log(tokenId);
-  console.log(tokenPrice);
+const SingleCollectionsCard = ({ tokenId, tokenPrice, collectionInstance }) => {
+  useReadFactoryContract();
 
   const [hover, setHover] = useState("notHovered");
   const navigateTo = useNavigate("");
@@ -35,7 +35,15 @@ const SingleCollectionsCard = ({ tokenId, tokenPrice }) => {
             <button
               className="w-full bg-action-btn-green font-light text-black py-1 rounded-sm cursor-pointer 
                          transition-all duration-300 ease-in-out"
-              onClick={() => navigateTo("/explore/buyNft")}
+              onClick={() =>
+                navigateTo(`/explore/buyNft/${tokenId}`, {
+                  state: {
+                    tokenId,
+                    tokenPrice,
+                    collectionAddress: collectionInstance.target,
+                  },
+                })
+              }
             >
               BUY NOW
             </button>

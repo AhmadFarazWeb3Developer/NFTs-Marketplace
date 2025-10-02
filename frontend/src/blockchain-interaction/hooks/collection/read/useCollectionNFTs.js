@@ -7,8 +7,10 @@ import { ethers, formatEther } from "ethers";
 
 const useCollectionNFTs = () => {
   useReadFactoryContract();
-  const { collection } = useParams();
   const { factoryReadInstance } = useReadFactoryInstanceStore();
+  const { getNFTCollectionInstance } = useReadSingleCollection();
+
+  const { collection } = useParams();
 
   const [collectionInstance, setCollectionInstance] = useState(null);
   const [collectionId, setCollectionId] = useState(null);
@@ -17,9 +19,9 @@ const useCollectionNFTs = () => {
   const [avgPrice, setAvgPrice] = useState(null);
   const [volume, setVolume] = useState(null);
 
-  const [NFTsPricesAndIds, setNFTsPricesAndIds] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const { getNFTCollectionInstance } = useReadSingleCollection();
+  const [NFTsPricesAndIds, setNFTsPricesAndIds] = useState([]);
 
   const NFTsPricesAndIDs = async (instance) => {
     const tempData = [];
@@ -47,27 +49,35 @@ const useCollectionNFTs = () => {
   };
 
   const fetchNFTs = async () => {
-    const collectionId = Number(
-      await factoryReadInstance.collectionAddressToId(collection)
-    );
+    setIsLoading(true);
 
-    const instance = await getNFTCollectionInstance(collection);
+    try {
+      const collectionId = Number(
+        await factoryReadInstance.collectionAddressToId(collection)
+      );
 
-    const name = await instance.name();
-    const id = Number(await instance.tokenId());
-    const avgPrice = await calculateAvgPrice(instance);
+      const instance = await getNFTCollectionInstance(collection);
 
-    const provider = new ethers.JsonRpcProvider("http://127.0.0.1:8545");
-    const collectionBalance = await provider.getBalance(collection);
+      const name = await instance.name();
+      const id = Number(await instance.tokenId());
+      const avgPrice = await calculateAvgPrice(instance);
 
-    NFTsPricesAndIDs(instance);
+      const provider = new ethers.JsonRpcProvider("http://127.0.0.1:8545");
+      const collectionBalance = await provider.getBalance(collection);
 
-    setCollectionInstance(instance);
-    setCollectionName(name);
-    setCollectionId(collectionId);
-    setTotalItems(id);
-    setAvgPrice(avgPrice);
-    setVolume(ethers.formatEther(collectionBalance));
+      await NFTsPricesAndIDs(instance);
+
+      setCollectionInstance(instance);
+      setCollectionName(name);
+      setCollectionId(collectionId);
+      setTotalItems(id);
+      setAvgPrice(avgPrice);
+      setVolume(formatEther(collectionBalance));
+    } catch (error) {
+      console.error("Error fetching NFTs:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -83,6 +93,7 @@ const useCollectionNFTs = () => {
     avgPrice,
     volume,
     NFTsPricesAndIds,
+    isLoading,
   };
 };
 

@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { FaCloudUploadAlt, FaCheckCircle } from "react-icons/fa";
 import useMintNFT from "../blockchain-interaction/hooks/nft/write/useMintNFT";
+import useReadFactoryContract from "../blockchain-interaction/hooks/factory/useReadFactoryContract";
 
 const MintNFT = ({ collectionInstance }) => {
+  useReadFactoryContract();
+
   const { mintNFTOnChain } = useMintNFT();
 
   const [formData, setFormData] = useState({

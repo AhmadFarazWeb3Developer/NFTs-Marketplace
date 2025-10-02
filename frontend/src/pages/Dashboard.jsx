@@ -14,7 +14,6 @@ const Dashboard = () => {
   const { address, isConnected } = useAppKitAccount();
   const { userCollections } = useDashboard();
 
-  // console.log("user collections ", userCollections);
   return (
     <>
       <Navbar />

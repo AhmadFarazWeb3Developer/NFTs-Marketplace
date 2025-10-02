@@ -34,10 +34,9 @@ const useDashboard = () => {
             c.collectionAddress
           );
 
-          // rename collectionAddress -> collection
           return {
             ...c,
-            collection, // override with instance
+            collection,
             collectionId,
           };
         })

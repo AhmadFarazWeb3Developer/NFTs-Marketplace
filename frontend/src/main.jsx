@@ -57,7 +57,7 @@ const router = createBrowserRouter([
       { path: "/explore", element: <Explore /> },
       { path: "/create-collection", element: <CreateCollection /> },
       { path: "/dashboard", element: <Dashboard /> },
-      { path: "/explore/buyNft", element: <BuyNFT /> },
+      { path: "/explore/buyNft/:tokenId", element: <BuyNFT /> },
       {
         path: "/explore/collection/:collection",
         element: <SingleCollection />,

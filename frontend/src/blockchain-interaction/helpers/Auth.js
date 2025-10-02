@@ -43,7 +43,7 @@ const useAuthenticate = () => {
 
   useEffect(() => {
     authenticate();
-  }, [authenticate]);
+  }, [authenticate, signer]);
 
   return { error, signer, isConnected, address };
 };

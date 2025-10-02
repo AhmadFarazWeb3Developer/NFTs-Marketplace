@@ -10,13 +10,14 @@ const useReadSingleCollection = () => {
       console.log(error);
     }
 
-    const instance = new ethers.Contract(
-      collectionAddress,
-      NFTsCollectionABI.abi,
-      signer
-    );
+    const runner =
+      (await signer) ?? new ethers.JsonRpcProvider("http://127.0.0.1:8545");
 
-    return instance;
+    return new ethers.Contract(
+      await collectionAddress,
+      NFTsCollectionABI.abi,
+      runner
+    );
   };
 
   return { getNFTCollectionInstance };

@@ -10,8 +10,16 @@ import { MdOutlineTableRows } from "react-icons/md";
 import MintNFT from "./MintNFT";
 import useCollectionNFTs from "../blockchain-interaction/hooks/collection/read/useCollectionNFTs";
 import { useState } from "react";
+import useReadFactoryContract from "../blockchain-interaction/hooks/factory/useReadFactoryContract";
+import useReadAllCollections from "../blockchain-interaction/hooks/collection/read/useReadAllCollections";
+import useReadFactoryInstanceStore from "../blockchain-interaction/stores/useReadFactoryInstanceStore.store";
 
 const SingleCollection = () => {
+  useReadFactoryContract();
+  useReadAllCollections();
+
+  const { factoryReadInstance } = useReadFactoryInstanceStore();
+
   const {
     collectionInstance,
     collection,
@@ -21,6 +29,7 @@ const SingleCollection = () => {
     avgPrice,
     volume,
     NFTsPricesAndIds,
+    isLoading,
   } = useCollectionNFTs();
 
   const [splitedCollectionName, setSplitedCollectionName] = useState([]);
@@ -31,11 +40,11 @@ const SingleCollection = () => {
   };
 
   useEffect(() => {
-    if (collectionInstance && collectionName) {
+    if (collectionName && !isLoading) {
       const splitedName = collectionName.split(" ");
       setSplitedCollectionName(splitedName);
     }
-  }, [collectionInstance]);
+  }, [collectionName, isLoading]);
 
   return (
     <>
@@ -120,11 +129,12 @@ const SingleCollection = () => {
           </div>
         </div>
         <div className="nft-cards py-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 ">
-          {NFTsPricesAndIds.map(({ tokenId, tokenPrice }) => (
+          {NFTsPricesAndIds.map(({ index, tokenId, tokenPrice }) => (
             <SingleCollectionsCard
-              key={tokenId}
+              key={index}
               tokenId={tokenId}
               tokenPrice={tokenPrice}
+              collectionInstance={collectionInstance}
             />
           ))}
         </div>

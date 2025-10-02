@@ -2,20 +2,21 @@ import React, { cloneElement, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { formatEther } from "ethers";
 import useReadFactoryInstanceStore from "../blockchain-interaction/stores/useReadFactoryInstanceStore.store";
+import useReadFactoryContract from "../blockchain-interaction/hooks/factory/useReadFactoryContract";
+import useReadAllCollections from "../blockchain-interaction/hooks/collection/read/useReadAllCollections";
 
 const CollectionCard = ({ collectionId, collection, accountAddress }) => {
-  // console.log("collection Id ", collectionId);
-  // console.log("collection ", collection);
-  // console.log("address ", accountAddress);
-
-  const navigateTo = useNavigate();
+  useReadFactoryContract();
+  useReadAllCollections();
   const { factoryReadInstance } = useReadFactoryInstanceStore();
+  const navigateTo = useNavigate();
+
   const [collectionDetails, setCollectionDetails] = useState({
     symbol: "",
     avgPrice: "",
     items: "",
     owners: "",
-    remaing: "",
+    remaining: "",
     forSale: "",
   });
 
@@ -43,13 +44,6 @@ const CollectionCard = ({ collectionId, collection, accountAddress }) => {
       const owners = totalItems - remaining;
 
       const forSale = await factoryReadInstance.isForSale(collectionId);
-
-      console.log(symbol);
-      console.log(avgPrice);
-      console.log(totalItems);
-      console.log(remaining);
-      console.log(owners);
-      console.log(forSale);
 
       setCollectionDetails({
         symbol,
