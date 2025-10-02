@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useMintNFT from "../../blockchain-interaction/hooks/nft/write/useMintNFT";
 
-const SingleCollectionsCard = () => {
+const SingleCollectionsCard = ({ tokenId, tokenPrice }) => {
+  console.log(tokenId);
+  console.log(tokenPrice);
+
   const [hover, setHover] = useState("notHovered");
   const navigateTo = useNavigate("");
 
@@ -18,8 +22,8 @@ const SingleCollectionsCard = () => {
                        transition-all duration-00 ease-in-out opacity-100"
             onMouseEnter={() => setHover("hovered")}
           >
-            <h3>50.00 ETH</h3>
-            <p className="font-light text-paragraph text-sm">#245</p>
+            <h3>{tokenPrice} ETH</h3>
+            <p className="font-light text-paragraph text-sm">#{tokenId}</p>
           </div>
         )}
 

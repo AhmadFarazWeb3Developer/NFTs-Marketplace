@@ -4,9 +4,9 @@ import { formatEther } from "ethers";
 import useReadFactoryInstanceStore from "../blockchain-interaction/stores/useReadFactoryInstanceStore.store";
 
 const CollectionCard = ({ collectionId, collection, accountAddress }) => {
-  console.log("collection Id ", collectionId);
-  console.log("collection ", collection);
-  console.log("address ", accountAddress);
+  // console.log("collection Id ", collectionId);
+  // console.log("collection ", collection);
+  // console.log("address ", accountAddress);
 
   const navigateTo = useNavigate();
   const { factoryReadInstance } = useReadFactoryInstanceStore();

@@ -1,31 +1,47 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import SingleCollectionsCard from "../components/single-collections-card/SingleCollectionsCard";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-import { Copy } from "lucide-react";
+import { Copy, Toilet } from "lucide-react";
 import { SiEthereum } from "react-icons/si";
 import { CiGrid41, CiSearch } from "react-icons/ci";
 import { MdOutlineTableRows } from "react-icons/md";
-import useExploreCollection from "../blockchain-interaction/hooks/collection/read/useExploreCollection";
 import MintNFT from "./MintNFT";
 import useCollectionNFTs from "../blockchain-interaction/hooks/collection/read/useCollectionNFTs";
+import { useState } from "react";
 
 const SingleCollection = () => {
-  const { collection } = useExploreCollection();
+  const {
+    collectionInstance,
+    collection,
+    collectionId,
+    collectionName,
+    totalItems,
+    avgPrice,
+    volume,
+    NFTsPricesAndIds,
+  } = useCollectionNFTs();
 
-  useCollectionNFTs();
-
+  const [splitedCollectionName, setSplitedCollectionName] = useState([]);
   const mintNFTSectionRef = useRef(null);
+
   const handleScrollToMintNFT = () => {
     mintNFTSectionRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+
+  useEffect(() => {
+    if (collectionInstance && collectionName) {
+      const splitedName = collectionName.split(" ");
+      setSplitedCollectionName(splitedName);
+    }
+  }, [collectionInstance]);
+
   return (
     <>
       <Navbar />
 
       <div className="single-collection bg-primary-black text-white px-10 pt-4 font-unbounded">
-        {/* Profile Section */}
         <div className="profile border-1 border-paragraph/40 rounded-sm flex w-full p-4">
           <div className="left w-1/2 flex flex-row ">
             <div className="w-16 h-16 rounded-full border-1 border-paragraph/50">
@@ -37,18 +53,25 @@ const SingleCollection = () => {
             </div>
 
             <div className="flex flex-col pl-2 gap-1 justify-center ">
-              <h3 className="text-action-btn-green font-medium">
-                RED <span className="text-white">ASSASSIN </span>
-                <span className="text-white font-light">#456</span>
-              </h3>
-
+              <div className="flex flex-row gap-2">
+                {splitedCollectionName.map((word, index) => (
+                  <h3 className="font-medium uppercase">
+                    {index % 2 === 0 ? (
+                      <span className="text-action-btn-green">{word} </span>
+                    ) : (
+                      <span className="text-white">{word} </span>
+                    )}
+                  </h3>
+                ))}
+                <span className="text-white/50 font">#{collectionId}</span>
+              </div>
               <div className=" flex flex-row gap-2  font-extralight text-xs">
                 <div className="py-1 px-2 flex items-center border-1 border-paragraph/70 rounded-sm bg-paragraph/30 gap-1">
                   <SiEthereum />
                   <p>ETHEREUM</p>
                 </div>
-                <div className="py-1 px-2 border rounded-sm border-paragraph/70 bg-paragraph/30 gap-2 flex">
-                  <p>0xaf23...0012</p>
+                <div className="py-1 px-2 border rounded-sm border-paragraph/70 bg-paragraph/30 gap-2 flex cursor-pointer">
+                  <p>{collection}</p>
                   <Copy strokeWidth={0.7} size={16} />
                 </div>
               </div>
@@ -57,17 +80,17 @@ const SingleCollection = () => {
           <div className="right w-1/2 flex justify-end gap-10">
             <div className="flex flex-col justify-end items-end gap-2">
               <p className="text-xs font-light text-paragraph ">ITEMS</p>
-              <p>500</p>
+              <p>{totalItems}</p>
             </div>
 
             <div className="flex flex-col justify-end items-end gap-2">
               <p className="text-xs font-light text-paragraph">AVG PRICE</p>
-              <p>25.67 ETH</p>
+              <p>{avgPrice}</p>
             </div>
 
             <div className="flex flex-col justify-end items-end gap-2">
               <p className="text-xs font-light text-paragraph"> TOTAL VOLUME</p>
-              <p>1.3 M</p>
+              <p>{volume}</p>
             </div>
           </div>
         </div>
@@ -97,18 +120,20 @@ const SingleCollection = () => {
           </div>
         </div>
         <div className="nft-cards py-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 ">
-          <SingleCollectionsCard />
-          <SingleCollectionsCard />
-          <SingleCollectionsCard />
-          <SingleCollectionsCard />
-          <SingleCollectionsCard />
+          {NFTsPricesAndIds.map(({ tokenId, tokenPrice }) => (
+            <SingleCollectionsCard
+              key={tokenId}
+              tokenId={tokenId}
+              tokenPrice={tokenPrice}
+            />
+          ))}
         </div>
 
         <div
           ref={mintNFTSectionRef}
           className=" border rounded-md border-paragraph/40 "
         >
-          <MintNFT />
+          <MintNFT collectionInstance={collectionInstance} />
         </div>
       </div>
 
