@@ -1,19 +1,43 @@
+import { useAppKitAccount } from "@reown/appkit/react";
 import decodeCollectionRevert from "../../../helpers/decodeCollectionRevert";
-import useCollectionStore from "../../../stores/useCollectionStore.store";
-import useReadSingleCollection from "../read/useReadSingleCollection";
+import useAuthenticate from "../../../helpers/Auth";
+import { ethers } from "ethers";
 
 const useBuyNFT = () => {
-  const { getNFTCollectionInstance } = useReadSingleCollection();
-  const { collections } = useCollectionStore();
+  const { isConnected, address } = useAppKitAccount();
+  const { signer } = useAuthenticate();
 
-  const buyNFT = async (tokenId) => {
+  const buyNFT = async (instance, tokenId, tokenPrice) => {
+    console.log("instane : ", instance);
+    console.log("token id", tokenId);
+    console.log("price ", tokenPrice);
+
     try {
-      const instance = await getNFTCollectionInstance(collections[0]);
+      if (!isConnected) {
+        new Error("wallet is not connected");
+      }
 
-      const price = ethers.parseEther("1.0");
+      if (address == (await instance.ownerOf(tokenId))) {
+        new Error("Cannot send to your self");
+      }
+      if (!signer) {
+        new Error("Signer does not exists");
+      }
+
+      const priceInWei = ethers.parseEther(tokenPrice.toString());
+
+      console.log("price in wei ", priceInWei);
+      console.log(signer);
+
+      const balance = await signer.provider.getBalance(address);
+
+      if (balance < priceInWei) {
+        console.log("Insufficient ETH balance");
+        return;
+      }
 
       const tx = await instance.buy(tokenId, {
-        value: price,
+        value: priceInWei,
       });
       await tx.wait();
     } catch (error) {

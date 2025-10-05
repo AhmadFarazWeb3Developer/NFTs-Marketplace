@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import useBuyNFT from "../../blockchain-interaction/hooks/nft/write/useBuyNFT";
+
 import { useLocation, useParams } from "react-router-dom";
 
 import useReadSingleCollection from "../../blockchain-interaction/hooks/nft/read/useReadSingleCollection";
 import fetchEthUsd from "../../blockchain-interaction/hooks/nft/read/fetchEthUSD";
+import useBuyNFT from "../../blockchain-interaction/hooks/nft/write/useBuyNFT";
 
 const BuyNft = () => {
   const [activeTab, setActiveTab] = useState("");
@@ -18,6 +19,8 @@ const BuyNft = () => {
 
   const { tokenPrice, collectionAddress } = state;
   const { getNFTCollectionInstance } = useReadSingleCollection();
+
+  const { buyNFT } = useBuyNFT();
 
   useEffect(() => {
     const init = async () => {
@@ -44,7 +47,7 @@ const BuyNft = () => {
   }
 
   const BuyingNFT = async () => {
-    await buyNFT(tokenId);
+    await buyNFT(instance, tokenId, tokenPrice);
   };
 
   return (

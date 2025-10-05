@@ -7,6 +7,9 @@ const useMintNFT = () => {
   const { error } = useAuthenticate();
 
   const mintNFTOnChain = async (collectionInstance, tokenPrice) => {
+    console.log(collectionInstance);
+    console.log(tokenPrice);
+
     if (error) {
       console.log(error);
       throw new Error("Authentication error: " + error);

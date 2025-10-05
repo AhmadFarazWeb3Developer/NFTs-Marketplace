@@ -24,6 +24,10 @@ const MintNFT = ({ collectionInstance }) => {
     }
 
     try {
+      if (!collectionInstance) {
+        console.log("Collection instace does not exists");
+      }
+
       await mintNFTOnChain(collectionInstance, formData.nftPrice);
 
       const response = await fetch(
