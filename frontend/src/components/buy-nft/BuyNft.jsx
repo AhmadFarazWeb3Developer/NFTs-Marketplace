@@ -5,10 +5,10 @@ import { useLocation, useParams } from "react-router-dom";
 import useReadSingleCollection from "../../blockchain-interaction/hooks/nft/read/useReadSingleCollection";
 import fetchEthUsd from "../../blockchain-interaction/hooks/nft/read/fetchEthUSD";
 import useBuyNFT from "../../blockchain-interaction/hooks/nft/write/useBuyNFT";
+import { ToastContainer, toast } from "react-toastify";
 
 const BuyNft = () => {
   const [activeTab, setActiveTab] = useState("");
-
   const [instance, setInstance] = useState(null);
   const [tokenOwer, setTokenOwner] = useState(null);
   const [collectionName, setCollectionName] = useState(null);
@@ -20,7 +20,7 @@ const BuyNft = () => {
   const { tokenPrice, collectionAddress } = state;
   const { getNFTCollectionInstance } = useReadSingleCollection();
 
-  const { buyNFT } = useBuyNFT();
+  const { buyNFT, error } = useBuyNFT();
 
   useEffect(() => {
     const init = async () => {
@@ -34,9 +34,10 @@ const BuyNft = () => {
       setCollectionName(name);
       setTokenOwner(owner);
       setEthUSD(usd * tokenPrice);
+      toast.error(error);
     };
     init();
-  }, [EthUSD]);
+  }, [EthUSD, error]);
 
   function formatToK(num) {
     if (num === null || num === undefined) return "";
@@ -125,6 +126,7 @@ const BuyNft = () => {
               >
                 Activity
               </button>
+              <ToastContainer />
             </div>
 
             {/* Tab content */}

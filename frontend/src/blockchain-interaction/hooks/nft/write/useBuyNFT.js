@@ -2,10 +2,12 @@ import { useAppKitAccount } from "@reown/appkit/react";
 import decodeCollectionRevert from "../../../helpers/decodeCollectionRevert";
 import useAuthenticate from "../../../helpers/Auth";
 import { ethers } from "ethers";
+import { useState } from "react";
 
 const useBuyNFT = () => {
   const { isConnected, address } = useAppKitAccount();
   const { signer } = useAuthenticate();
+  const [error, setError] = useState("");
 
   const buyNFT = async (instance, tokenId, tokenPrice) => {
     console.log("instane : ", instance);
@@ -43,10 +45,12 @@ const useBuyNFT = () => {
     } catch (error) {
       const decoded = decodeCollectionRevert(error);
       console.log(decoded);
+
+      setError(decoded?.name);
     }
   };
 
-  return { buyNFT };
+  return { buyNFT, error };
 };
 
 export default useBuyNFT;

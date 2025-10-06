@@ -13,6 +13,7 @@ import { useState } from "react";
 import useReadFactoryContract from "../blockchain-interaction/hooks/factory/useReadFactoryContract";
 import useReadAllCollections from "../blockchain-interaction/hooks/collection/read/useReadAllCollections";
 import useReadFactoryInstanceStore from "../blockchain-interaction/stores/useReadFactoryInstanceStore.store";
+import UpdateNFTSaleStatus from "./UpdateNFTSaleStatus";
 
 const SingleCollection = () => {
   useReadFactoryContract();
@@ -144,6 +145,10 @@ const SingleCollection = () => {
           className=" border rounded-md border-paragraph/40 "
         >
           <MintNFT collectionInstance={collectionInstance} />
+        </div>
+
+        <div>
+          <UpdateNFTSaleStatus />
         </div>
       </div>
 
