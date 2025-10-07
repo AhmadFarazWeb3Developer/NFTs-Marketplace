@@ -10,8 +10,8 @@ const useReadSingleCollection = () => {
       console.log(error);
     }
 
-    const runner =
-      (await signer) ?? new ethers.JsonRpcProvider("http://127.0.0.1:8545");
+    console.log(signer);
+    const runner = await signer;
 
     return new ethers.Contract(
       await collectionAddress,
@@ -20,7 +20,7 @@ const useReadSingleCollection = () => {
     );
   };
 
-  return { getNFTCollectionInstance };
+  return { getNFTCollectionInstance, signer };
 };
 
 export default useReadSingleCollection;

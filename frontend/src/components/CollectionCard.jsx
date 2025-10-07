@@ -8,6 +8,7 @@ import useReadAllCollections from "../blockchain-interaction/hooks/collection/re
 const CollectionCard = ({ collectionId, collection, accountAddress }) => {
   useReadFactoryContract();
   useReadAllCollections();
+
   const { factoryReadInstance } = useReadFactoryInstanceStore();
   const navigateTo = useNavigate();
 

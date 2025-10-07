@@ -19,8 +19,6 @@ const SingleCollection = () => {
   useReadFactoryContract();
   useReadAllCollections();
 
-  const { factoryReadInstance } = useReadFactoryInstanceStore();
-
   const {
     collectionInstance,
     collection,
@@ -47,6 +45,12 @@ const SingleCollection = () => {
     }
   }, [collectionName, isLoading]);
 
+  useEffect(() => {
+    const init = async () => {
+      await collectionInstance;
+    };
+    init();
+  }, [collectionInstance]);
   return (
     <>
       <Navbar />

@@ -1,10 +1,15 @@
 import { ethers } from "ethers";
 import useAuthenticate from "../../../helpers/Auth";
-import NFTsCollectionABI from "../../../../../artifacts/onchain/NFTsCollection.sol/NFTsCollection.json";
+
 import { tokenURI } from "../../../helpers/IPFS";
+import decodeCollectionRevert from "../../../helpers/decodeCollectionRevert";
+import { useState } from "react";
 
 const useMintNFT = () => {
   const { error } = useAuthenticate();
+
+  const [IsError, setError] = useState("");
+  const [IsSuccess, setSuccess] = useState(false);
 
   const mintNFTOnChain = async (collectionInstance, tokenPrice) => {
     console.log(collectionInstance);
@@ -26,7 +31,6 @@ const useMintNFT = () => {
     console.log("minting with params:", { tokenURI, tokenPrice });
 
     try {
-      // Validate inputs
       const priceInWei = ethers.parseEther(tokenPrice.toString());
       if (!priceInWei || priceInWei <= 0) {
         throw new Error("Invalid token price");
@@ -38,49 +42,17 @@ const useMintNFT = () => {
 
       const tokenId = await collectionInstance.tokenId();
 
-      console.log("token Id :", tokenId);
-
+      if (receipt) {
+        setSuccess(true);
+      }
       return receipt;
     } catch (err) {
-      console.error("Transaction error:", err);
-
-      // Enhanced error decoding
-      if (err?.data || err?.error?.data) {
-        try {
-          const iface = new ethers.Interface(NFTsCollectionABI.abi);
-          const errorData = err.data || err.error.data;
-
-          // Handle both hex string and object formats
-          const errorHex =
-            typeof errorData === "string"
-              ? errorData
-              : errorData?.data || errorData;
-
-          if (errorHex && errorHex !== "0x") {
-            const decoded = iface.parseError(errorHex);
-            console.error("Decoded custom error:", decoded);
-            throw new Error(`Smart contract error: ${decoded.name}`);
-          }
-        } catch (decodeErr) {
-          console.error("Error decoding failed:", decodeErr);
-          // Continue with original error
-        }
-      }
-
-      // Handle common errors
-      if (err.code === "INSUFFICIENT_FUNDS") {
-        throw new Error("Insufficient funds for transaction");
-      }
-
-      if (err.message?.includes("user rejected")) {
-        throw new Error("Transaction rejected by user");
-      }
-
-      throw new Error(err.reason || err.message || "Transaction failed");
+      const decode = decodeCollectionRevert();
+      setError(decode.name);
     }
   };
 
-  return { mintNFTOnChain };
+  return { mintNFTOnChain, IsError, IsSuccess };
 };
 
 export default useMintNFT;

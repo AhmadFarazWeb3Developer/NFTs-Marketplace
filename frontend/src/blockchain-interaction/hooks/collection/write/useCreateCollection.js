@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import useWriteFactoryContract from "../../factory/useWriteFactoryContract";
-
+import decodeCollectionRevert from "../../../helpers/decodeCollectionRevert";
 const useCreateCollection = () => {
   const { factoryWriteInstance, isLoading, signer } = useWriteFactoryContract();
 
@@ -82,27 +82,8 @@ const useCreateCollection = () => {
       setCollectionAddress(collectionAddress);
       setIsSuccess(true);
     } catch (err) {
-      console.error("Error creating collection:", err);
-
-      if (err.code === "ACTION_REJECTED") {
-        setError(new Error("Transaction was rejected by user"));
-      } else if (err.reason) {
-        setError(new Error(`Contract error: ${err.reason}`));
-      } else if (err.data?.message) {
-        setError(new Error(`Contract revert: ${err.data.message}`));
-      } else if (err.message.includes("revert")) {
-        const revertMatch = err.message.match(
-          /revert with reason string '(.*)'/
-        );
-        if (revertMatch)
-          setError(new Error(`Transaction reverted: ${revertMatch[1]}`));
-        else
-          setError(
-            new Error("Transaction reverted. Check contract requirements.")
-          );
-      } else {
-        setError(err);
-      }
+      const decode = decodeCollectionRevert(err);
+      setError(decode.name);
     } finally {
       setIsPending(false);
     }

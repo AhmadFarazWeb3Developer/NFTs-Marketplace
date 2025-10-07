@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import { Upload } from "lucide-react";
 import useCreateCollection from "../blockchain-interaction/hooks/collection/write/useCreateCollection";
 import { useAppKitAccount } from "@reown/appkit/react";
+import { ToastContainer, toast } from "react-toastify";
 
 const CreateCollection = () => {
   const [formData, setFormData] = useState({
@@ -98,6 +99,15 @@ const CreateCollection = () => {
     sendApiRequest();
   }, [isSuccess, txHash, collectionAddress, accountAddress]);
 
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Collection created successfully!");
+    }
+
+    if (isError) {
+      toast.error(error);
+    }
+  }, [isSuccess, error]);
   return (
     <>
       <Navbar />
@@ -174,11 +184,7 @@ const CreateCollection = () => {
           </div>
         </form>
 
-        {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-        {isError && <p className="text-red-500">Error: {error?.message}</p>}
-        {isSuccess && (
-          <p className="text-green-500">Collection created successfully!</p>
-        )}
+        <ToastContainer />
       </div>
       <Footer />
     </>
