@@ -4,7 +4,7 @@ import useMintNFT from "../blockchain-interaction/hooks/nft/write/useMintNFT";
 import useReadFactoryContract from "../blockchain-interaction/hooks/factory/useReadFactoryContract";
 import { ToastContainer, toast } from "react-toastify";
 
-const MintNFT = ({ collectionInstance }) => {
+const MintNFT = ({ collectionInstance, onMintSuccess }) => {
   useReadFactoryContract();
 
   const { mintNFTOnChain, IsError, IsSuccess } = useMintNFT();
@@ -30,6 +30,8 @@ const MintNFT = ({ collectionInstance }) => {
       }
 
       await mintNFTOnChain(collectionInstance, formData.nftPrice);
+
+      if (onMintSuccess) onMintSuccess();
 
       const response = await fetch(
         "http://localhost:3000/api/v1/add-mint-nft",

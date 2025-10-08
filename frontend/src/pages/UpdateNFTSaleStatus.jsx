@@ -1,15 +1,31 @@
 import React, { useEffect, useState } from "react";
 import useUpdateSaleStatus from "../blockchain-interaction/hooks/nft/write/useUpdateSaleStatus";
 import { ToastContainer, toast } from "react-toastify";
-const UpdateNFTSaleStatus = () => {
+
+const UpdateNFTSaleStatus = ({ collectionInstance }) => {
   const [tokenId, setTokenId] = useState("");
   const [forSale, setForSale] = useState("false");
 
   const { updateSaleStatus, error } = useUpdateSaleStatus();
 
-  const handleClick = () => {
-    console.log("Token ID:", tokenId);
-    console.log("For Sale:", forSale);
+  const handleClick = async () => {
+    try {
+      console.log("🟢 Updating Sale Status...");
+      const saleStatusBool = forSale === "true";
+
+      const txHash = await updateSaleStatus(
+        collectionInstance,
+        tokenId,
+        saleStatusBool
+      );
+
+      if (txHash) {
+        toast.success(`Status updated successfully!`);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Transaction failed");
+    }
   };
 
   useEffect(() => {

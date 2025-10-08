@@ -12,12 +12,13 @@ import useCollectionNFTs from "../blockchain-interaction/hooks/collection/read/u
 import { useState } from "react";
 import useReadFactoryContract from "../blockchain-interaction/hooks/factory/useReadFactoryContract";
 import useReadAllCollections from "../blockchain-interaction/hooks/collection/read/useReadAllCollections";
-import useReadFactoryInstanceStore from "../blockchain-interaction/stores/useReadFactoryInstanceStore.store";
+
 import UpdateNFTSaleStatus from "./UpdateNFTSaleStatus";
 
 const SingleCollection = () => {
   useReadFactoryContract();
   useReadAllCollections();
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const {
     collectionInstance,
@@ -29,7 +30,13 @@ const SingleCollection = () => {
     volume,
     NFTsPricesAndIds,
     isLoading,
-  } = useCollectionNFTs();
+  } = useCollectionNFTs(refreshKey);
+
+  console.log(collectionInstance);
+
+  const handleMintSuccess = () => {
+    setRefreshKey((prev) => prev + 1);
+  };
 
   const [splitedCollectionName, setSplitedCollectionName] = useState([]);
   const mintNFTSectionRef = useRef(null);
@@ -148,11 +155,14 @@ const SingleCollection = () => {
           ref={mintNFTSectionRef}
           className=" border rounded-md border-paragraph/40 "
         >
-          <MintNFT collectionInstance={collectionInstance} />
+          <MintNFT
+            collectionInstance={collectionInstance}
+            onMintSuccess={handleMintSuccess}
+          />
         </div>
 
         <div>
-          <UpdateNFTSaleStatus />
+          <UpdateNFTSaleStatus collectionInstance={collectionInstance} />
         </div>
       </div>
 

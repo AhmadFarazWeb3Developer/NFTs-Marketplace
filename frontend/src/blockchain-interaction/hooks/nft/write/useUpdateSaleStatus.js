@@ -4,21 +4,28 @@ import useReadSingleCollection from "../read/useReadSingleCollection";
 
 const useUpdateSaleStatus = () => {
   const [error, setError] = useState("");
-
   const { getNFTCollectionInstance } = useReadSingleCollection();
 
-  const updateSaleStatus = async (instance, tokenId, saleStaus) => {
+  // ✅ instance = collectionInstance passed from parent component
+  const updateSaleStatus = async (instance, tokenId, saleStatus) => {
     try {
-      await tx.wait();
-      console.log(tx.hash);
-    } catch (error) {
-      const decoded = decodeCollectionRevert(error);
+      if (!instance) throw new Error("Collection instance not found");
+      if (!tokenId) throw new Error("Token ID is required");
 
-      console.log("decoded error : ", decoded.name);
+      const tx = await instance.updateSaleStatus(tokenId, saleStatus);
+      await tx.wait();
+
+      console.log("Transaction successful:", tx.hash);
+      return tx.hash;
+    } catch (err) {
+      console.error("Transaction failed:", err);
+
+      const decoded = decodeCollectionRevert(err);
       setError(decoded?.name || decoded || "Transaction failed.");
     }
   };
 
   return { updateSaleStatus, error };
 };
+
 export default useUpdateSaleStatus;

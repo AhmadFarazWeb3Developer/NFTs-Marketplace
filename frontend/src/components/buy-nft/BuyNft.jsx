@@ -18,26 +18,42 @@ const BuyNft = () => {
   const { state } = useLocation();
 
   const { tokenPrice, collectionAddress } = state;
-  const { getNFTCollectionInstance } = useReadSingleCollection();
+  const { getNFTCollectionInstance, signer } = useReadSingleCollection();
 
   const { buyNFT, error } = useBuyNFT();
 
   useEffect(() => {
     const init = async () => {
-      const localInstance = await getNFTCollectionInstance(collectionAddress);
-      const name = await localInstance.name();
-      const owner = await localInstance.ownerOf(tokenId);
+      if (!collectionAddress || !signer) {
+        console.log("⏳ Waiting for signer or collectionAddress...");
+        return;
+      }
 
-      const usd = await fetchEthUsd();
+      try {
+        const localInstance = await getNFTCollectionInstance(collectionAddress);
+        const name = await localInstance.name();
+        const owner = await localInstance.ownerOf(tokenId);
+        const usd = await fetchEthUsd();
 
-      setInstance(localInstance);
-      setCollectionName(name);
-      setTokenOwner(owner);
-      setEthUSD(usd * tokenPrice);
-      toast.error(error);
+        setInstance(localInstance);
+        setCollectionName(name);
+        setTokenOwner(owner);
+        setEthUSD(usd * tokenPrice);
+        if (error) toast.error(error);
+      } catch (err) {
+        console.error("❌ Error initializing BuyNft:", err);
+      }
     };
+
     init();
-  }, [EthUSD, error]);
+  }, [
+    signer,
+    collectionAddress,
+    tokenId,
+    tokenPrice,
+    getNFTCollectionInstance,
+    error,
+  ]);
 
   function formatToK(num) {
     if (num === null || num === undefined) return "";
