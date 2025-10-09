@@ -50,12 +50,12 @@ const SingleCollection = () => {
     }
   }, [collectionName, isLoading]);
 
-  useEffect(() => {
-    const init = async () => {
-      await collectionInstance;
-    };
-    init();
-  }, [collectionInstance]);
+  // useEffect(() => {
+  //   const init = async () => {
+  //     await collectionInstance;
+  //   };
+  //   init();
+  // }, [collectionInstance]);
   return (
     <>
       <Navbar />

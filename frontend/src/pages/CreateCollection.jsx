@@ -5,6 +5,7 @@ import { Upload } from "lucide-react";
 import useCreateCollection from "../blockchain-interaction/hooks/collection/write/useCreateCollection";
 import { useAppKitAccount } from "@reown/appkit/react";
 import { ToastContainer, toast } from "react-toastify";
+import CollectionCreatedToast from "../components/toasts/CollectionCreateToast";
 
 const CreateCollection = () => {
   const [formData, setFormData] = useState({
@@ -23,9 +24,9 @@ const CreateCollection = () => {
     isSuccess,
     isError,
     error,
-
     collectionAddress,
     accountAddress,
+    collectionEventInfo,
   } = useCreateCollection();
 
   const uploadCollectionImage = (event) => {
@@ -105,14 +106,26 @@ const CreateCollection = () => {
   }, [isSuccess, txHash, collectionAddress, accountAddress]);
 
   useEffect(() => {
-    if (isSuccess) {
-      toast.success("Collection created successfully!");
+    if (isSuccess && collectionEventInfo) {
+      toast(
+        <CollectionCreatedToast collectionEventInfo={collectionEventInfo} />,
+        {
+          position: "top-right",
+          autoClose: 8000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "dark",
+        }
+      );
     }
 
     if (isError) {
       toast.error(error);
     }
-  }, [isSuccess, error]);
+  }, [isSuccess, isError, error, collectionEventInfo]);
+
   return (
     <>
       <Navbar />
