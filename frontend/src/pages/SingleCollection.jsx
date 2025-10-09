@@ -32,8 +32,6 @@ const SingleCollection = () => {
     isLoading,
   } = useCollectionNFTs(refreshKey);
 
-  console.log(collectionInstance);
-
   const handleMintSuccess = () => {
     setRefreshKey((prev) => prev + 1);
   };

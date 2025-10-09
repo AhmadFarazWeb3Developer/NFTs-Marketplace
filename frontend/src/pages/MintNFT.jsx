@@ -18,21 +18,20 @@ const MintNFT = ({ collectionInstance, onMintSuccess }) => {
   const mintNFT = async (event) => {
     event.preventDefault();
 
-    const form = new FormData();
-    form.append("nftPrice", formData.nftPrice);
-    if (formData.nftImage) {
-      form.append("nftImage", formData.nftImage);
+    if (!formData.nftImage) {
+      toast.error("Please upload an NFT image");
+      return;
+    }
+    if (!formData.nftPrice) {
+      toast.error("Please set a price");
+      return;
     }
 
+    const form = new FormData();
+    form.append("nftPrice", formData.nftPrice);
+    form.append("nftImage", formData.nftImage);
+
     try {
-      if (!collectionInstance) {
-        console.log("Collection instace does not exists");
-      }
-
-      await mintNFTOnChain(collectionInstance, formData.nftPrice);
-
-      if (onMintSuccess) onMintSuccess();
-
       const response = await fetch(
         "http://localhost:3000/api/v1/add-mint-nft",
         {
@@ -40,11 +39,27 @@ const MintNFT = ({ collectionInstance, onMintSuccess }) => {
           body: form,
         }
       );
-
       const data = await response.json();
       console.log("Server Response:", data);
+
+      if (!response.ok) {
+        throw new Error(data.error || "Backend upload failed");
+      }
+
+      const { cid, gatewayUrl } = data.data || {};
+      if (!cid) {
+        throw new Error("CID not returned");
+      }
+      const tokenURI = gatewayUrl || `https://gateway.pinata.cloud/ipfs/${cid}`;
+
+      await mintNFTOnChain(collectionInstance, formData.nftPrice, tokenURI);
+
+      if (onMintSuccess) {
+        onMintSuccess();
+      }
     } catch (error) {
-      console.error("Error sending request:", error);
+      console.error("Error in mintNFT:", error);
+      toast.error(error.message || "Minting failed");
     }
   };
 
@@ -61,12 +76,12 @@ const MintNFT = ({ collectionInstance, onMintSuccess }) => {
 
   useEffect(() => {
     if (IsError) {
-      toast.error(Error);
+      toast.error(IsError);
     }
     if (IsSuccess) {
       toast.success("NFT Minted!");
     }
-  }, [Error]);
+  }, [IsError, IsSuccess]);
 
   return (
     <form

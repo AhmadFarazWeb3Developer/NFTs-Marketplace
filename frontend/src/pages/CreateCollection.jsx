@@ -11,6 +11,7 @@ const CreateCollection = () => {
     name: "",
     symbol: "",
     image: null,
+    previewUrl: null,
   });
   const [errorMessage, setErrorMessage] = useState("");
   const { address } = useAppKitAccount();
@@ -34,7 +35,11 @@ const CreateCollection = () => {
       return;
     }
     if (file) {
-      setFormData({ ...formData, image: file });
+      setFormData({
+        ...formData,
+        image: file,
+        previewUrl: URL.createObjectURL(file),
+      });
       setErrorMessage("");
     }
   };
@@ -169,6 +174,19 @@ const CreateCollection = () => {
               <p className="text-xs text-paragraph/70">PNG, JPG up to 5MB</p>
             </label>
           </div>
+
+          {formData.previewUrl && (
+            <div className="mt-6 w-full max-w-md flex flex-col items-center rounded-md border border-paragraph/50 py-3 ">
+              <p className="text-sm text-paragraph/70 mb-2 font-light">
+                Preview
+              </p>
+              <img
+                src={formData.previewUrl}
+                alt="NFT Preview"
+                className="w-40 h-40 object-cover rounded-md border border-paragraph/50 shadow-md"
+              />
+            </div>
+          )}
 
           <div className="flex flex-col gap-2 w-full">
             <button

@@ -12,7 +12,6 @@ const useReadSingleCollection = () => {
         console.log(error);
       }
 
-      console.log("Signer : ", signer);
       const runner = await signer;
 
       return new ethers.Contract(

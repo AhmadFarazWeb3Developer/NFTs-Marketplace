@@ -1,34 +1,23 @@
 import { ethers } from "ethers";
 import useAuthenticate from "../../../helpers/Auth";
-
-import { tokenURI } from "../../../helpers/IPFS";
 import decodeCollectionRevert from "../../../helpers/decodeCollectionRevert";
 import { useState } from "react";
 
 const useMintNFT = () => {
-  const { error } = useAuthenticate();
-
+  const { error: authError } = useAuthenticate();
   const [IsError, setError] = useState("");
   const [IsSuccess, setSuccess] = useState(false);
 
-  const mintNFTOnChain = async (collectionInstance, tokenPrice) => {
-    console.log(collectionInstance);
-    console.log(tokenPrice);
-
-    if (error) {
-      console.log(error);
-      throw new Error("Authentication error: " + error);
+  const mintNFTOnChain = async (collectionInstance, tokenPrice, tokenURI) => {
+    if (authError) {
+      throw new Error("Authentication error: " + authError);
     }
-
     if (!collectionInstance) {
-      throw new Error("Collection instance is null or undefined");
+      throw new Error("Collection contract instance missing");
     }
-
     if (!tokenURI) {
       throw new Error("Token URI is required");
     }
-
-    console.log("minting with params:", { tokenURI, tokenPrice });
 
     try {
       const priceInWei = ethers.parseEther(tokenPrice.toString());
@@ -37,18 +26,18 @@ const useMintNFT = () => {
       }
 
       const tx = await collectionInstance.mint(tokenURI, priceInWei);
-
       const receipt = await tx.wait();
-
-      const tokenId = await collectionInstance.tokenId();
 
       if (receipt) {
         setSuccess(true);
       }
       return receipt;
     } catch (err) {
-      const decode = decodeCollectionRevert();
-      setError(decode.name);
+      const decoded = decodeCollectionRevert(err);
+
+      console.log(decoded.name);
+
+      setError(decoded?.name);
     }
   };
 
