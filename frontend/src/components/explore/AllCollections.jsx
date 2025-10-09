@@ -1,10 +1,48 @@
+import { useEffect, useState } from "react";
+import useReadAllCollections from "../../blockchain-interaction/hooks/collection/read/useReadAllCollections";
+import useReadFactoryContract from "../../blockchain-interaction/hooks/factory/useReadFactoryContract";
 import CollectionCard from "../CollectionCard";
 import Navbar from "../Navbar";
 
 import { LucideSortAsc } from "lucide-react";
 
 import { GrNext, GrPrevious } from "react-icons/gr";
+import useCollectionStore from "../../blockchain-interaction/stores/useCollectionStore.store";
+import useReadSingleCollection from "../../blockchain-interaction/hooks/nft/read/useReadSingleCollection";
+import useReadFactoryInstanceStore from "../../blockchain-interaction/stores/useReadFactoryInstanceStore.store";
 const AllCollections = () => {
+  useReadAllCollections();
+  useReadFactoryContract();
+
+  const [collectionsData, setCollectionsData] = useState([
+    { collectioId: "", collection: "", accountAddress: "" },
+  ]);
+  const { collections } = useCollectionStore();
+  const { getNFTCollectionInstance, signer } = useReadSingleCollection();
+  const { factoryReadInstance } = useReadFactoryInstanceStore();
+
+  useEffect(() => {
+    const loadCollections = async () => {
+      const data = await Promise.all(
+        collections.map(async ({ collectionAddress, accountAddress }) => {
+          const instance = await getNFTCollectionInstance(collectionAddress);
+          console.log("instance in top collection ", instance);
+          const id = await factoryReadInstance.collectionAddressToId(
+            collectionAddress
+          );
+
+          return { collectionId: id, collection: instance, accountAddress };
+        })
+      );
+
+      setCollectionsData(data);
+    };
+
+    if (collections.length > 0) {
+      loadCollections();
+    }
+  }, [collections]);
+
   return (
     <>
       <Navbar />
@@ -49,7 +87,44 @@ const AllCollections = () => {
           </div>
 
           <div className="right-container border-1  border-white/5 rounded-sm ">
-            <CollectionCard />
+            <table className="w-full table-fixed text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+              <thead className="text-xs uppercase dark:text-gray-500 font-unbounded font-light">
+                <tr>
+                  <th scope="col" className="px-2 py-3 w-[120px]">
+                    COLLECTION
+                  </th>
+                  <th scope="col" className="px-2 py-3 w-[150px]">
+                    Symbol
+                  </th>
+                  <th scope="col" className="px-2 py-3">
+                    AVG PRICE
+                  </th>
+                  <th scope="col" className="px-2 py-3">
+                    ITEMS
+                  </th>
+                  <th scope="col" className="px-2 py-3">
+                    OWNERS
+                  </th>
+                  <th scope="col" className="px-2 py-3">
+                    REMAINING
+                  </th>
+                  <th scope="col" className="px-2 py-3">
+                    FOR SALE
+                  </th>
+                </tr>
+              </thead>
+            </table>
+
+            {collectionsData.map(
+              ({ index, collectionId, collection, accountAddress }) => (
+                <CollectionCard
+                  key={index}
+                  collectionId={collectionId}
+                  collection={collection}
+                  accountAddress={accountAddress}
+                />
+              )
+            )}
           </div>
         </div>
 

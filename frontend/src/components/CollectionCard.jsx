@@ -86,7 +86,9 @@ const CollectionCard = ({ collectionId, collection, accountAddress }) => {
             <td className="px-2 py-4">{collectionDetails.items}</td>
             <td className="px-2 py-4">{collectionDetails.owners}</td>
             <td className="px-2 py-4">{collectionDetails.remaining}</td>
-            <td className="px-2 py-4">{collectionDetails.forSale}</td>
+            <td className="px-2 py-4">
+              {collectionDetails.forSale ? "Not Active" : "Active"}
+            </td>
           </tr>
         </tbody>
       </table>
