@@ -20,15 +20,22 @@ const TopCollections = () => {
   useEffect(() => {
     const loadCollections = async () => {
       const data = await Promise.all(
-        collections.map(async ({ collectionAddress, accountAddress }) => {
-          const instance = await getNFTCollectionInstance(collectionAddress);
-          console.log("instance in top collection ", instance);
-          const id = await factoryReadInstance.collectionAddressToId(
-            collectionAddress
-          );
+        collections.map(
+          async ({ collectionAddress, accountAddress, image }) => {
+            const instance = await getNFTCollectionInstance(collectionAddress);
+            console.log("instance in top collection ", instance);
+            const id = await factoryReadInstance.collectionAddressToId(
+              collectionAddress
+            );
 
-          return { collectionId: id, collection: instance, accountAddress };
-        })
+            return {
+              collectionId: id,
+              collection: instance,
+              accountAddress,
+              image,
+            };
+          }
+        )
       );
 
       setCollectionsData(data);
@@ -76,12 +83,13 @@ const TopCollections = () => {
           </table>
 
           {collectionsData.map(
-            ({ index, collectionId, collection, accountAddress }) => (
+            ({ index, collectionId, collection, accountAddress, image }) => (
               <CollectionCard
                 key={index}
                 collectionId={collectionId}
                 collection={collection}
                 accountAddress={accountAddress}
+                image={image}
               />
             )
           )}
@@ -93,7 +101,6 @@ const TopCollections = () => {
           </div>
         </>
       ) : (
-        // 🩵 Empty state (UI only)
         <div className="flex flex-col items-center justify-center flex-1 text-center py-16">
           <div className="w-24 h-24 rounded-full bg-gray-800 flex items-center justify-center mb-6">
             <svg

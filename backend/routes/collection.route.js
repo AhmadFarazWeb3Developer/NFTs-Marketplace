@@ -1,11 +1,22 @@
 import { Router } from "express";
-import createCollection from "../controllers/createCollection.controller.js";
 import multer from "multer";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import cloudinary from "../config/cloudinary.js";
+import createCollection from "../controllers/createCollection.controller.js";
 import getCollection from "../controllers/getCollection.controller.js";
 
 const CollectionRouter = Router();
 
-const uploadCollectionImage = multer({ dest: "uploads/collections" });
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "NFT-collections",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
+    transformation: [{ width: 800, height: 800, crop: "limit" }],
+  },
+});
+
+const uploadCollectionImage = multer({ storage });
 
 CollectionRouter.post(
   "/add-create-collection",

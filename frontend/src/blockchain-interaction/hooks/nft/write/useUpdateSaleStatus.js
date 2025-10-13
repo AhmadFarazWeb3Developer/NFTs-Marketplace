@@ -25,9 +25,7 @@ const useUpdateSaleStatus = () => {
             };
             break;
           }
-        } catch (err) {
-          // Ignore logs that don't match
-        }
+        } catch (err) {}
       }
 
       if (!eventInfo) {

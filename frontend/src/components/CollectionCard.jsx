@@ -6,7 +6,12 @@ import useReadFactoryContract from "../blockchain-interaction/hooks/factory/useR
 import useReadAllCollections from "../blockchain-interaction/hooks/collection/read/useReadAllCollections";
 import { HiOutlineCollection } from "react-icons/hi";
 
-const CollectionCard = ({ collectionId, collection, accountAddress }) => {
+const CollectionCard = ({
+  collectionId,
+  collection,
+  accountAddress,
+  image,
+}) => {
   useReadFactoryContract();
   useReadAllCollections();
 
@@ -73,7 +78,7 @@ const CollectionCard = ({ collectionId, collection, accountAddress }) => {
             <td className="px-6 py-4">
               <div className="w-14 h-14">
                 <img
-                  src="richLizard.jpeg"
+                  src={image}
                   alt="Rich Lizard"
                   className="w-full h-full object-cover rounded-md"
                 />

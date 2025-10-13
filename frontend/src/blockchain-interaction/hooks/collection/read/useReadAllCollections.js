@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { cloneElement, useEffect, useState } from "react";
 import useCollectionId from "./useCollectionId";
 import useCollectionStore from "../../../stores/useCollectionStore.store";
 import useReadFactoryInstanceStore from "../../../stores/useReadFactoryInstanceStore.store";
@@ -15,7 +15,9 @@ const useReadAllCollections = () => {
         if (!response.ok) throw new Error("API request failed");
         const collectionApi = await response.json();
 
-        const addrs = collectionApi?.data?.map((c) => c.accountAddress) || [];
+        const collectionsData = collectionApi?.data || [];
+
+        const addrs = collectionsData.map((c) => c.accountAddress) || [];
 
         if (!factoryReadInstance || collectionId === null || addrs.length === 0)
           return;
@@ -26,8 +28,9 @@ const useReadAllCollections = () => {
             i,
             addrs[i]
           );
+          const { image } = collectionsData[i];
 
-          results.push({ collectionAddress, accountAddress: addrs[i] });
+          results.push({ collectionAddress, accountAddress: addrs[i], image });
         }
         setCollections(results);
       } catch (err) {

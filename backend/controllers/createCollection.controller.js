@@ -6,6 +6,8 @@ const createCollection = async (req, res) => {
 
     const image = req.file;
 
+    console.log(image);
+
     if (!accountAddress || !collectionAddress || !name || !symbol || !image) {
       return res.status(400).json({
         error:
@@ -18,7 +20,7 @@ const createCollection = async (req, res) => {
       collectionAddress,
       name,
       symbol,
-      image: image.filename,
+      image: image.path,
     });
     const savedCollection = await newCollection.save();
     console.log("Collection saved to database:", savedCollection);
@@ -30,12 +32,15 @@ const createCollection = async (req, res) => {
         collectionAddress,
         name,
         symbol,
-        image: image ? image.filename : "No image uploaded",
+        image: image.path,
       },
     });
   } catch (error) {
     console.error("Error in createCollection:", error);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({
+      error: error.message || "Something went wrong",
+      details: error,
+    });
   }
 };
 
