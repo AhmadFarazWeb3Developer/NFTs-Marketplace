@@ -30,6 +30,7 @@ const SingleCollection = () => {
     volume,
     NFTsPricesAndIds,
     isLoading,
+    tokenURIs,
   } = useCollectionNFTs(refreshKey);
 
   const handleMintSuccess = () => {
@@ -50,12 +51,6 @@ const SingleCollection = () => {
     }
   }, [collectionName, isLoading]);
 
-  // useEffect(() => {
-  //   const init = async () => {
-  //     await collectionInstance;
-  //   };
-  //   init();
-  // }, [collectionInstance]);
   return (
     <>
       <Navbar />
@@ -139,12 +134,13 @@ const SingleCollection = () => {
           </div>
         </div>
         <div className="nft-cards py-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 ">
-          {NFTsPricesAndIds.map(({ index, tokenId, tokenPrice }) => (
+          {NFTsPricesAndIds.map(({ tokenId, tokenPrice }, index) => (
             <SingleCollectionsCard
               key={tokenId}
               tokenId={tokenId}
               tokenPrice={tokenPrice}
               collectionInstance={collectionInstance}
+              tokenURI={tokenURIs[index]}
             />
           ))}
         </div>

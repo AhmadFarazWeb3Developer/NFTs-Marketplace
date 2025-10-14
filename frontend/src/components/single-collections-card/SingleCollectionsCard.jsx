@@ -3,9 +3,15 @@ import { useNavigate } from "react-router-dom";
 import useMintNFT from "../../blockchain-interaction/hooks/nft/write/useMintNFT";
 import useReadFactoryContract from "../../blockchain-interaction/hooks/factory/useReadFactoryContract";
 
-const SingleCollectionsCard = ({ tokenId, tokenPrice, collectionInstance }) => {
+const SingleCollectionsCard = ({
+  tokenId,
+  tokenPrice,
+  collectionInstance,
+  tokenURI,
+}) => {
   useReadFactoryContract();
 
+  console.log(tokenURI);
   const [hover, setHover] = useState("notHovered");
   const navigateTo = useNavigate("");
 
@@ -13,7 +19,7 @@ const SingleCollectionsCard = ({ tokenId, tokenPrice, collectionInstance }) => {
     <>
       <div className="card border-1 border-paragraph/50 rounded-md flex justify-center flex-col items-center gap-2 pb-2 bg-black/20">
         <div className="rounded-md">
-          <img src="/scifiHumanoid.jpg" alt="" className="rounded-md" />
+          <img src={tokenURI} alt="" className="rounded-md" />
         </div>
 
         {hover === "notHovered" && (

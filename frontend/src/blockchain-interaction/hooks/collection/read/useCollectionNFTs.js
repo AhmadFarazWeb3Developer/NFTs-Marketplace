@@ -20,6 +20,7 @@ const useCollectionNFTs = (refreshKey) => {
   const [volume, setVolume] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [NFTsPricesAndIds, setNFTsPricesAndIds] = useState([]);
+  const [tokenURIs, setTokenURIs] = useState([]);
 
   const calculateAvgPrice = async (instance) => {
     let totalPrice = 0n;
@@ -51,11 +52,13 @@ const useCollectionNFTs = (refreshKey) => {
       const provider = new ethers.JsonRpcProvider("http://127.0.0.1:8545");
       const collectionBalance = await provider.getBalance(collection);
 
-      // ✅ Fetch prices AFTER you know totalItems
       const tempData = [];
+      const tempURIs = [];
       for (let tokenId = 0; tokenId < id; tokenId++) {
         const tokenPrice = formatEther(await instance.tokenPrice(tokenId));
+        const tokenURI = await instance.tokenURI(tokenId);
         tempData.push({ tokenId, tokenPrice });
+        tempURIs.push(tokenURI);
       }
 
       setCollectionInstance(instance);
@@ -65,6 +68,7 @@ const useCollectionNFTs = (refreshKey) => {
       setAvgPrice(avgPrice);
       setVolume(formatEther(collectionBalance));
       setNFTsPricesAndIds(tempData);
+      setTokenURIs(tempURIs);
     } catch (error) {
       console.error("Error fetching NFTs:", error);
     } finally {
@@ -88,6 +92,7 @@ const useCollectionNFTs = (refreshKey) => {
     volume,
     NFTsPricesAndIds,
     isLoading,
+    tokenURIs,
   };
 };
 

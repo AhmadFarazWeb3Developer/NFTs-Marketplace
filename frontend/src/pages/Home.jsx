@@ -12,10 +12,9 @@ const Home = () => {
 
   return (
     <>
-      <div className="home-page h-screen bg-primary-black">
+      <div className="home-page  bg-primary-black">
         <Navbar />
         <Hero />
-
         <TopCollections />
         <CollectionStatistics />
         <Footer />

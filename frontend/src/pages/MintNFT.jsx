@@ -3,11 +3,12 @@ import { FaCloudUploadAlt, FaCheckCircle } from "react-icons/fa";
 import useMintNFT from "../blockchain-interaction/hooks/nft/write/useMintNFT";
 import useReadFactoryContract from "../blockchain-interaction/hooks/factory/useReadFactoryContract";
 import { ToastContainer, toast } from "react-toastify";
+import MintNFTToast from "../components/toasts/MintNFTToast";
 
 const MintNFT = ({ collectionInstance, onMintSuccess }) => {
   useReadFactoryContract();
 
-  const { mintNFTOnChain, IsError, IsSuccess } = useMintNFT();
+  const { mintNFTOnChain, IsError, IsSuccess, eventInfo } = useMintNFT();
 
   const [formData, setFormData] = useState({
     nftPrice: "",
@@ -78,10 +79,14 @@ const MintNFT = ({ collectionInstance, onMintSuccess }) => {
     if (IsError) {
       toast.error(IsError);
     }
-    if (IsSuccess) {
-      toast.success("NFT Minted!");
+
+    if (IsSuccess && eventInfo.length > 0) {
+      toast.success(<MintNFTToast events={eventInfo} />, {
+        autoClose: 8000,
+        position: "bottom-right",
+      });
     }
-  }, [IsError, IsSuccess]);
+  }, [IsError, IsSuccess, eventInfo]);
 
   return (
     <form

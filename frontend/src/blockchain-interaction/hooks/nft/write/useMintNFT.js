@@ -7,6 +7,7 @@ const useMintNFT = () => {
   const { error: authError } = useAuthenticate();
   const [IsError, setError] = useState("");
   const [IsSuccess, setSuccess] = useState(false);
+  const [eventInfo, setEventInfo] = useState([]);
 
   const mintNFTOnChain = async (collectionInstance, tokenPrice, tokenURI) => {
     if (authError) throw new Error("Authentication error: " + authError);
@@ -22,21 +23,48 @@ const useMintNFT = () => {
       const tx = await collectionInstance.mint(tokenURI, priceInWei);
       const receipt = await tx.wait();
 
+      const events = [];
+
+      for (const log of receipt.logs) {
+        try {
+          const parsed = collectionInstance.interface.parseLog(log);
+
+          if (parsed.name === "Transfer") {
+            events.push({
+              event: parsed.name,
+              from: parsed.args.from,
+              to: parsed.args.to,
+              tokenId: parsed.args.tokenId.toString(),
+            });
+          }
+
+          if (parsed.name === "TokenPriceUpdated") {
+            events.push({
+              event: parsed.name,
+              tokenID: parsed.args.tokenID.toString(),
+              oldPrice: parsed.args.oldPrice.toString(),
+              newPrice: parsed.args.newPrice.toString(),
+            });
+          }
+        } catch (err) {}
+      }
+
+      setEventInfo(events);
+
       if (receipt) {
         setSuccess(true);
-        // Reset after short delay to avoid double toasts on re-render
         setTimeout(() => setSuccess(false), 200);
       }
+
       return receipt;
     } catch (err) {
       const decoded = decodeCollectionRevert(err);
       setError(decoded?.name || "Mint failed");
-      // Reset too
       setTimeout(() => setError(""), 200);
     }
   };
 
-  return { mintNFTOnChain, IsError, IsSuccess };
+  return { mintNFTOnChain, IsError, IsSuccess, eventInfo };
 };
 
 export default useMintNFT;
