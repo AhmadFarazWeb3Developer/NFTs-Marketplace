@@ -48,9 +48,14 @@ const MintNFT = ({ collectionInstance, onMintSuccess }) => {
       }
 
       const { cid, gatewayUrl } = data.data || {};
+
+      console.log("cid : ", cid);
+      console.log("gateway : ", gatewayUrl);
+
       if (!cid) {
         throw new Error("CID not returned");
       }
+
       const tokenURI = gatewayUrl || `https://gateway.pinata.cloud/ipfs/${cid}`;
 
       await mintNFTOnChain(collectionInstance, formData.nftPrice, tokenURI);

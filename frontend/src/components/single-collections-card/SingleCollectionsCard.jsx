@@ -15,11 +15,35 @@ const SingleCollectionsCard = ({
   const [hover, setHover] = useState("notHovered");
   const navigateTo = useNavigate("");
 
+  const stripBeforeHttp = (str) => {
+    if (!str || typeof str !== "string") return "";
+
+    // Case 1: already starts with http(s)
+    if (str.startsWith("http://") || str.startsWith("https://")) {
+      return str;
+    }
+
+    // Case 2: contains http somewhere (e.g., "BoardApes/https://...")
+    const httpIndex = str.indexOf("http");
+    if (httpIndex !== -1) {
+      return str.substring(httpIndex);
+    }
+
+    // Case 3: missing protocol, but contains domain like "BoardApes/rose-traditional-swordtail-..."
+    const slashIndex = str.indexOf("/");
+    if (slashIndex !== -1) {
+      const clean = str.substring(slashIndex + 1);
+      return `https://${clean}`;
+    }
+
+    // Fallback — just prefix https
+    return `https://${str}`;
+  };
   return (
     <>
       <div className="card border-1 border-paragraph/50 rounded-md flex justify-center flex-col items-center gap-2 pb-2 bg-black/20">
         <div className="rounded-md">
-          <img src={tokenURI} alt="" className="rounded-md" />
+          <img src={stripBeforeHttp(tokenURI)} alt="" className="rounded-md" />
         </div>
 
         {hover === "notHovered" && (
