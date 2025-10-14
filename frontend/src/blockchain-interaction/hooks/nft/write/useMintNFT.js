@@ -8,6 +8,7 @@ const useMintNFT = () => {
   const [IsError, setError] = useState("");
   const [IsSuccess, setSuccess] = useState(false);
   const [eventInfo, setEventInfo] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const mintNFTOnChain = async (collectionInstance, tokenPrice, tokenURI) => {
     if (authError) throw new Error("Authentication error: " + authError);
@@ -16,6 +17,11 @@ const useMintNFT = () => {
     if (!tokenURI) throw new Error("Token URI is required");
 
     try {
+      setError("");
+      setSuccess(false);
+      setEventInfo([]);
+      setIsLoading(true);
+
       const priceInWei = ethers.parseEther(tokenPrice.toString());
       if (!priceInWei || priceInWei <= 0)
         throw new Error("Invalid token price");
@@ -24,7 +30,6 @@ const useMintNFT = () => {
       const receipt = await tx.wait();
 
       const events = [];
-
       for (const log of receipt.logs) {
         try {
           const parsed = collectionInstance.interface.parseLog(log);
@@ -46,25 +51,22 @@ const useMintNFT = () => {
               newPrice: parsed.args.newPrice.toString(),
             });
           }
-        } catch (err) {}
+        } catch {}
       }
 
       setEventInfo(events);
-
-      if (receipt) {
-        setSuccess(true);
-        setTimeout(() => setSuccess(false), 200);
-      }
-
+      setSuccess(true);
       return receipt;
     } catch (err) {
       const decoded = decodeCollectionRevert(err);
       setError(decoded?.name || "Mint failed");
-      setTimeout(() => setError(""), 200);
+      setSuccess(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  return { mintNFTOnChain, IsError, IsSuccess, eventInfo };
+  return { mintNFTOnChain, IsError, IsSuccess, eventInfo, isLoading };
 };
 
 export default useMintNFT;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaCloudUploadAlt, FaCheckCircle } from "react-icons/fa";
 import useMintNFT from "../blockchain-interaction/hooks/nft/write/useMintNFT";
 import useReadFactoryContract from "../blockchain-interaction/hooks/factory/useReadFactoryContract";
@@ -8,7 +8,8 @@ import MintNFTToast from "../components/toasts/MintNFTToast";
 const MintNFT = ({ collectionInstance, onMintSuccess }) => {
   useReadFactoryContract();
 
-  const { mintNFTOnChain, IsError, IsSuccess, eventInfo } = useMintNFT();
+  const { mintNFTOnChain, IsError, IsSuccess, eventInfo, isLoading } =
+    useMintNFT();
 
   const [formData, setFormData] = useState({
     nftPrice: "",
@@ -40,6 +41,7 @@ const MintNFT = ({ collectionInstance, onMintSuccess }) => {
           body: form,
         }
       );
+
       const data = await response.json();
       console.log("Server Response:", data);
 
@@ -48,21 +50,17 @@ const MintNFT = ({ collectionInstance, onMintSuccess }) => {
       }
 
       const { cid, gatewayUrl } = data.data || {};
-
-      console.log("cid : ", cid);
-      console.log("gateway : ", gatewayUrl);
+      console.log("cid:", cid);
+      console.log("gateway:", gatewayUrl);
 
       if (!cid) {
         throw new Error("CID not returned");
       }
 
       const tokenURI = gatewayUrl || `https://gateway.pinata.cloud/ipfs/${cid}`;
-
       await mintNFTOnChain(collectionInstance, formData.nftPrice, tokenURI);
 
-      if (onMintSuccess) {
-        onMintSuccess();
-      }
+      if (onMintSuccess) onMintSuccess();
     } catch (error) {
       console.error("Error in mintNFT:", error);
       toast.error(error.message || "Minting failed");
@@ -80,15 +78,24 @@ const MintNFT = ({ collectionInstance, onMintSuccess }) => {
     }
   };
 
+  const hasShownToast = useRef(false);
+
   useEffect(() => {
     if (IsError) {
-      toast.error(IsError);
+      toast.dismiss(); // clear old toasts
+      toast.error(IsError, { toastId: "mintError" });
+      hasShownToast.current = false; // allow next success toast
     }
 
-    if (IsSuccess && eventInfo.length > 0) {
+    if (IsSuccess && eventInfo.length > 0 && !hasShownToast.current) {
+      hasShownToast.current = true;
+
+      toast.dismiss(); // clear old toasts
       toast.success(<MintNFTToast events={eventInfo} />, {
-        autoClose: 8000,
-        position: "bottom-right",
+        toastId: "mintSuccess",
+        autoClose: 5000,
+        position: "top-right",
+        icon: false,
       });
     }
   }, [IsError, IsSuccess, eventInfo]);
@@ -101,7 +108,6 @@ const MintNFT = ({ collectionInstance, onMintSuccess }) => {
       <h1 className="text-2xl font-semibold mb-8">
         Mint <span className="text-action-btn-green">NFT</span>
       </h1>
-
       <label
         htmlFor="nft-upload"
         className="w-full max-w-md rounded-md border border-paragraph/50 p-8 flex flex-col items-center justify-center gap-3 bg-black/10 hover:bg-black/20 transition-colors cursor-pointer"
@@ -125,7 +131,6 @@ const MintNFT = ({ collectionInstance, onMintSuccess }) => {
           onChange={uploadNftImage}
         />
       </label>
-
       {formData.previewUrl && (
         <div className="mt-6 w-full max-w-md flex flex-col items-center rounded-md border border-paragraph/50 py-3">
           <p className="text-sm text-paragraph/70 mb-2">Preview:</p>
@@ -136,7 +141,6 @@ const MintNFT = ({ collectionInstance, onMintSuccess }) => {
           />
         </div>
       )}
-
       <div className="mt-8 w-full max-w-md">
         <label className="block text-sm mb-2">NFT Initial Price (ETH)</label>
         <input
@@ -151,10 +155,13 @@ const MintNFT = ({ collectionInstance, onMintSuccess }) => {
 
       <button
         type="submit"
-        className="mt-8 w-full max-w-md bg-action-btn-green text-black font-medium py-3 rounded-md hover:bg-[#aaff4d] transition-colors cursor-pointer"
+        disabled={isLoading}
+        className={`mt-8 w-full max-w-md bg-action-btn-green text-black font-medium py-3 rounded-md transition-colors cursor-pointer 
+    ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:bg-[#aaff4d]"}`}
       >
-        Mint NFT
+        {isLoading ? "Minting..." : "Mint NFT"}
       </button>
+
       <ToastContainer />
     </form>
   );
