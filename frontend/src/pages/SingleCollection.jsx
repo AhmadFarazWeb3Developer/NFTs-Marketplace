@@ -137,7 +137,7 @@ const SingleCollection = () => {
             </button>
           </div>
         </div>
-        <div className="nft-cards py-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 ">
+        <div className="nft-cards py-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4  justify-start border-1">
           {NFTsPricesAndIds.map(({ tokenId, tokenPrice }, index) => (
             <SingleCollectionsCard
               key={tokenId}
