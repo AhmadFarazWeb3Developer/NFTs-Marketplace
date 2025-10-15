@@ -27,18 +27,36 @@ const CollectionCard = ({
     forSale: "",
   });
 
+  // const calculateAvgPrice = async () => {
+  //   let totalPrice = 0n;
+  //   const supply = await collection.tokenId();
+  //   for (let tokenId = 0n; tokenId < supply; tokenId++) {
+  //     const price = await collection.tokenPrice(tokenId);
+  //     totalPrice += price;
+  //   }
+
+  //   if (supply === 0n) return "0";
+
+  //   const avgPrice = totalPrice / supply;
+  //   return formatEther(avgPrice);
+  // };
+
   const calculateAvgPrice = async () => {
     let totalPrice = 0n;
     const supply = await collection.tokenId();
+
+    if (supply === 0n) return "0.00";
+
     for (let tokenId = 0n; tokenId < supply; tokenId++) {
       const price = await collection.tokenPrice(tokenId);
       totalPrice += price;
     }
 
-    if (supply === 0n) return "0";
-
     const avgPrice = totalPrice / supply;
-    return formatEther(avgPrice);
+
+    const avgPriceInEth = parseFloat(formatEther(avgPrice)).toFixed(2);
+
+    return avgPriceInEth;
   };
 
   useEffect(() => {
@@ -72,7 +90,9 @@ const CollectionCard = ({
           <tr
             className="collection-card border-b border-gray-700 text-white hover:border-none"
             onClick={() => {
-              navigateTo(`/explore/collection/${collection.target}`);
+              navigateTo(`/explore/collection/${collection.target}`, {
+                state: { image },
+              });
             }}
           >
             <td className="px-6 py-4">

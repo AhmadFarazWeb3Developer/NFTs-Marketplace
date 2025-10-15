@@ -25,8 +25,10 @@ const AllCollections = () => {
     const loadCollections = async () => {
       const data = await Promise.all(
         collections.map(async ({ collectionAddress, accountAddress }) => {
+          console.log("collection Address : ", collectionAddress);
+          console.log("account Address : ", accountAddress);
+
           const instance = await getNFTCollectionInstance(collectionAddress);
-          console.log("instance in top collection ", instance);
           const id = await factoryReadInstance.collectionAddressToId(
             collectionAddress
           );

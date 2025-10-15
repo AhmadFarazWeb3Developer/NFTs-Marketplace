@@ -14,11 +14,15 @@ import useReadFactoryContract from "../blockchain-interaction/hooks/factory/useR
 import useReadAllCollections from "../blockchain-interaction/hooks/collection/read/useReadAllCollections";
 
 import UpdateNFTSaleStatus from "./UpdateNFTSaleStatus";
+import { useLocation } from "react-router-dom";
 
 const SingleCollection = () => {
   useReadFactoryContract();
   useReadAllCollections();
   const [refreshKey, setRefreshKey] = useState(0);
+
+  const location = useLocation();
+  const { image } = location.state;
 
   const {
     collectionInstance,
@@ -27,7 +31,7 @@ const SingleCollection = () => {
     collectionName,
     totalItems,
     avgPrice,
-    volume,
+    totalWorth,
     NFTsPricesAndIds,
     isLoading,
     tokenURIs,
@@ -60,8 +64,8 @@ const SingleCollection = () => {
           <div className="left w-1/2 flex flex-row ">
             <div className="w-16 h-16 rounded-full border-1 border-paragraph/50">
               <img
-                src="/nida.jpg"
-                alt=""
+                src={image}
+                alt="collection image"
                 className="object-contain rounded-full"
               />
             </div>
@@ -103,8 +107,8 @@ const SingleCollection = () => {
             </div>
 
             <div className="flex flex-col justify-end items-end gap-2">
-              <p className="text-xs font-light text-paragraph"> TOTAL VOLUME</p>
-              <p>{volume}</p>
+              <p className="text-xs font-light text-paragraph"> TOTAL WORTH</p>
+              <p>{totalWorth}</p>
             </div>
           </div>
         </div>

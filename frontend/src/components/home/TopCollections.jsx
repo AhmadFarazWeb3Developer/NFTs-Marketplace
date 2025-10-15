@@ -23,7 +23,6 @@ const TopCollections = () => {
         collections.map(
           async ({ collectionAddress, accountAddress, image }) => {
             const instance = await getNFTCollectionInstance(collectionAddress);
-            console.log("instance in top collection ", instance);
             const id = await factoryReadInstance.collectionAddressToId(
               collectionAddress
             );

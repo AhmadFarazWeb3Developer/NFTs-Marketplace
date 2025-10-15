@@ -41,7 +41,9 @@ const useBuyNFT = () => {
       const tx = await instance.buy(tokenId, {
         value: priceInWei,
       });
-      await tx.wait();
+      const receipt = await tx.wait();
+
+      console.log("receipt : ", receipt);
     } catch (error) {
       const decoded = decodeCollectionRevert(error);
       console.log(decoded);

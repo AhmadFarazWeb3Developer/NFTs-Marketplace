@@ -29,7 +29,6 @@ const useReadAllCollections = () => {
             addrs[i]
           );
           const { image } = collectionsData[i];
-
           results.push({ collectionAddress, accountAddress: addrs[i], image });
         }
         setCollections(results);
