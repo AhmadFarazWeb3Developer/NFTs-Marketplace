@@ -22,7 +22,6 @@ const useCollectionNFTs = (refreshKey) => {
   const [NFTsPricesAndIds, setNFTsPricesAndIds] = useState([]);
   const [tokenURIs, setTokenURIs] = useState([]);
 
-  console.log(tokenURIs);
   const calculateAvgPrice = async (instance) => {
     let totalPrice = 0n;
     const supply = Number(await instance.tokenId());

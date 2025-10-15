@@ -21,10 +21,8 @@ const useDashboard = () => {
       }
       if (!factoryReadInstance) return;
 
-      // Filter collections for this user
       const matched = collections.filter((c) => c.accountAddress === address);
 
-      // Fetch ids for each collection and merge
       const enriched = await Promise.all(
         matched.map(async (c) => {
           const collection = await getNFTCollectionInstance(
@@ -41,6 +39,8 @@ const useDashboard = () => {
           };
         })
       );
+
+      console.log("enriched : ", enriched);
 
       setUserCollections(enriched);
     };

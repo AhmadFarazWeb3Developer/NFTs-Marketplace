@@ -50,8 +50,6 @@ const MintNFT = ({ collectionInstance, onMintSuccess }) => {
       }
 
       const { cid, gatewayUrl } = data.data || {};
-      console.log("cid:", cid);
-      console.log("gateway:", gatewayUrl);
 
       if (!cid) {
         throw new Error("CID not returned");
@@ -90,12 +88,19 @@ const MintNFT = ({ collectionInstance, onMintSuccess }) => {
     if (IsSuccess && eventInfo.length > 0 && !hasShownToast.current) {
       hasShownToast.current = true;
 
-      toast.dismiss(); // clear old toasts
+      toast.dismiss();
       toast.success(<MintNFTToast events={eventInfo} />, {
-        toastId: "mintSuccess",
-        autoClose: 5000,
         position: "top-right",
+        autoClose: 8000,
+        hideProgressBar: false,
+        closeOnClick: true,
         icon: false,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "dark",
+        toastClassName:
+          "!w-full !max-w-[100vw] !min-w-[600px] mx-auto whitespace-nowrap overflow-x-auto !important",
+        style: { width: "150w", maxWidth: "50vw", minWidth: "600px" },
       });
     }
   }, [IsError, IsSuccess, eventInfo]);
@@ -162,7 +167,21 @@ const MintNFT = ({ collectionInstance, onMintSuccess }) => {
         {isLoading ? "Minting..." : "Mint NFT"}
       </button>
 
-      <ToastContainer />
+      <ToastContainer
+        position="top-right"
+        autoClose={8000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={true}
+        rtl={false}
+        icon={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        className="!w-full !min-w-[50vw]"
+        style={{ width: "50%", maxWidth: "50%" }}
+      />
     </form>
   );
 };

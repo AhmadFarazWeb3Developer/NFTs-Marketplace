@@ -79,7 +79,7 @@ const CollectionCard = ({
               <div className="w-14 h-14">
                 <img
                   src={image}
-                  alt="Rich Lizard"
+                  alt=""
                   className="w-full h-full object-cover rounded-md"
                 />
               </div>

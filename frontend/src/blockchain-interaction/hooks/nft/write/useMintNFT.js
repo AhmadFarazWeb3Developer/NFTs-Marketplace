@@ -51,6 +51,7 @@ const useMintNFT = () => {
               newPrice: parsed.args.newPrice.toString(),
             });
           }
+          console.log("events : ", events);
         } catch {}
       }
 

@@ -11,7 +11,6 @@ const SingleCollectionsCard = ({
 }) => {
   useReadFactoryContract();
 
-  console.log(tokenURI);
   const [hover, setHover] = useState("notHovered");
   const navigateTo = useNavigate("");
 
