@@ -76,34 +76,23 @@ const MintNFT = ({ collectionInstance, onMintSuccess }) => {
     }
   };
 
-  const hasShownToast = useRef(false);
-
   useEffect(() => {
-    if (IsError) {
-      toast.dismiss(); // clear old toasts
-      toast.error(IsError, { toastId: "mintError" });
-      hasShownToast.current = false; // allow next success toast
-    }
-
-    if (IsSuccess && eventInfo.length > 0 && !hasShownToast.current) {
-      hasShownToast.current = true;
-
-      toast.dismiss();
+    if (IsSuccess && eventInfo?.length) {
       toast.success(<MintNFTToast events={eventInfo} />, {
         position: "top-right",
         autoClose: 8000,
         hideProgressBar: false,
         closeOnClick: true,
-        icon: false,
         pauseOnHover: true,
         draggable: true,
         theme: "dark",
-        toastClassName:
-          "!w-full !max-w-[100vw] !min-w-[600px] mx-auto whitespace-nowrap overflow-x-auto !important",
+        toastId: "mintSuccess",
+        className:
+          "!w-full !max-w-[100vw] !min-w-[600px] mx-auto whitespace-nowrap overflow-x-auto",
         style: { width: "150w", maxWidth: "50vw", minWidth: "600px" },
       });
     }
-  }, [IsError, IsSuccess, eventInfo]);
+  }, [IsSuccess, eventInfo]);
 
   return (
     <form

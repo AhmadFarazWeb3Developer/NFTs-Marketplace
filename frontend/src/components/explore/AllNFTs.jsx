@@ -6,8 +6,14 @@ import { LucideSortAsc } from "lucide-react";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import { FiSearch } from "react-icons/fi";
 import Footer from "../Footer";
+import useReadAllCollections from "../../blockchain-interaction/hooks/collection/read/useReadAllCollections";
+import useReadFactoryContract from "../../blockchain-interaction/hooks/factory/useReadFactoryContract";
+import useReadAggregateAllNFTs from "../../blockchain-interaction/hooks/nft/read/useReadAggregateAllNFTs";
 
 const AllNFTs = () => {
+  useReadFactoryContract();
+  const allNFTs = useReadAggregateAllNFTs();
+
   return (
     <>
       <div className="all-nfts flex flex-col items-center bg-primary-black px-10  border-1 ">
@@ -70,7 +76,22 @@ const AllNFTs = () => {
               <label htmlFor="">Sold</label>
             </div>
           </div>
-          <NftCard />
+
+          <div className="right flex flex-wrap gap-5">
+            {allNFTs.length === 0 ? (
+              <p className="text-white/70 text-sm">Loading NFTs...</p>
+            ) : (
+              allNFTs.map((nft, idx) => (
+                <NftCard
+                  key={`${nft.collectionId}-${nft.tokenId}-${idx}`}
+                  tokenId={nft.tokenId}
+                  tokenURI={nft.tokenURI}
+                  tokenPrice={nft.price}
+                  collectionAddress={nft.collectionAddress}
+                />
+              ))
+            )}
+          </div>
         </div>
 
         <div className="next-previous-btns flex flex-row items-center justify-center py-4 text-sm gap-5  font-unbounded font-extralight  w-full  text-action-btn-green">

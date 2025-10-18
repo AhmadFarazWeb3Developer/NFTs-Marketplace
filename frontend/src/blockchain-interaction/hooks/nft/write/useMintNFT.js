@@ -57,7 +57,7 @@ const useMintNFT = () => {
 
       setEventInfo(events);
       setSuccess(true);
-      return receipt;
+      return { receipt, events };
     } catch (err) {
       const decoded = decodeCollectionRevert(err);
       setError(decoded?.name || "Mint failed");

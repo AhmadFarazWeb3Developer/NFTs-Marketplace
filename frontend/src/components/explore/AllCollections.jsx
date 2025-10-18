@@ -15,7 +15,12 @@ const AllCollections = () => {
   useReadFactoryContract();
 
   const [collectionsData, setCollectionsData] = useState([
-    { collectioId: "", collection: "", accountAddress: "" },
+    {
+      collectioId: "",
+      collection: "",
+      accountAddress: "",
+      collectionImage: "",
+    },
   ]);
   const { collections } = useCollectionStore();
   const { getNFTCollectionInstance, signer } = useReadSingleCollection();
@@ -24,17 +29,25 @@ const AllCollections = () => {
   useEffect(() => {
     const loadCollections = async () => {
       const data = await Promise.all(
-        collections.map(async ({ collectionAddress, accountAddress }) => {
-          console.log("collection Address : ", collectionAddress);
-          console.log("account Address : ", accountAddress);
+        collections.map(
+          async ({ collectionAddress, accountAddress, image }) => {
+            console.log("collection Address : ", collectionAddress);
+            console.log("account Address : ", accountAddress);
+            console.log("account Address : ", image);
 
-          const instance = await getNFTCollectionInstance(collectionAddress);
-          const id = await factoryReadInstance.collectionAddressToId(
-            collectionAddress
-          );
+            const instance = await getNFTCollectionInstance(collectionAddress);
+            const id = await factoryReadInstance.collectionAddressToId(
+              collectionAddress
+            );
 
-          return { collectionId: id, collection: instance, accountAddress };
-        })
+            return {
+              collectionId: id,
+              collection: instance,
+              accountAddress,
+              image,
+            };
+          }
+        )
       );
 
       setCollectionsData(data);
@@ -118,12 +131,13 @@ const AllCollections = () => {
             </table>
 
             {collectionsData.map(
-              ({ index, collectionId, collection, accountAddress }) => (
+              ({ index, collectionId, collection, accountAddress, image }) => (
                 <CollectionCard
                   key={index}
                   collectionId={collectionId}
                   collection={collection}
                   accountAddress={accountAddress}
+                  image={image}
                 />
               )
             )}

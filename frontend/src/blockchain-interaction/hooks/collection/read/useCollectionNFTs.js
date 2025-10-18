@@ -37,7 +37,7 @@ const useCollectionNFTs = (refreshKey) => {
     const avgPrice = totalPrice / BigInt(supply);
 
     const avgPriceInEth = parseFloat(formatEther(avgPrice)).toFixed(2);
-
+    console.log(avgPriceInEth);
     return avgPriceInEth;
   };
 
@@ -53,7 +53,9 @@ const useCollectionNFTs = (refreshKey) => {
 
       const name = await instance.name();
       const id = Number(await instance.tokenId());
-      const { avgPrice, tokenPrice } = await calculateAvgPrice(instance);
+      const avgPrice = await calculateAvgPrice(instance);
+
+      console.log(avgPrice);
 
       const tempData = [];
       const tempURIs = [];

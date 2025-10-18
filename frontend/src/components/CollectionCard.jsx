@@ -27,20 +27,6 @@ const CollectionCard = ({
     forSale: "",
   });
 
-  // const calculateAvgPrice = async () => {
-  //   let totalPrice = 0n;
-  //   const supply = await collection.tokenId();
-  //   for (let tokenId = 0n; tokenId < supply; tokenId++) {
-  //     const price = await collection.tokenPrice(tokenId);
-  //     totalPrice += price;
-  //   }
-
-  //   if (supply === 0n) return "0";
-
-  //   const avgPrice = totalPrice / supply;
-  //   return formatEther(avgPrice);
-  // };
-
   const calculateAvgPrice = async () => {
     let totalPrice = 0n;
     const supply = await collection.tokenId();

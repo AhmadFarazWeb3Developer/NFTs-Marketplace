@@ -72,12 +72,6 @@ const SingleCollectionsCard = ({
         onMouseLeave={() => setHover(false)}
       >
         <div className="rounded-md overflow-hidden w-full">
-          {/* <img
-            src={stripBeforeHttp(tokenURI)}
-            alt=""
-            className="rounded-md w-full"
-          /> */}
-
           <img
             src={stripBeforeHttp(tokenURI)}
             alt=""
