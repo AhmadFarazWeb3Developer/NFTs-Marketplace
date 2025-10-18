@@ -94,7 +94,6 @@ const SingleCollectionsCard = ({
             <p className="text-paragraph text-sm font-medium">#{tokenId}</p>
           </div>
 
-          {/* Owner address + copy */}
           <div
             className="flex items-center gap-2 text-sm font-light transition-all duration-300 ease-in-out
                        cursor-pointer text-paragraph hover:text-green-400"
@@ -104,7 +103,6 @@ const SingleCollectionsCard = ({
             <FaRegCopy className="hover:text-green-400 transition-colors duration-200" />
           </div>
 
-          {/* Buy button */}
           {hover && (
             <button
               className="w-full bg-action-btn-green font-light text-black py-1 rounded-sm cursor-pointer 

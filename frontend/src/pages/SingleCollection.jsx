@@ -12,10 +12,17 @@ import useReadFactoryContract from "../blockchain-interaction/hooks/factory/useR
 import useReadAllCollections from "../blockchain-interaction/hooks/collection/read/useReadAllCollections";
 import UpdateNFTSaleStatus from "./UpdateNFTSaleStatus";
 import { useLocation } from "react-router-dom";
+import UpdateCollectionStatus from "../components/UpdateCollectionStatus";
+import useReadFactoryInstanceStore from "../blockchain-interaction/stores/useReadFactoryInstanceStore.store";
 
 const SingleCollection = () => {
   useReadFactoryContract();
   useReadAllCollections();
+
+  const { factoryReadInstance } = useReadFactoryInstanceStore();
+
+  console.log("factory : ", factoryReadInstance);
+
   const [refreshKey, setRefreshKey] = useState(0);
 
   const location = useLocation();
@@ -41,6 +48,7 @@ const SingleCollection = () => {
   const [splitedCollectionName, setSplitedCollectionName] = useState([]);
   const mintNFTSectionRef = useRef(null);
   const updateStatusSectionRef = useRef(null);
+  const collectionStatusSectionRef = useRef(null);
 
   const handleScrollToMintNFT = () => {
     mintNFTSectionRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -48,6 +56,10 @@ const SingleCollection = () => {
 
   const handleScrollToUpdateStatus = () => {
     updateStatusSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleScrollToCollectionStatus = () => {
+    collectionStatusSectionRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -143,10 +155,15 @@ const SingleCollection = () => {
             >
               Update Status
             </button>
+            <button
+              className="bg-paragraph/30 border border-paragraph/70 text-xs px-4 py-1 rounded-full text-white font-light cursor-pointer transition-all duration-200 hover:bg-paragraph/50 hover:scale-105 active:scale-95"
+              onClick={handleScrollToCollectionStatus}
+            >
+              Update Collection Status
+            </button>
           </div>
         </div>
 
-        {/* --- NFT Cards --- */}
         <div className="nft-cards py-4 flex flex-wrap gap-5 justify-start">
           {NFTsPricesAndIds.map(({ tokenId, tokenPrice }, index) => (
             <SingleCollectionsCard
@@ -171,9 +188,18 @@ const SingleCollection = () => {
 
         <div
           ref={updateStatusSectionRef}
-          className="border rounded-md border-paragraph/40 mt-4"
+          className="border rounded-md border-paragraph/40 py-4 my-4"
         >
           <UpdateNFTSaleStatus collectionInstance={collectionInstance} />
+        </div>
+
+        <div
+          ref={collectionStatusSectionRef}
+          className="border rounded-md border-paragraph/40 py-4"
+        >
+          {factoryReadInstance && (
+            <UpdateCollectionStatus factoryReadInstance={factoryReadInstance} />
+          )}
         </div>
       </div>
 

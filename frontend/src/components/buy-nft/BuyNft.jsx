@@ -18,6 +18,7 @@ const BuyNft = () => {
   const { state } = useLocation();
 
   const { tokenPrice, collectionAddress } = state;
+
   const { getNFTCollectionInstance, signer } = useReadSingleCollection();
 
   const { buyNFT, error } = useBuyNFT();

@@ -18,28 +18,31 @@ const useReadAggregateAllNFTs = () => {
 
       const nftResults = [];
 
-      console.log("collection :", collections);
-
       for (const col of collections) {
         try {
           const collectionInstance = await getNFTCollectionInstance(
             col.collectionAddress
           );
 
-          console.log(collectionInstance);
-
           const totalSupply = await collectionInstance.tokenId();
 
           for (let tokenId = 0; tokenId < Number(totalSupply); tokenId++) {
-            const [tokenURI, name, symbol, price, owner, isForSale] =
-              await Promise.all([
-                collectionInstance.tokenURI(tokenId),
-                collectionInstance.name(),
-                collectionInstance.symbol(),
-                collectionInstance.tokenPrice(tokenId),
-                collectionInstance.ownerOf(tokenId),
-                collectionInstance.isForSale(tokenId),
-              ]);
+            const [
+              tokenURI,
+              name,
+              symbol,
+              price,
+              owner,
+              isForSale,
+              collection,
+            ] = await Promise.all([
+              collectionInstance.tokenURI(tokenId),
+              collectionInstance.name(),
+              collectionInstance.symbol(),
+              collectionInstance.tokenPrice(tokenId),
+              collectionInstance.ownerOf(tokenId),
+              collectionInstance.isForSale(tokenId),
+            ]);
 
             const tokenPrice = formatEther(price);
             nftResults.push({
@@ -50,6 +53,7 @@ const useReadAggregateAllNFTs = () => {
               tokenPrice,
               owner,
               isForSale,
+              collectionInstance: col,
             });
           }
         } catch (err) {

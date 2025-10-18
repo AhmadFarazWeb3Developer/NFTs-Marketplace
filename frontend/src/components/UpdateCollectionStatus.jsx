@@ -1,40 +1,32 @@
-import React, { useEffect, useState } from "react";
-import useUpdateSaleStatus from "../blockchain-interaction/hooks/nft/write/useUpdateSaleStatus";
+import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import UpdateNFTSaleStatusToast from "../components/toasts/UpdateNFTSaleStatusToast";
+import "react-toastify/dist/ReactToastify.css";
 
-const UpdateNFTSaleStatus = ({ collectionInstance }) => {
-  const [tokenId, setTokenId] = useState("");
+const UpdateCollectionStatus = ({ factoryReadInstance }) => {
+  if (!factoryReadInstance) return null;
+
+  const [collectionId, setCollectionId] = useState("");
+  const [newPrice, setNewPrice] = useState("");
   const [forSale, setForSale] = useState("false");
   const [isPending, setIsPending] = useState(false);
 
-  const { updateSaleStatus, error } = useUpdateSaleStatus();
+  const handleUpdate = async () => {
+    if (!collectionId || newPrice === "") {
+      toast.error("Please enter Collection ID and Price");
+      return;
+    }
 
-  const handleClick = async () => {
     setIsPending(true);
     try {
-      const saleStatusBool = forSale === "true";
-
-      const { txHash, eventInfo } = await updateSaleStatus(
-        collectionInstance,
-        tokenId,
-        saleStatusBool
+      const forSaleBool = forSale === "true";
+      const tx = await factoryReadInstance.UpdateCollectionStatus(
+        collectionId,
+        newPrice,
+        forSaleBool
       );
+      await tx.wait();
 
-      if (txHash) {
-        toast(<UpdateNFTSaleStatusToast eventInfo={eventInfo} />, {
-          position: "top-right",
-          autoClose: 8000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          theme: "dark",
-          toastClassName:
-            "!w-full !max-w-[100vw] !min-w-[600px] mx-auto whitespace-nowrap overflow-x-auto !important",
-          style: { width: "150w", maxWidth: "50vw", minWidth: "600px" },
-        });
-      }
+      toast.success(`Collection ${collectionId} updated successfully!`);
     } catch (err) {
       console.error(err);
       toast.error("Transaction failed");
@@ -43,24 +35,35 @@ const UpdateNFTSaleStatus = ({ collectionInstance }) => {
     }
   };
 
-  useEffect(() => {
-    if (error) toast.error(error);
-  }, [error]);
-
   return (
-    <div className="flex justify-center  px-4">
+    <div className="flex justify-center px-4 my-4">
       <div className="bg-primary-black border border-gray-700 rounded-2xl p-6 w-[380px] sm:w-[420px] text-white font-unbounded">
         <h2 className="text-lg font-semibold text-action-btn-green text-center mb-4">
-          Update NFT Sale Status
+          Update Collection Status
         </h2>
-        <label className="block text-sm text-paragraph mb-2">Token ID</label>
+
+        <label className="block text-sm text-paragraph mb-2">
+          Collection ID
+        </label>
         <input
           type="number"
-          placeholder="Enter Token ID"
-          value={tokenId}
-          onChange={(e) => setTokenId(e.target.value)}
+          placeholder="Enter Collection ID"
+          value={collectionId}
+          onChange={(e) => setCollectionId(e.target.value)}
           className="w-full p-3 mb-4 bg-black/20 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-action-btn-green outline-none"
         />
+
+        <label className="block text-sm text-paragraph mb-2">
+          New Price (ETH)
+        </label>
+        <input
+          type="number"
+          placeholder="Enter New Price"
+          value={newPrice}
+          onChange={(e) => setNewPrice(e.target.value)}
+          className="w-full p-3 mb-4 bg-black/20 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-action-btn-green outline-none"
+        />
+
         <label className="block text-sm text-paragraph mb-2">For Sale</label>
         <select
           value={forSale}
@@ -70,13 +73,15 @@ const UpdateNFTSaleStatus = ({ collectionInstance }) => {
           <option value="false">false</option>
           <option value="true">true</option>
         </select>
+
         <button
-          onClick={handleClick}
+          onClick={handleUpdate}
+          disabled={isPending}
           className="w-full bg-action-btn-green text-black py-3 rounded-lg font-medium hover:bg-action-btn-green/80 transition-all disabled:opacity-50 cursor-pointer"
-          disabled={isPending} // disable button while pending
         >
           {isPending ? "Updating..." : "Update Status"}
         </button>
+
         <ToastContainer
           position="top-right"
           autoClose={8000}
@@ -96,4 +101,4 @@ const UpdateNFTSaleStatus = ({ collectionInstance }) => {
   );
 };
 
-export default UpdateNFTSaleStatus;
+export default UpdateCollectionStatus;

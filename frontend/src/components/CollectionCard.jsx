@@ -5,6 +5,7 @@ import useReadFactoryInstanceStore from "../blockchain-interaction/stores/useRea
 import useReadFactoryContract from "../blockchain-interaction/hooks/factory/useReadFactoryContract";
 import useReadAllCollections from "../blockchain-interaction/hooks/collection/read/useReadAllCollections";
 import { HiOutlineCollection } from "react-icons/hi";
+import { BsCircleFill } from "react-icons/bs";
 
 const CollectionCard = ({
   collectionId,
@@ -94,15 +95,32 @@ const CollectionCard = ({
               </div>
             </td>
 
-            <td className="px-2 py-4">{collectionDetails.name}</td>
-            <td className="px-2 py-4">{collectionDetails.symbol}</td>
+            <td className="px-2 py-3">{collectionDetails.name}</td>
+            <td className="px-2 py-3">{collectionDetails.symbol}</td>
 
-            <td className="px-2 py-4">{collectionDetails.avgPrice}</td>
-            <td className="px-2 py-4">{collectionDetails.items}</td>
-            <td className="px-2 py-4">{collectionDetails.owners}</td>
-            <td className="px-2 py-4">{collectionDetails.remaining}</td>
-            <td className="px-2 py-4">
-              {collectionDetails.forSale ? "Not Active" : "Active"}
+            <td className="px-2 py-3">
+              {collectionDetails.avgPrice}{" "}
+              <span className="text-paragraph/50">ETH</span>{" "}
+            </td>
+            <td className="px-2 py-3">{collectionDetails.items}</td>
+            <td className="px-2 py-3">{collectionDetails.owners}</td>
+            <td className="px-2 py-3">{collectionDetails.remaining}</td>
+            <td className="px-2 py-3 ">
+              <div className="flex items-center gap-2">
+                <BsCircleFill
+                  size={6}
+                  className={`text-xs ${
+                    collectionDetails.forSale === "true"
+                      ? "text-green-500"
+                      : "text-red-400"
+                  }`}
+                />
+                <span className="text-paragraph/70 font-light">
+                  {collectionDetails.forSale === "true"
+                    ? "Active"
+                    : "Not Active"}
+                </span>
+              </div>
             </td>
           </tr>
         </tbody>

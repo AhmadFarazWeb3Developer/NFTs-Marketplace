@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { FaRegCopy } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { BsCircleFill } from "react-icons/bs";
 const NftCard = ({
   tokenURI,
   name,
@@ -11,7 +11,9 @@ const NftCard = ({
   tokenPrice,
   owner,
   isForSale,
+  collectionInstance,
 }) => {
+  console.log(collectionInstance);
   const navigateTo = useNavigate();
 
   const trimmedOwner = owner
@@ -31,8 +33,16 @@ const NftCard = ({
   return (
     <>
       <tr
-        className="collection-card border-b border-gray-700 hover:bg-white/5 cursor-pointer  "
-        onClick={() => navigateTo("/explore/buyNft")}
+        className="collection-card border-b border-gray-700 hover:bg-white/5 cursor-pointer  text-xs"
+        onClick={() =>
+          navigateTo(`/explore/buyNft/${tokenId}`, {
+            state: {
+              tokenId,
+              tokenPrice,
+              collectionAddress: collectionInstance.collectionAddress,
+            },
+          })
+        }
       >
         <td className="px-2 py-3">
           <img
@@ -43,21 +53,26 @@ const NftCard = ({
         </td>
         <td className="px-2 py-3">{name || "—"}</td>
         <td className="px-2 py-3">{symbol || "—"}</td>
-        <td className="px-2 py-3">{tokenId || "—"}</td>
-        <td className="px-2 py-3">{tokenPrice ? `${tokenPrice} ETH` : "—"}</td>
-        <td className="px-2 py-3 flex  border-1 gap-2">
-          {trimmedOwner}
-          {owner && (
-            <FaRegCopy
-              className="text-white hover:text-action-btn-green cursor-pointer"
-              onClick={(e) => {
-                // e.stopPropagation();
-                copyAddress(owner);
-              }}
-            />
-          )}
+        <td className="px-2 py-3">{tokenId}</td>
+        <td className="px-2 py-3">
+          {tokenPrice} <span className="text-paragraph/50">ETH</span>
         </td>
-        <td className="px-2 py-3">{isForSale ? "For Sale" : "Not For Sale"}</td>
+
+        <td className="px-2 py-3">{trimmedOwner}</td>
+
+        <td className="px-2 py-3">
+          <div className="flex items-center gap-2">
+            <BsCircleFill
+              size={6}
+              className={`text-xs ${
+                isForSale ? "text-green-500" : "text-red-400"
+              }`}
+            />
+            <span className="text-paragraph/70 font-light">
+              {isForSale ? "For Sale" : "Not For Sale"}
+            </span>
+          </div>
+        </td>
       </tr>
       <ToastContainer
         position="top-right"
