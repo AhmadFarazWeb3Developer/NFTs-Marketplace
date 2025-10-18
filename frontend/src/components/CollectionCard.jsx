@@ -19,6 +19,7 @@ const CollectionCard = ({
   const navigateTo = useNavigate();
 
   const [collectionDetails, setCollectionDetails] = useState({
+    name: "",
     symbol: "",
     avgPrice: "",
     items: "",
@@ -47,6 +48,7 @@ const CollectionCard = ({
 
   useEffect(() => {
     const fetchCollectionsDetails = async () => {
+      const name = await collection.name();
       const symbol = await collection.symbol();
       const avgPrice = await calculateAvgPrice();
       const totalItems = await collection.tokenId();
@@ -57,6 +59,7 @@ const CollectionCard = ({
       const forSale = await factoryReadInstance.isForSale(collectionId);
 
       setCollectionDetails({
+        name,
         symbol,
         avgPrice,
         items: totalItems.toString(),
@@ -70,7 +73,7 @@ const CollectionCard = ({
   }, [collection, collectionId]);
 
   return (
-    <div className="relative overflow-x-auto shadow-md sm:rounded-lg  ">
+    <div className="relative overflow-x-auto shadow-md sm:rounded-lg   ">
       <table className="w-full table-fixed text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
         <tbody className="font-unbounded font-light">
           <tr
@@ -90,9 +93,10 @@ const CollectionCard = ({
                 />
               </div>
             </td>
-            <td className="px-2 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-              {collectionDetails.symbol}
-            </td>
+
+            <td className="px-2 py-4">{collectionDetails.name}</td>
+            <td className="px-2 py-4">{collectionDetails.symbol}</td>
+
             <td className="px-2 py-4">{collectionDetails.avgPrice}</td>
             <td className="px-2 py-4">{collectionDetails.items}</td>
             <td className="px-2 py-4">{collectionDetails.owners}</td>

@@ -23,7 +23,7 @@ contract NFTsCollection is Ownable, ReentrancyGuard, IERC165, ERC721 {
     mapping(uint256 => string) private tokenURIs; // id => uri
     mapping(uint256 => uint256) public tokenPrice;
     mapping(uint256 => bool) private isListed; // listed/unlisted on marketplace (UI purpose)
-    mapping(uint256 => bool) private isForSale; // whether token is for sale
+    mapping(uint256 => bool) public isForSale; // whether token is for sale
 
     // -----------------------------------------------------------------------
     // Events

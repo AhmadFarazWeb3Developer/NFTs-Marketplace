@@ -108,9 +108,14 @@ const AllCollections = () => {
                   <th scope="col" className="px-2 py-3 w-[120px]">
                     COLLECTION
                   </th>
+
+                  <th scope="col" className="px-2 py-3 w-[150px]">
+                    Name
+                  </th>
                   <th scope="col" className="px-2 py-3 w-[150px]">
                     Symbol
                   </th>
+
                   <th scope="col" className="px-2 py-3">
                     AVG PRICE
                   </th>

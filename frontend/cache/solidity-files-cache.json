@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\Users\\MMO\\Desktop\\NFTs-Marketplace\\frontend\\onchain\\NFTsCollection.sol": {
-      "lastModificationDate": 1758980130467,
-      "contentHash": "5ad5f0c52fa073477a37eea4147c6fe9",
+      "lastModificationDate": 1760793553789,
+      "contentHash": "b16ad9c5ecb70f6440f0a8a43f5d3723",
       "sourceName": "onchain/NFTsCollection.sol",
       "solcConfig": {
         "version": "0.8.20",
