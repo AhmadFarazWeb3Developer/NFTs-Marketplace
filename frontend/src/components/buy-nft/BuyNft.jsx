@@ -42,7 +42,7 @@ const BuyNft = () => {
         setEthUSD(usd * tokenPrice);
         if (error) toast.error(error);
       } catch (err) {
-        console.error("❌ Error initializing BuyNft:", err);
+        console.error("Error initializing BuyNft:", err);
       }
     };
 
@@ -120,7 +120,6 @@ const BuyNft = () => {
             </button>
           </div>
 
-          {/* Tabs */}
           <div>
             <div className="flex gap-6 border-b border-gray-700 pb-1 text-xs ">
               <button
@@ -146,7 +145,6 @@ const BuyNft = () => {
               <ToastContainer />
             </div>
 
-            {/* Tab content */}
             <div className="mt-4 border border-gray-700 rounded-sm p-4 font-light text-xs bg-black/20">
               {activeTab === "traits" && (
                 <div>

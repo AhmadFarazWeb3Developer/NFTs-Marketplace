@@ -31,12 +31,12 @@ const AllCollections = () => {
       const data = await Promise.all(
         collections.map(
           async ({ collectionAddress, accountAddress, image }) => {
-            console.log("collection Address : ", collectionAddress);
-            console.log("account Address : ", accountAddress);
-            console.log("account Address : ", image);
-
             const instance = await getNFTCollectionInstance(collectionAddress);
             const id = await factoryReadInstance.collectionAddressToId(
+              collectionAddress
+            );
+
+            const collectionOwner = await factoryReadInstance.ownerOfCollection(
               collectionAddress
             );
 
@@ -45,6 +45,7 @@ const AllCollections = () => {
               collection: instance,
               accountAddress,
               image,
+              collectionOwner,
             };
           }
         )
@@ -113,6 +114,9 @@ const AllCollections = () => {
                   <th scope="col" className="px-2 py-3 ">
                     SYMBOL
                   </th>
+                  <th scope="col" className="px-2 py-3 ">
+                    OWNER
+                  </th>
 
                   <th scope="col" className="px-2 py-3">
                     AVG PRICE
@@ -121,7 +125,7 @@ const AllCollections = () => {
                     ITEMS
                   </th>
                   <th scope="col" className="px-2 py-3">
-                    OWNERS
+                    HOLDERS
                   </th>
                   <th scope="col" className="px-2 py-3">
                     REMAINING
@@ -134,13 +138,21 @@ const AllCollections = () => {
             </table>
 
             {collectionsData.map(
-              ({ index, collectionId, collection, accountAddress, image }) => (
+              ({
+                index,
+                collectionId,
+                collection,
+                accountAddress,
+                image,
+                collectionOwner,
+              }) => (
                 <CollectionCard
                   key={index}
                   collectionId={collectionId}
                   collection={collection}
                   accountAddress={accountAddress}
                   image={image}
+                  collectionOwner={collectionOwner}
                 />
               )
             )}

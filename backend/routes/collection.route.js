@@ -4,6 +4,7 @@ import { CloudinaryStorage } from "multer-storage-cloudinary";
 import cloudinary from "../config/cloudinary.js";
 import createCollection from "../controllers/createCollection.controller.js";
 import getCollection from "../controllers/getCollection.controller.js";
+import updateCollectionOwner from "../controllers/updateCollectionOwner.controller.js.js";
 
 const CollectionRouter = Router();
 
@@ -25,5 +26,7 @@ CollectionRouter.post(
 );
 
 CollectionRouter.get("/collection", getCollection);
+
+CollectionRouter.put("/update-owner", updateCollectionOwner);
 
 export default CollectionRouter;

@@ -20,11 +20,8 @@ const useReadFactoryContract = () => {
         provider
       );
 
-      // Get balance and format to ETH with 2 decimals
       const balance = await provider.getBalance(factoryAddress);
       const balanceInEth = parseFloat(formatEther(balance)).toFixed(2);
-
-      console.log("Factory balance (ETH):", balanceInEth);
 
       setFactoryReadInstance(contract);
       setFactoryBalance(balanceInEth);

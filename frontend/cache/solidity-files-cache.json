@@ -2,7 +2,7 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\Users\\MMO\\Desktop\\NFTs-Marketplace\\frontend\\onchain\\NFTsCollection.sol": {
-      "lastModificationDate": 1760793553789,
+      "lastModificationDate": 1760793817282,
       "contentHash": "b16ad9c5ecb70f6440f0a8a43f5d3723",
       "sourceName": "onchain/NFTsCollection.sol",
       "solcConfig": {
@@ -46,8 +46,8 @@
       ]
     },
     "C:\\Users\\MMO\\Desktop\\NFTs-Marketplace\\frontend\\onchain\\NFTsMarketplaceFactory.sol": {
-      "lastModificationDate": 1759344179289,
-      "contentHash": "a5047a09dc90b45631978ffe9d6446f9",
+      "lastModificationDate": 1760864512765,
+      "contentHash": "d7b247b1192100f58e996ece5c12d263",
       "sourceName": "onchain/NFTsMarketplaceFactory.sol",
       "solcConfig": {
         "version": "0.8.20",

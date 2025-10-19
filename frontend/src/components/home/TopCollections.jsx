@@ -26,12 +26,16 @@ const TopCollections = () => {
             const id = await factoryReadInstance.collectionAddressToId(
               collectionAddress
             );
+            const collectionOwner = await factoryReadInstance.ownerOfCollection(
+              collectionAddress
+            );
 
             return {
               collectionId: id,
               collection: instance,
               accountAddress,
               image,
+              collectionOwner,
             };
           }
         )
@@ -66,14 +70,20 @@ const TopCollections = () => {
                 </th>
 
                 <th scope="col" className="px-2 py-3">
+                  OWNER
+                </th>
+
+                <th scope="col" className="px-2 py-3">
                   AVG PRICE
                 </th>
+
                 <th scope="col" className="px-2 py-3">
                   ITEMS
                 </th>
                 <th scope="col" className="px-2 py-3">
-                  OWNERS
+                  HOLDERS
                 </th>
+
                 <th scope="col" className="px-2 py-3">
                   REMAINING
                 </th>
@@ -85,13 +95,21 @@ const TopCollections = () => {
           </table>
 
           {collectionsData.map(
-            ({ index, collectionId, collection, accountAddress, image }) => (
+            ({
+              index,
+              collectionId,
+              collection,
+              accountAddress,
+              image,
+              collectionOwner,
+            }) => (
               <CollectionCard
                 key={index}
                 collectionId={collectionId}
                 collection={collection}
                 accountAddress={accountAddress}
                 image={image}
+                collectionOwner={collectionOwner}
               />
             )
           )}

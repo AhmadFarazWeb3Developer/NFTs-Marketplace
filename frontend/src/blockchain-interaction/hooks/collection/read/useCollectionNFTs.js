@@ -22,6 +22,7 @@ const useCollectionNFTs = (refreshKey) => {
   const [isLoading, setIsLoading] = useState(true);
   const [NFTsPricesAndIds, setNFTsPricesAndIds] = useState([]);
   const [tokenURIs, setTokenURIs] = useState([]);
+  const [collectionOwner, sertCollectionOwner] = useState(null);
 
   const calculateAvgPrice = async (instance) => {
     let totalPrice = 0n;
@@ -37,7 +38,7 @@ const useCollectionNFTs = (refreshKey) => {
     const avgPrice = totalPrice / BigInt(supply);
 
     const avgPriceInEth = parseFloat(formatEther(avgPrice)).toFixed(2);
-    console.log(avgPriceInEth);
+
     return avgPriceInEth;
   };
 
@@ -49,13 +50,13 @@ const useCollectionNFTs = (refreshKey) => {
         await factoryReadInstance.collectionAddressToId(collection)
       );
 
+      const owner = await factoryReadInstance.ownerOfCollection(collection);
+
       const instance = await getNFTCollectionInstance(collection);
 
       const name = await instance.name();
       const id = Number(await instance.tokenId());
       const avgPrice = await calculateAvgPrice(instance);
-
-      console.log(avgPrice);
 
       const tempData = [];
       const tempURIs = [];
@@ -77,6 +78,7 @@ const useCollectionNFTs = (refreshKey) => {
       setTotalWorth(formatEther(worth));
       setNFTsPricesAndIds(tempData);
       setTokenURIs(tempURIs);
+      sertCollectionOwner(owner);
     } catch (error) {
       console.error("Error fetching NFTs:", error);
     } finally {
@@ -95,6 +97,7 @@ const useCollectionNFTs = (refreshKey) => {
     collection,
     collectionId,
     collectionName,
+    collectionOwner,
     totalItems,
     avgPrice,
     totalWorth,

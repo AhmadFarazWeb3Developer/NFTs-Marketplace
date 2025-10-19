@@ -14,7 +14,7 @@ contract NFTsMarketplaceFactory is Ownable, ReentrancyGuard {
     uint256 public immutable SELL_FEE = 3e16; // 3% fee
 
     mapping(uint256 => mapping(address => address)) public collections; // id => owner => collection
-    mapping(address => address) private ownerOfCollection; // collection => owner
+    mapping(address => address) public ownerOfCollection; // collection => owner
     mapping(uint256 => bool) public isForSale; // id => true/false
     mapping(uint256 => uint256) public collectionPrice; // id => price in ETH
     mapping(address => uint256) public collectionAddressToId;

@@ -15,6 +15,7 @@ import UpdateNFTSaleStatus from "./pages/UpdateNFTSaleStatus.jsx";
 // ----- Reown AppKit Setup -----
 import { AppKitProvider, createAppKit } from "@reown/appkit/react";
 import { EthersAdapter } from "@reown/appkit-adapter-ethers";
+import BuyCollection from "./pages/BuyCollection.jsx";
 
 const projectId = import.meta.env.VITE_CONNECT_PROJECT_ID;
 
@@ -65,6 +66,11 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/update-sale-status",
         element: <UpdateNFTSaleStatus />,
+      },
+
+      {
+        path: "/buy-collection",
+        element: <BuyCollection />,
       },
     ],
   },
