@@ -17,7 +17,7 @@ const BuyNft = () => {
   const { tokenId } = useParams();
   const { state } = useLocation();
 
-  const { tokenPrice, collectionAddress } = state;
+  const { tokenPrice, collectionAddress, NFTImage } = state;
 
   const { getNFTCollectionInstance, signer } = useReadSingleCollection();
 
@@ -74,8 +74,8 @@ const BuyNft = () => {
         <div className="left flex items-start">
           <div className="box w-fit rounded-sm p-4 flex justify-center items-center bg-paragraph/10">
             <img
-              src="/Sith_Warrior.jpg"
-              alt="assassin"
+              src={NFTImage}
+              alt="NFT Image"
               className="max-h-96 object-contain rounded-sm"
             />
           </div>

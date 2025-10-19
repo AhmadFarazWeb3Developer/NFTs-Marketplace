@@ -14,6 +14,7 @@ const CollectionCard = ({
   image,
   collectionOwner,
 }) => {
+  console.log("collection id : ", collectionId);
   useReadFactoryContract();
   useReadAllCollections();
 

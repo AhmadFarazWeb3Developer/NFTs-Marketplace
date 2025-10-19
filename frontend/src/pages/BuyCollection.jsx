@@ -8,8 +8,10 @@ import { FiCopy, FiCheck } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import useReadFactoryInstanceStore from "../blockchain-interaction/stores/useReadFactoryInstanceStore.store";
 import useWriteFactoryContract from "../blockchain-interaction/hooks/factory/useWriteFactoryContract";
-
+import useReadAllCollections from "../blockchain-interaction/hooks/collection/read/useReadAllCollections";
 const AddressHoverCard = ({ label, address }) => {
+  useReadAllCollections();
+
   const [copied, setCopied] = useState(false);
   const [hover, setHover] = useState(false);
 
@@ -63,6 +65,8 @@ const AddressHoverCard = ({ label, address }) => {
 };
 
 const BuyCollection = () => {
+  useReadAllCollections();
+
   const { factoryReadInstance } = useReadFactoryInstanceStore();
   const { factoryWriteInstance } = useWriteFactoryContract();
 
@@ -103,9 +107,60 @@ const BuyCollection = () => {
     init();
   }, [collectionId, collectionAddress, factoryReadInstance]);
 
+  // const handleBuyCollection = async () => {
+  //   try {
+  //     if (!factoryReadInstance) {
+  //       setTxStatus("Factory instance not found.");
+  //       return;
+  //     }
+
+  //     setLoading(true);
+  //     setTxStatus("Processing transaction...");
+
+  //     console.log(collectionId);
+  //     console.log(ownerAddress);
+
+  //     const tx = await factoryWriteInstance.BuyCollection(
+  //       collectionId,
+  //       ownerAddress,
+  //       { value: collectionPrice }
+  //     );
+
+  //     await tx.wait();
+
+  //     const newOwner = await factoryReadInstance.ownerOfCollection(
+  //       collectionId
+  //     );
+
+  //     const response = await fetch(
+  //       "http://localhost:3000/api/v1/update-owner",
+  //       {
+  //         method: "PUT",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify({
+  //           collectionAddress,
+  //           newOwner,
+  //         }),
+  //       }
+  //     );
+
+  //     const data = response.json();
+  //     if (data) {
+  //       setTxStatus("Successfully purchased the entire collection!");
+  //       setLoading(false);
+  //     }
+
+  //     setTimeout(() => navigate("/"), 2500);
+  //   } catch (error) {
+  //     console.error("BuyCollection error:", error);
+  //     setTxStatus("Transaction failed. Check console for details.");
+  //     setLoading(false);
+  //   }
+  // };
+
   const handleBuyCollection = async () => {
     try {
-      if (!factoryReadInstance) {
+      if (!factoryReadInstance || !factoryWriteInstance) {
         setTxStatus("Factory instance not found.");
         return;
       }
@@ -113,20 +168,24 @@ const BuyCollection = () => {
       setLoading(true);
       setTxStatus("Processing transaction...");
 
+      console.log(collectionId);
+      console.log(ownerAddress);
+
       const tx = await factoryWriteInstance.BuyCollection(
         collectionId,
         ownerAddress,
         { value: collectionPrice }
       );
-
       await tx.wait();
 
+      // Fetch the new owner from blockchain after transaction
       const newOwner = await factoryReadInstance.ownerOfCollection(
         collectionId
       );
 
+      // Update backend with new owner only
       const response = await fetch(
-        "http://localhost:5000/api/collections/update-owner",
+        "http://localhost:3000/api/v1/update-owner",
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -137,12 +196,18 @@ const BuyCollection = () => {
         }
       );
 
-      const data = response.json();
-      if (data) {
-        setTxStatus("Successfully purchased the entire collection!");
-        setLoading(false);
+      const data = await response.json();
+
+      if (response.ok) {
+        setTxStatus("Successfully purchased the collection!");
+      } else {
+        console.warn("Backend update failed:", data);
+        setTxStatus("Purchase completed, but backend sync failed.");
       }
 
+      setLoading(false);
+
+      // Optional: delay navigation so user can see status
       setTimeout(() => navigate("/"), 2500);
     } catch (error) {
       console.error("BuyCollection error:", error);

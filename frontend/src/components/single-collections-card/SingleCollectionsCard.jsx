@@ -113,6 +113,7 @@ const SingleCollectionsCard = ({
                     tokenId,
                     tokenPrice,
                     collectionAddress: collectionInstance.target,
+                    NFTImage: stripBeforeHttp(tokenURI),
                   },
                 })
               }

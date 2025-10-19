@@ -4,9 +4,11 @@ import useReadSingleCollection from "../../nft/read/useReadSingleCollection";
 import useReadFactoryInstanceStore from "../../../stores/useReadFactoryInstanceStore.store";
 import useReadFactoryContract from "../../factory/useReadFactoryContract";
 import { ethers, formatEther } from "ethers";
+import useReadAllCollections from "./useReadAllCollections";
 
 const useCollectionNFTs = (refreshKey) => {
   useReadFactoryContract();
+  useReadAllCollections();
 
   const { factoryReadInstance } = useReadFactoryInstanceStore();
   const { getNFTCollectionInstance } = useReadSingleCollection();

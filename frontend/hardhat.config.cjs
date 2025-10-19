@@ -17,4 +17,17 @@ module.exports = {
     artifacts: "./artifacts",
     cache: "./cache",
   },
+
+  networks: {
+    hardhat: {
+      blockGasLimit: 30000000,
+      gas: 12000000,
+      allowUnlimitedContractSize: true,
+      loggingEnabled: true,
+      accounts: {
+        count: 20,
+        accountsBalance: "1000000000000000000000",
+      },
+    },
+  },
 };

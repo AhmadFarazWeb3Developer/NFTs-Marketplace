@@ -48,14 +48,6 @@ const UpdateCollectionStatus = ({ factoryWriteInstance, collectionId }) => {
     }
   };
 
-  if (!isReady) {
-    return (
-      <div className="flex justify-center text-paragraph/70 py-6 font-unbounded">
-        <p>Loading collection data...</p>
-      </div>
-    );
-  }
-
   return (
     <div className="flex justify-center px-4 my-4">
       <div className="bg-primary-black border border-gray-700 rounded-2xl p-6 w-[380px] sm:w-[420px] text-white font-unbounded">
