@@ -107,57 +107,6 @@ const BuyCollection = () => {
     init();
   }, [collectionId, collectionAddress, factoryReadInstance]);
 
-  // const handleBuyCollection = async () => {
-  //   try {
-  //     if (!factoryReadInstance) {
-  //       setTxStatus("Factory instance not found.");
-  //       return;
-  //     }
-
-  //     setLoading(true);
-  //     setTxStatus("Processing transaction...");
-
-  //     console.log(collectionId);
-  //     console.log(ownerAddress);
-
-  //     const tx = await factoryWriteInstance.BuyCollection(
-  //       collectionId,
-  //       ownerAddress,
-  //       { value: collectionPrice }
-  //     );
-
-  //     await tx.wait();
-
-  //     const newOwner = await factoryReadInstance.ownerOfCollection(
-  //       collectionId
-  //     );
-
-  //     const response = await fetch(
-  //       "http://localhost:3000/api/v1/update-owner",
-  //       {
-  //         method: "PUT",
-  //         headers: { "Content-Type": "application/json" },
-  //         body: JSON.stringify({
-  //           collectionAddress,
-  //           newOwner,
-  //         }),
-  //       }
-  //     );
-
-  //     const data = response.json();
-  //     if (data) {
-  //       setTxStatus("Successfully purchased the entire collection!");
-  //       setLoading(false);
-  //     }
-
-  //     setTimeout(() => navigate("/"), 2500);
-  //   } catch (error) {
-  //     console.error("BuyCollection error:", error);
-  //     setTxStatus("Transaction failed. Check console for details.");
-  //     setLoading(false);
-  //   }
-  // };
-
   const handleBuyCollection = async () => {
     try {
       if (!factoryReadInstance || !factoryWriteInstance) {
@@ -168,47 +117,44 @@ const BuyCollection = () => {
       setLoading(true);
       setTxStatus("Processing transaction...");
 
-      console.log(collectionId);
-      console.log(ownerAddress);
-
       const tx = await factoryWriteInstance.BuyCollection(
         collectionId,
         ownerAddress,
         { value: collectionPrice }
       );
-      await tx.wait();
+      const receipt = await tx.wait();
 
-      // Fetch the new owner from blockchain after transaction
       const newOwner = await factoryReadInstance.ownerOfCollection(
-        collectionId
+        collectionAddress
       );
 
-      // Update backend with new owner only
-      const response = await fetch(
-        "http://localhost:3000/api/v1/update-owner",
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            collectionAddress,
-            newOwner,
-          }),
+      console.log("new Owner : ", newOwner);
+
+      if (receipt && newOwner) {
+        const response = await fetch(
+          "http://localhost:3000/api/v1/update-owner",
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              collectionAddress,
+              newOwner,
+            }),
+          }
+        );
+        const data = await response.json();
+
+        if (response.ok) {
+          setTxStatus("Successfully purchased the collection!");
+        } else {
+          console.warn("Backend update failed:", data);
+          setTxStatus("Purchase completed, but backend sync failed.");
         }
-      );
 
-      const data = await response.json();
+        setLoading(false);
 
-      if (response.ok) {
-        setTxStatus("Successfully purchased the collection!");
-      } else {
-        console.warn("Backend update failed:", data);
-        setTxStatus("Purchase completed, but backend sync failed.");
+        setTimeout(() => navigate("/"), 2500);
       }
-
-      setLoading(false);
-
-      // Optional: delay navigation so user can see status
-      setTimeout(() => navigate("/"), 2500);
     } catch (error) {
       console.error("BuyCollection error:", error);
       setTxStatus("Transaction failed. Check console for details.");
@@ -230,7 +176,6 @@ const BuyCollection = () => {
       <Navbar />
       <div className="bg-primary-black text-white min-h-screen px-6 md:px-20 py-10 font-unbounded flex justify-center items-center">
         <div className="w-full max-w-4xl bg-black/40 border border-paragraph/30 rounded-3xl shadow-2xl backdrop-blur-xl p-8 md:p-12 space-y-8 transition-all">
-          {/* Collection Header */}
           <div className="flex flex-col md:flex-row items-center gap-8">
             <img
               src={image}

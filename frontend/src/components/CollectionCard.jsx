@@ -12,9 +12,7 @@ const CollectionCard = ({
   collection,
   accountAddress,
   image,
-  collectionOwner,
 }) => {
-  console.log("collection id : ", collectionId);
   useReadFactoryContract();
   useReadAllCollections();
 
@@ -87,8 +85,8 @@ const CollectionCard = ({
               });
             }}
           >
-            <td className="px-6 py-4">
-              <div className="w-14 h-14">
+            <td className="px-6 py-4 ">
+              <div className="w-16 h-16 border-1 rounded-md border-paragraph/50">
                 <img
                   src={image}
                   alt=""
@@ -100,13 +98,6 @@ const CollectionCard = ({
             <td className="px-2 py-3">{collectionDetails.name}</td>
             <td className="px-2 py-3">{collectionDetails.symbol}</td>
 
-            <td className="px-2 py-3  text-white/80 whitespace-nowrap">
-              {collectionOwner
-                ? `${collectionOwner.slice(0, 6)}...${collectionOwner.slice(
-                    -4
-                  )}`
-                : "—"}
-            </td>
             <td className="px-2 py-3">
               {collectionDetails.avgPrice}{" "}
               <span className="text-paragraph/50">ETH</span>{" "}

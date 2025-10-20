@@ -1,5 +1,5 @@
 import React, { cloneElement, useEffect, useRef, useState } from "react";
-import SingleCollectionsCard from "../components/single-collections-card/SingleCollectionsCard";
+import SingleNFTCard from "../components/SingleNFTCard";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Copy } from "lucide-react";
@@ -17,19 +17,18 @@ import UpdateCollectionStatus from "../components/UpdateCollectionStatus";
 import useReadFactoryInstanceStore from "../blockchain-interaction/stores/useReadFactoryInstanceStore.store";
 import { toast, ToastContainer } from "react-toastify";
 import useWriteFactoryContract from "../blockchain-interaction/hooks/factory/useWriteFactoryContract";
+import { useAppKitAccount } from "@reown/appkit/react";
 
 const SingleCollection = () => {
   useReadFactoryContract();
   useReadAllCollections();
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [layout, setLayout] = useState("grid");
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const { factoryWriteInstance } = useWriteFactoryContract();
-  const { factoryReadInstance } = useReadFactoryInstanceStore();
-
-  const [refreshKey, setRefreshKey] = useState(0);
-
-  const location = useLocation();
-
-  const navigate = useNavigate();
+  const { address, isConnected } = useAppKitAccount();
 
   const { image } = location.state;
 
@@ -214,73 +213,103 @@ const SingleCollection = () => {
           </div>
 
           <div className="flex gap-2">
-            <CiGrid41 size={24} className="text-paragraph/70" />
-            <MdOutlineTableRows size={24} className="text-paragraph/70" />
+            <CiGrid41
+              size={24}
+              className={`cursor-pointer transition-colors ${
+                layout === "grid"
+                  ? "text-action-btn-green"
+                  : "text-paragraph/70"
+              }`}
+              onClick={() => setLayout("grid")}
+            />
+            <MdOutlineTableRows
+              size={24}
+              className={`cursor-pointer transition-colors ${
+                layout === "list"
+                  ? "text-action-btn-green"
+                  : "text-paragraph/70"
+              }`}
+              onClick={() => setLayout("list")}
+            />
           </div>
 
-          <div className="w-full flex items-center justify-end gap-3">
-            <button
-              className="bg-action-btn-green text-xs px-4 py-1 rounded-full text-black font-light cursor-pointer transition-all duration-200 hover:brightness-110 hover:scale-105 active:scale-95"
-              onClick={handleScrollToMintNFT}
-            >
-              Mint NFT
-            </button>
+          {collectionOwner === address && isConnected && (
+            <div className="w-full flex items-center justify-end gap-3">
+              <button
+                className="bg-action-btn-green text-xs px-4 py-1 rounded-full text-black font-light cursor-pointer transition-all duration-200 hover:brightness-110 hover:scale-105 active:scale-95"
+                onClick={handleScrollToMintNFT}
+              >
+                Mint NFT
+              </button>
 
-            <button
-              className="bg-paragraph/30 border border-paragraph/70 text-xs px-4 py-1 rounded-full text-white font-light cursor-pointer transition-all duration-200 hover:bg-paragraph/50 hover:scale-105 active:scale-95"
-              onClick={handleScrollToUpdateStatus}
-            >
-              Update Status
-            </button>
-            <button
-              className="bg-paragraph/30 border border-paragraph/70 text-xs px-4 py-1 rounded-full text-white font-light cursor-pointer transition-all duration-200 hover:bg-paragraph/50 hover:scale-105 active:scale-95"
-              onClick={handleScrollToCollectionStatus}
-            >
-              Update Collection Status
-            </button>
-          </div>
+              <button
+                className="bg-paragraph/30 border border-paragraph/70 text-xs px-4 py-1 rounded-full text-white font-light cursor-pointer transition-all duration-200 hover:bg-paragraph/50 hover:scale-105 active:scale-95"
+                onClick={handleScrollToUpdateStatus}
+              >
+                Update Status
+              </button>
+              <button
+                className="bg-paragraph/30 border border-paragraph/70 text-xs px-4 py-1 rounded-full text-white font-light cursor-pointer transition-all duration-200 hover:bg-paragraph/50 hover:scale-105 active:scale-95"
+                onClick={handleScrollToCollectionStatus}
+              >
+                Update Collection Status
+              </button>
+            </div>
+          )}
         </div>
 
-        <div className="nft-cards py-4 flex flex-wrap gap-5 justify-start">
+        <div
+          className={`py-4 gap-4 w-full border-1 ${
+            layout === "grid"
+              ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+              : "flex flex-col items-start"
+          }`}
+        >
           {NFTsPricesAndIds.map(({ tokenId, tokenPrice }, index) => (
-            <SingleCollectionsCard
+            <SingleNFTCard
               key={tokenId}
               tokenId={tokenId}
               tokenPrice={tokenPrice}
               collectionInstance={collectionInstance}
               tokenURI={tokenURIs[index]}
+              image={image}
+              layout={layout}
             />
           ))}
         </div>
 
-        <div
-          ref={mintNFTSectionRef}
-          className="border rounded-md border-paragraph/40"
-        >
-          <MintNFT
-            collectionInstance={collectionInstance}
-            onMintSuccess={handleMintSuccess}
-          />
-        </div>
+        {collectionOwner === address && isConnected && (
+          <>
+            <div
+              ref={mintNFTSectionRef}
+              className="border rounded-md border-paragraph/40"
+            >
+              <MintNFT
+                collectionInstance={collectionInstance}
+                onMintSuccess={handleMintSuccess}
+              />
+            </div>
 
-        <div
-          ref={updateStatusSectionRef}
-          className="border rounded-md border-paragraph/40 py-4 my-4"
-        >
-          <UpdateNFTSaleStatus collectionInstance={collectionInstance} />
-        </div>
+            <div
+              ref={updateStatusSectionRef}
+              className="border rounded-md border-paragraph/40 py-4 my-4"
+            >
+              <UpdateNFTSaleStatus collectionInstance={collectionInstance} />
+            </div>
 
-        <div
-          ref={collectionStatusSectionRef}
-          className="border rounded-md border-paragraph/40 py-4"
-        >
-          {factoryWriteInstance && (
-            <UpdateCollectionStatus
-              factoryWriteInstance={factoryWriteInstance}
-              collectionId={collectionId}
-            />
-          )}
-        </div>
+            <div
+              ref={collectionStatusSectionRef}
+              className="border rounded-md border-paragraph/40 py-4"
+            >
+              {factoryWriteInstance && (
+                <UpdateCollectionStatus
+                  factoryWriteInstance={factoryWriteInstance}
+                  collectionId={collectionId}
+                />
+              )}
+            </div>
+          </>
+        )}
       </div>
 
       <Footer />

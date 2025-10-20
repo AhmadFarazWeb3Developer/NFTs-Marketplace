@@ -4,6 +4,9 @@ const updateCollectionOwner = async (req, res) => {
   try {
     const { collectionAddress, newOwner } = req.body;
 
+    console.log("backend address ", collectionAddress);
+    console.log("backend newOwner ", newOwner);
+
     if (!collectionAddress || !newOwner) {
       return res.status(400).json({
         success: false,

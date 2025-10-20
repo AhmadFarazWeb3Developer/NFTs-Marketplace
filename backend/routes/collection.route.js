@@ -26,7 +26,7 @@ CollectionRouter.post(
 );
 
 CollectionRouter.get("/collection", getCollection);
-
+console.log("put router called : ");
 CollectionRouter.put("/update-owner", updateCollectionOwner);
 
 export default CollectionRouter;

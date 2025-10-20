@@ -17,7 +17,7 @@ const BuyNft = () => {
   const { tokenId } = useParams();
   const { state } = useLocation();
 
-  const { tokenPrice, collectionAddress, NFTImage } = state;
+  const { tokenPrice, collectionAddress, NFTImage, collectionImage } = state;
 
   const { getNFTCollectionInstance, signer } = useReadSingleCollection();
 
@@ -26,7 +26,7 @@ const BuyNft = () => {
   useEffect(() => {
     const init = async () => {
       if (!collectionAddress || !signer) {
-        console.log("⏳ Waiting for signer or collectionAddress...");
+        console.log("Waiting for signer or collectionAddress...");
         return;
       }
 
@@ -91,8 +91,8 @@ const BuyNft = () => {
           <div className="flex items-center gap-2 text-sm font-light mt-4">
             <div className="flex items-center gap-2">
               <img
-                src="/alchemyrefiner.jpg"
-                alt="profile"
+                src={collectionImage}
+                alt="collection Image"
                 className="w-6 h-6 rounded-full bg-gray-700 object-cover border border-gray-600/10"
               />
               <h2>{collectionName}</h2>

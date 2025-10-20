@@ -14,14 +14,17 @@ const TopCollections = () => {
     { collectioId: "", collection: "", accountAddress: "" },
   ]);
   const { collections } = useCollectionStore();
-  const { getNFTCollectionInstance, signer } = useReadSingleCollection();
   const { factoryReadInstance } = useReadFactoryInstanceStore();
+  const { getNFTCollectionInstance, signer } = useReadSingleCollection();
 
   useEffect(() => {
     const loadCollections = async () => {
       const data = await Promise.all(
         collections.map(
           async ({ collectionAddress, accountAddress, image }) => {
+            console.log("Collection Address :  ", collectionAddress);
+            console.log("Account Address :  ", accountAddress);
+
             const instance = await getNFTCollectionInstance(collectionAddress);
             const id = await factoryReadInstance.collectionAddressToId(
               collectionAddress
@@ -70,10 +73,6 @@ const TopCollections = () => {
                 </th>
 
                 <th scope="col" className="px-2 py-3">
-                  OWNER
-                </th>
-
-                <th scope="col" className="px-2 py-3">
                   AVG PRICE
                 </th>
 
@@ -95,21 +94,13 @@ const TopCollections = () => {
           </table>
 
           {collectionsData.map(
-            ({
-              index,
-              collectionId,
-              collection,
-              accountAddress,
-              image,
-              collectionOwner,
-            }) => (
+            ({ index, collectionId, collection, accountAddress, image }) => (
               <CollectionCard
                 key={index}
                 collectionId={collectionId}
                 collection={collection}
                 accountAddress={accountAddress}
                 image={image}
-                collectionOwner={collectionOwner}
               />
             )
           )}

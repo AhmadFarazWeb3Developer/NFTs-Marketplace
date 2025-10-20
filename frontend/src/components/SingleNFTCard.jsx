@@ -3,20 +3,20 @@ import { useNavigate } from "react-router-dom";
 import { FaRegCopy } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import useReadFactoryContract from "../blockchain-interaction/hooks/factory/useReadFactoryContract";
 
-import useReadFactoryContract from "../../blockchain-interaction/hooks/factory/useReadFactoryContract";
-
-const SingleCollectionsCard = ({
+const SingleNFTCard = ({
   tokenId,
   tokenPrice,
   collectionInstance,
   tokenURI,
+  image,
+  layout,
 }) => {
   useReadFactoryContract();
 
   const [hover, setHover] = useState(false);
   const [owner, setOwner] = useState(null);
-
   const navigateTo = useNavigate("");
 
   useEffect(() => {
@@ -66,36 +66,49 @@ const SingleCollectionsCard = ({
   return (
     <>
       <div
-        className="card border-1 border-paragraph/50 rounded-md flex flex-col items-center gap-2 pb-2 bg-black/20 
-                   transition-all duration-300 ease-in-out transform hover:scale-105"
+        className={`card border border-paragraph/50 rounded-md bg-black/20 transition-all duration-400 ease-in-out transform hover:scale-105 w-full
+    ${
+      layout === "grid"
+        ? "flex flex-col items-start gap-2 pb-2 w-full"
+        : "flex flex-row items-center gap-4 p-3 w-full"
+    }`}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
-        <div className="rounded-md overflow-hidden w-full">
+        <div
+          className={`${
+            layout === "grid"
+              ? "w-full rounded-t-md"
+              : "w-32 h-32 rounded-md overflow-hidden flex-shrink-0"
+          }`}
+        >
           <img
             src={stripBeforeHttp(tokenURI)}
             alt=""
-            className="rounded-md w-full h-64 object-cover"
+            className={`object-cover w-full h-full ${
+              layout === "grid" ? "rounded-t-md" : "rounded-md"
+            }`}
           />
         </div>
 
         <div
-          className={`w-full px-2 py-2 flex flex-col items-center gap-2 transition-all duration-300 ease-in-out
-                      ${
-                        hover
-                          ? "opacity-100 translate-y-0"
-                          : "opacity-90 -translate-y-1"
-                      }`}
+          className={`transition-all duration-300 ease-in-out ${
+            layout === "grid"
+              ? "w-full px-2 py-2 flex flex-col items-center gap-2"
+              : "flex flex-col justify-between flex-1"
+          } ${hover ? "opacity-100" : "opacity-90"}`}
         >
           <div className="flex justify-between items-center w-full">
-            <h3 className="font-medium text-action-btn-green">
+            <h3 className="font-medium text-action-btn-green text-sm sm:text-base md:text-lg">
               {tokenPrice} ETH
             </h3>
-            <p className="text-paragraph text-sm font-medium">#{tokenId}</p>
+            <p className="text-paragraph text-xs sm:text-sm md:text-base font-medium">
+              #{tokenId}
+            </p>
           </div>
 
           <div
-            className="flex items-center gap-2 text-sm font-light transition-all duration-300 ease-in-out
+            className="flex items-center gap-2 text-xs sm:text-sm md:text-base font-light transition-all duration-300 ease-in-out
                        cursor-pointer text-paragraph hover:text-green-400"
             onClick={copyToClipboard}
           >
@@ -105,8 +118,10 @@ const SingleCollectionsCard = ({
 
           {hover && (
             <button
-              className="w-full bg-action-btn-green font-light text-black py-1 rounded-sm cursor-pointer 
-                         transition-all duration-300 ease-in-out transform hover:scale-105"
+              className="w-full bg-action-btn-green font-light text-black 
+                         py-1 sm:py-1.5 md:py-2 rounded-sm cursor-pointer 
+                         text-xs sm:text-sm md:text-base
+                         transition-all duration-400 ease-in-out transform hover:scale-95 "
               onClick={() =>
                 navigateTo(`/explore/buyNft/${tokenId}`, {
                   state: {
@@ -114,6 +129,7 @@ const SingleCollectionsCard = ({
                     tokenPrice,
                     collectionAddress: collectionInstance.target,
                     NFTImage: stripBeforeHttp(tokenURI),
+                    collectionImage: image,
                   },
                 })
               }
@@ -129,4 +145,4 @@ const SingleCollectionsCard = ({
   );
 };
 
-export default SingleCollectionsCard;
+export default SingleNFTCard;

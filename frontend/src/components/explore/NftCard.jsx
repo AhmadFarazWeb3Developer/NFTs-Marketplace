@@ -33,7 +33,7 @@ const NftCard = ({
   return (
     <>
       <tr
-        className="collection-card border-b border-gray-700 hover:bg-white/5 cursor-pointer  text-xs"
+        className="collection-card border-b border-gray-700 hover:bg-white/5 cursor-pointer text-xs"
         onClick={() =>
           navigateTo(`/explore/buyNft/${tokenId}`, {
             state: {
