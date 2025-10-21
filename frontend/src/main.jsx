@@ -14,6 +14,7 @@ import UpdateNFTSaleStatus from "./pages/UpdateNFTSaleStatus.jsx";
 
 // ----- Reown AppKit Setup -----
 import { AppKitProvider, createAppKit } from "@reown/appkit/react";
+import { polygonAmoy } from "@reown/appkit/networks";
 import { EthersAdapter } from "@reown/appkit-adapter-ethers";
 import BuyCollection from "./pages/BuyCollection.jsx";
 
@@ -35,7 +36,7 @@ const hardhat = {
 createAppKit({
   autoConnect: false,
   adapters: [new EthersAdapter()],
-  networks: [hardhat],
+  networks: [polygonAmoy], /// will add harhdat for local development
   projectId,
   features: {
     analytics: true,

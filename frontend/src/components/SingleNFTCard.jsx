@@ -66,10 +66,10 @@ const SingleNFTCard = ({
   return (
     <>
       <div
-        className={`card border border-paragraph/50 rounded-md bg-black/20 transition-all duration-400 ease-in-out transform hover:scale-105 w-full
+        className={`card border border-paragraph/50 rounded-md bg-black/20 transition-all duration-400 ease-in-out transform hover:scale-105 w-1/5
     ${
       layout === "grid"
-        ? "flex flex-col items-start gap-2 pb-2 w-full"
+        ? "flex flex-col items-start gap-2 pb-2"
         : "flex flex-row items-center gap-4 p-3 w-full"
     }`}
         onMouseEnter={() => setHover(true)}

@@ -21,6 +21,8 @@ const useAuthenticate = () => {
       }
 
       const provider = new ethers.BrowserProvider(walletProvider);
+      console.log("provider : ", provider);
+
       const newSigner = await provider.getSigner();
 
       if (!newSigner) {
@@ -28,7 +30,6 @@ const useAuthenticate = () => {
         return;
       }
 
-      // ✅ only set signer if different from previous
       setSigner((prev) => {
         if (prev && prev.address === newSigner.address) return prev;
         return newSigner;

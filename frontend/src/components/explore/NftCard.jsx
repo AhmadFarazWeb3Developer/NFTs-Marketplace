@@ -12,8 +12,8 @@ const NftCard = ({
   owner,
   isForSale,
   collectionInstance,
+  collectionImage,
 }) => {
-  console.log(collectionInstance);
   const navigateTo = useNavigate();
 
   const trimmedOwner = owner
@@ -40,6 +40,8 @@ const NftCard = ({
               tokenId,
               tokenPrice,
               collectionAddress: collectionInstance.collectionAddress,
+              NFTImage: tokenURI,
+              collectionImage,
             },
           })
         }

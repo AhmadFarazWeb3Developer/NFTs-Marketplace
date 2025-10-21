@@ -2,8 +2,11 @@ import { useState } from "react";
 import useWriteFactoryContract from "../../factory/useWriteFactoryContract";
 import useReadFactoryInstanceStore from "../../../stores/useReadFactoryInstanceStore.store";
 import decodeCollectionRevert from "../../../helpers/decodeCollectionRevert";
+import useReadFactoryContract from "../../factory/useReadFactoryContract";
 
 const useCreateCollection = () => {
+  useReadFactoryContract();
+
   const { factoryWriteInstance, isLoading, signer } = useWriteFactoryContract();
   const { factoryReadInstance } = useReadFactoryInstanceStore();
 
@@ -42,19 +45,28 @@ const useCreateCollection = () => {
     }
 
     try {
-      // 🔹 Execute transaction
       const tx = await factoryWriteInstance.createCollection(name, symbol);
       setTxHash(tx.hash);
 
-      // 🔹 Wait for confirmation
+      console.log("transaction : ", tx);
+
       const receipt = await tx.wait();
+
+      console.log("transaction : ", receipt);
+
+      console.log("All logs:", receipt.logs);
 
       let collectionCreatedEvent = null;
 
       for (const log of receipt.logs) {
+        if (
+          log.address.toLowerCase() !== factoryReadInstance.target.toLowerCase()
+        )
+          continue;
+
         try {
           const parsed = factoryReadInstance.interface.parseLog(log);
-
+          console.log("parsed : ", parsed);
           if (parsed.name === "CollectionCreated") {
             console.log("CollectionCreated event:", parsed.args);
 
@@ -73,9 +85,7 @@ const useCreateCollection = () => {
             console.log("Creator:", creator);
             console.log("Collection Address:", collectionAddress);
           }
-        } catch (e) {
-          // Ignore unrelated logs
-        }
+        } catch (e) {}
       }
 
       if (!collectionCreatedEvent) {

@@ -74,7 +74,7 @@ const BuyNft = () => {
         <div className="left flex items-start">
           <div className="box w-fit rounded-sm p-4 flex justify-center items-center bg-paragraph/10">
             <img
-              src={NFTImage}
+              src={NFTImage.substring(NFTImage.indexOf("https://"))}
               alt="NFT Image"
               className="max-h-96 object-contain rounded-sm"
             />

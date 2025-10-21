@@ -13,7 +13,10 @@ const useReadFactoryContract = () => {
     const init = async () => {
       if (!factoryAddress || !factoryABI) return;
 
-      const provider = new ethers.JsonRpcProvider("http://127.0.0.1:8545");
+      // const provider = new ethers.JsonRpcProvider("http://127.0.0.1:8545");
+      const provider = new ethers.JsonRpcProvider(
+        "https://rpc-amoy.polygon.technology"
+      );
       const contract = new ethers.Contract(
         factoryAddress,
         factoryABI,

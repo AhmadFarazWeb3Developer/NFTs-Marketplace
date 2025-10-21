@@ -13,9 +13,7 @@ import useReadAggregateAllNFTs from "../../blockchain-interaction/hooks/nft/read
 
 const AllNFTs = () => {
   useReadFactoryContract();
-  const allNFTs = useReadAggregateAllNFTs();
-
-  console.log(allNFTs);
+  const { allNfts, loading } = useReadAggregateAllNFTs();
 
   return (
     <>
@@ -85,7 +83,7 @@ const AllNFTs = () => {
                     <th className="px-2 py-3">STATUS</th>
                   </tr>
                 </thead>
-
+                {/* 
                 <tbody className="font-unbounded font-light text-xs ">
                   {allNFTs === null ? (
                     <tr>
@@ -113,17 +111,53 @@ const AllNFTs = () => {
                       />
                     ))
                   )}
+                </tbody> */}
+                <tbody className="font-unbounded font-light text-xs">
+                  {loading ? (
+                    <tr>
+                      <td colSpan={7} className="text-center py-12">
+                        <div className="flex flex-col items-center justify-center gap-3 animate-fade-in">
+                          <div className="relative">
+                            <ImSpinner2 className="animate-spin text-3xl text-action-btn-green" />
+                            <div className="absolute inset-0 blur-xl opacity-20 bg-action-btn-green rounded-full"></div>
+                          </div>
+                          <span className="text-action-btn-green/80 text-sm tracking-wide">
+                            Fetching NFTs from the blockchain...
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                  ) : allNfts.length === 0 ? (
+                    <tr>
+                      <td colSpan={7} className="text-center py-12">
+                        <div className="flex flex-col items-center justify-center gap-3 animate-fade-in">
+                          <AiOutlineInbox className="text-4xl text-action-btn-green/80" />
+                          <span className="text-sm text-white/70">
+                            No NFTs found yet — your collections might be
+                            minting soon 🌿
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                  ) : (
+                    allNfts.map((nft, idx) => (
+                      <NftCard
+                        key={`${nft.collectionAddress}-${nft.tokenId}-${idx}`}
+                        {...nft}
+                      />
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
 
             <div className="sm:hidden w-full flex flex-col gap-4">
-              {allNFTs.length === 0 ? (
+              {allNfts.length === 0 ? (
                 <p className="text-white/70 text-center py-4">
                   Loading NFTs...
                 </p>
               ) : (
-                allNFTs.map((nft, idx) => (
+                allNfts.map((nft, idx) => (
                   <div
                     key={`${nft.collectionAddress}-${nft.tokenId}-${idx}`}
                     className="flex flex-col sm:flex-row items-start sm:items-center bg-white/5 p-3 rounded-md gap-2"

@@ -259,10 +259,8 @@ const SingleCollection = () => {
         </div>
 
         <div
-          className={`py-4 gap-4 w-full border-1 ${
-            layout === "grid"
-              ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
-              : "flex flex-col items-start"
+          className={`py-4 gap-4 flex w-ful; justify-center flex-wrap ${
+            layout === "grid" ? " flex-row" : "flex-col items-start"
           }`}
         >
           {NFTsPricesAndIds.map(({ tokenId, tokenPrice }, index) => (
