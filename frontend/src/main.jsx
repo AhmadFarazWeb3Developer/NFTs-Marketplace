@@ -14,29 +14,29 @@ import UpdateNFTSaleStatus from "./pages/UpdateNFTSaleStatus.jsx";
 
 // ----- Reown AppKit Setup -----
 import { AppKitProvider, createAppKit } from "@reown/appkit/react";
-import { polygonAmoy } from "@reown/appkit/networks";
+import { polygonAmoy, opBNBTestnet } from "@reown/appkit/networks";
 import { EthersAdapter } from "@reown/appkit-adapter-ethers";
 import BuyCollection from "./pages/BuyCollection.jsx";
 
 const projectId = import.meta.env.VITE_CONNECT_PROJECT_ID;
 
-const hardhat = {
-  id: 31337,
-  name: "Hardhat",
-  caipNetworkId: "eip155:31337",
-  chainNamespace: "eip155",
-  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
-  rpcUrls: {
-    default: { http: ["http://127.0.0.1:8545"] },
-    public: { http: ["http://127.0.0.1:8545"] },
-  },
-  blockExplorers: { default: { name: "Hardhat", url: "" } },
-};
+// const hardhat = {
+//   id: 31337,
+//   name: "Hardhat",
+//   caipNetworkId: "eip155:31337",
+//   chainNamespace: "eip155",
+//   nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+//   rpcUrls: {
+//     default: { http: ["http://127.0.0.1:8545"] },
+//     public: { http: ["http://127.0.0.1:8545"] },
+//   },
+//   blockExplorers: { default: { name: "Hardhat", url: "" } },
+// };
 
 createAppKit({
   autoConnect: false,
   adapters: [new EthersAdapter()],
-  networks: [polygonAmoy], /// will add harhdat for local development
+  networks: [opBNBTestnet, polygonAmoy], // will add harhdat for local development
   projectId,
   features: {
     analytics: true,

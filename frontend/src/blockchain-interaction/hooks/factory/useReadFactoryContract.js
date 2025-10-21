@@ -14,9 +14,15 @@ const useReadFactoryContract = () => {
       if (!factoryAddress || !factoryABI) return;
 
       // const provider = new ethers.JsonRpcProvider("http://127.0.0.1:8545");
+      // const provider = new ethers.JsonRpcProvider(
+      //   "https://rpc-amoy.polygon.technology"
+      // );
+
       const provider = new ethers.JsonRpcProvider(
-        "https://rpc-amoy.polygon.technology"
+        `https://bnb-testnet.g.alchemy.com/v2/${process.env.BNB_ALCHEMY_API_KEY}
+    `
       );
+
       const contract = new ethers.Contract(
         factoryAddress,
         factoryABI,
