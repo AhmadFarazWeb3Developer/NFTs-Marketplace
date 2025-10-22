@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import useConstants from "../../helpers/useConstants";
-import Authenticate from "../../helpers/Auth";
 import useAuthenticate from "../../helpers/Auth";
 
 const useWriteFactoryContract = () => {

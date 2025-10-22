@@ -2,34 +2,27 @@ import { useEffect, useState } from "react";
 import { ethers, formatEther } from "ethers";
 import useConstants from "../../helpers/useConstants";
 import useReadFactoryInstanceStore from "../../stores/useReadFactoryInstanceStore.store";
+import { bnb_smart_chain_provider } from "../../helpers/providers";
 
 const useReadFactoryContract = () => {
   const { factoryAddress, factoryABI } = useConstants();
   const { setFactoryReadInstance } = useReadFactoryInstanceStore();
 
-  const [factoryBalance, setFactoryBalance] = useState("0.00"); // local state
+  const [factoryBalance, setFactoryBalance] = useState("0.00");
 
   useEffect(() => {
     const init = async () => {
       if (!factoryAddress || !factoryABI) return;
 
-      // const provider = new ethers.JsonRpcProvider("http://127.0.0.1:8545");
-      // const provider = new ethers.JsonRpcProvider(
-      //   "https://rpc-amoy.polygon.technology"
-      // );
-
-      const provider = new ethers.JsonRpcProvider(
-        `https://bnb-testnet.g.alchemy.com/v2/${process.env.BNB_ALCHEMY_API_KEY}
-    `
-      );
+      console.log("bnb provider : ", bnb_smart_chain_provider);
 
       const contract = new ethers.Contract(
         factoryAddress,
         factoryABI,
-        provider
+        bnb_smart_chain_provider
       );
 
-      const balance = await provider.getBalance(factoryAddress);
+      const balance = await bnb_smart_chain_provider.getBalance(factoryAddress);
       const balanceInEth = parseFloat(formatEther(balance)).toFixed(2);
 
       setFactoryReadInstance(contract);

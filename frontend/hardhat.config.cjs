@@ -24,7 +24,7 @@ module.exports = {
     },
 
     bsc_testnet: {
-      url: `https://bnb-testnet.g.alchemy.com/v2/${process.env.BNB_ALCHEMY_API_KEY}`,
+      url: `https://bnb-testnet.g.alchemy.com/v2/${process.env.VITE_BNB_ALCHEMY_API_KEY}`,
       accounts: [process.env.PRIVATE_KEY],
       chainId: 97,
     },
@@ -52,7 +52,7 @@ module.exports = {
 };
 
 // npx hardhat ignition deploy ./ignition/modules/NFTsMarketplaceFactory.js  --network localhost
-
 // npx hardhat ignition deploy ./ignition/modules/NFTsMarketplaceFactory.js --network polygon_amoy
+// npx hardhat ignition deploy ./ignition/modules/NFTsMarketplaceFactory.js --network bsc_testnet
 
-// npx hardhat verify --network polygon_amoy 0x460815F621C1CE8b2aDC8Db3f4042Bb564210E6A
+// npx hardhat verify --network bsc_testnet 0xa717002347fb5d897038aD347c8c25a1fB414f22

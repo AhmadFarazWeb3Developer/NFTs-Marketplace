@@ -46,8 +46,8 @@
       ]
     },
     "C:\\Users\\MMO\\Desktop\\NFTs-Marketplace\\frontend\\onchain\\NFTsMarketplaceFactory.sol": {
-      "lastModificationDate": 1760864512765,
-      "contentHash": "d7b247b1192100f58e996ece5c12d263",
+      "lastModificationDate": 1761057225537,
+      "contentHash": "b1bf4d88b7e7e58a9e70e02734f386aa",
       "sourceName": "onchain/NFTsMarketplaceFactory.sol",
       "solcConfig": {
         "version": "0.8.20",
