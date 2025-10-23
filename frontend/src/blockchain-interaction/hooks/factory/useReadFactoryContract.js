@@ -2,7 +2,12 @@ import { useEffect, useState } from "react";
 import { ethers, formatEther } from "ethers";
 import useConstants from "../../helpers/useConstants";
 import useReadFactoryInstanceStore from "../../stores/useReadFactoryInstanceStore.store";
-import { bnb_smart_chain_provider } from "../../helpers/providers";
+import {
+  arbitrum_sepolia_chain_provider,
+  avalanche_fuji,
+  bnb_smart_chain_provider,
+  optimism_sepolia,
+} from "../../helpers/providers";
 
 const useReadFactoryContract = () => {
   const { factoryAddress, factoryABI } = useConstants();
@@ -14,15 +19,13 @@ const useReadFactoryContract = () => {
     const init = async () => {
       if (!factoryAddress || !factoryABI) return;
 
-      console.log("bnb provider : ", bnb_smart_chain_provider);
-
       const contract = new ethers.Contract(
         factoryAddress,
         factoryABI,
-        bnb_smart_chain_provider
+        optimism_sepolia
       );
 
-      const balance = await bnb_smart_chain_provider.getBalance(factoryAddress);
+      const balance = await optimism_sepolia.getBalance(factoryAddress);
       const balanceInEth = parseFloat(formatEther(balance)).toFixed(2);
 
       setFactoryReadInstance(contract);

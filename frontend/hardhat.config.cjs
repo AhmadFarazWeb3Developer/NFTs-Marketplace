@@ -2,8 +2,11 @@ require("@nomicfoundation/hardhat-toolbox");
 require("dotenv").config();
 
 module.exports = {
+  // defaultNetwork: "hardhat",
   // defaultNetwork: "polygon_amoy",
-  defaultNetwork: "bsc_testnet",
+  // defaultNetwork: "bsc_testnet",
+  // defaultNetwork: "arbitrum_sepolia",
+  defaultNetwork: "avalanche_fuji",
 
   networks: {
     hardhat: {
@@ -24,9 +27,26 @@ module.exports = {
     },
 
     bsc_testnet: {
-      url: `https://bnb-testnet.g.alchemy.com/v2/${process.env.VITE_BNB_ALCHEMY_API_KEY}`,
+      url: `https://bnb-testnet.g.alchemy.com/v2/${process.env.VITE_ALCHEMY_RPC_API_KEY}`,
       accounts: [process.env.PRIVATE_KEY],
       chainId: 97,
+    },
+
+    arbitrum_sepolia: {
+      url: `https://arb-sepolia.g.alchemy.com/v2/${process.env.VITE_ALCHEMY_RPC_API_KEY}`,
+      accounts: [process.env.PRIVATE_KEY],
+      chainId: 421614,
+    },
+
+    avalanche_fuji: {
+      url: `https://avax-fuji.g.alchemy.com/v2/${process.env.VITE_ALCHEMY_RPC_API_KEY}`,
+      accounts: [process.env.PRIVATE_KEY],
+      chainId: 43113,
+    },
+    optimism_sepolia: {
+      url: `https://opt-sepolia.g.alchemy.com/v2/${process.env.VITE_ALCHEMY_RPC_API_KEY}`,
+      accounts: [process.env.PRIVATE_KEY],
+      chainId: 11155420,
     },
   },
 
@@ -54,5 +74,7 @@ module.exports = {
 // npx hardhat ignition deploy ./ignition/modules/NFTsMarketplaceFactory.js  --network localhost
 // npx hardhat ignition deploy ./ignition/modules/NFTsMarketplaceFactory.js --network polygon_amoy
 // npx hardhat ignition deploy ./ignition/modules/NFTsMarketplaceFactory.js --network bsc_testnet
+// npx hardhat ignition deploy ./ignition/modules/NFTsMarketplaceFactory.js --network arbitrum_sepolia
+// npx hardhat ignition deploy ./ignition/modules/NFTsMarketplaceFactory.js --network avalanche_fuji
 
-// npx hardhat verify --network bsc_testnet 0xa717002347fb5d897038aD347c8c25a1fB414f22
+// npx hardhat verify --network  avalanche_fuji 0xa717002347fb5d897038aD347c8c25a1fB414f22

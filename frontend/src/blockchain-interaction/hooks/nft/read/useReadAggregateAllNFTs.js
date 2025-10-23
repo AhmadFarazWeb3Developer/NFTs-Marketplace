@@ -27,6 +27,7 @@ const useReadAggregateAllNFTs = () => {
             col.collectionAddress
           );
 
+          console.log(col);
           const totalSupply = await collectionInstance.tokenId();
 
           for (let tokenId = 0; tokenId < Number(totalSupply); tokenId++) {
