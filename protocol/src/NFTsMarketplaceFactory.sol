@@ -46,7 +46,7 @@ contract NFTsMarketplaceFactory is Ownable, ReentrancyGuard {
     event CollectionCreated(
         uint256 indexed collectionId,
         address indexed owner,
-        address collectionAddress
+        address indexed collectionAddress
     );
 
     // -----------------------------------------------------------------------
