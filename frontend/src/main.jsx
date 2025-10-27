@@ -14,6 +14,7 @@ import UpdateNFTSaleStatus from "./pages/UpdateNFTSaleStatus.jsx";
 
 // ----- Reown AppKit Setup -----
 import { AppKitProvider, createAppKit } from "@reown/appkit/react";
+
 import {
   hardhat,
   polygonAmoy,
@@ -21,6 +22,11 @@ import {
   arbitrumSepolia,
   avalancheFuji,
   optimismSepolia,
+  mainnet,
+  polygon,
+  zksync,
+  avalanche,
+  arbitrum,
 } from "@reown/appkit/networks";
 import { EthersAdapter } from "@reown/appkit-adapter-ethers";
 import BuyCollection from "./pages/BuyCollection.jsx";
@@ -30,7 +36,18 @@ const projectId = import.meta.env.VITE_CONNECT_PROJECT_ID;
 createAppKit({
   autoConnect: false,
   adapters: [new EthersAdapter()],
-  networks: [optimismSepolia], //   add any network here, harhdat , polygonAmoy, bscTestnet, arbitrumSepolia, avalancheFuji
+  networks: [
+    mainnet,
+    polygon,
+    zksync,
+    avalanche,
+    arbitrum,
+    optimismSepolia,
+    polygonAmoy,
+    bscTestnet,
+    arbitrumSepolia,
+    avalancheFuji,
+  ], //   add any network here, harhdat , polygonAmoy, bscTestnet, arbitrumSepolia, avalancheFuji
   projectId,
   features: {
     analytics: true,
