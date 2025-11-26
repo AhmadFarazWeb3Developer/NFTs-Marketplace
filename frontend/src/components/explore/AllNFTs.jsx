@@ -83,35 +83,7 @@ const AllNFTs = () => {
                     <th className="px-2 py-3">STATUS</th>
                   </tr>
                 </thead>
-                {/* 
-                <tbody className="font-unbounded font-light text-xs ">
-                  {allNFTs === null ? (
-                    <tr>
-                      <td colSpan={7} className="text-center py-12">
-                        <div className="flex flex-col items-center justify-center gap-2 text-white/70">
-                          <ImSpinner2 className="animate-spin text-3xl" />
-                          <span className="text-sm mt-2">Loading NFTs...</span>
-                        </div>
-                      </td>
-                    </tr>
-                  ) : allNFTs.length === 0 ? (
-                    <tr>
-                      <td colSpan={7} className="text-center py-12">
-                        <div className="flex flex-col items-center justify-center gap-2 text-white/70">
-                          <AiOutlineInbox className="text-4xl" />
-                          <span className="text-sm mt-2">No NFTs found.</span>
-                        </div>
-                      </td>
-                    </tr>
-                  ) : (
-                    allNFTs.map((nft, idx) => (
-                      <NftCard
-                        key={`${nft.collectionAddress}-${nft.tokenId}-${idx}`}
-                        {...nft}
-                      />
-                    ))
-                  )}
-                </tbody> */}
+
                 <tbody className="font-unbounded font-light text-xs">
                   {loading ? (
                     <tr>
@@ -134,7 +106,7 @@ const AllNFTs = () => {
                           <AiOutlineInbox className="text-4xl text-action-btn-green/80" />
                           <span className="text-sm text-white/70">
                             No NFTs found yet — your collections might be
-                            minting soon 🌿
+                            minting soon
                           </span>
                         </div>
                       </td>

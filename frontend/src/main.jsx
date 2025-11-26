@@ -12,7 +12,6 @@ import Dashboard from "./pages/Dashboard.jsx";
 import Home from "./pages/Home.jsx";
 import UpdateNFTSaleStatus from "./pages/UpdateNFTSaleStatus.jsx";
 
-// ----- Reown AppKit Setup -----
 import { AppKitProvider, createAppKit } from "@reown/appkit/react";
 
 import {
@@ -37,6 +36,7 @@ createAppKit({
   autoConnect: false,
   adapters: [new EthersAdapter()],
   networks: [
+    hardhat,
     mainnet,
     polygon,
     zksync,
@@ -60,7 +60,6 @@ createAppKit({
   },
 });
 
-// ----- Routes -----
 const router = createBrowserRouter([
   {
     path: "/",
@@ -88,7 +87,6 @@ const router = createBrowserRouter([
   },
 ]);
 
-// ----- Render -----
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AppKitProvider>

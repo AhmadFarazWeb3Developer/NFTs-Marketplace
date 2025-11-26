@@ -1,8 +1,8 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "C:\\Users\\MMO\\Desktop\\NFTs-Marketplace\\frontend\\onchain\\NFTsCollection.sol": {
-      "lastModificationDate": 1760793817282,
+    "C:\\Side Hustle\\NFTs-Marketplace\\frontend\\onchain\\NFTsCollection.sol": {
+      "lastModificationDate": 1762325240799,
       "contentHash": "b16ad9c5ecb70f6440f0a8a43f5d3723",
       "sourceName": "onchain/NFTsCollection.sol",
       "solcConfig": {
@@ -45,8 +45,8 @@
         "NFTsCollection"
       ]
     },
-    "C:\\Users\\MMO\\Desktop\\NFTs-Marketplace\\frontend\\onchain\\NFTsMarketplaceFactory.sol": {
-      "lastModificationDate": 1761057225537,
+    "C:\\Side Hustle\\NFTs-Marketplace\\frontend\\onchain\\NFTsMarketplaceFactory.sol": {
+      "lastModificationDate": 1762325240799,
       "contentHash": "b1bf4d88b7e7e58a9e70e02734f386aa",
       "sourceName": "onchain/NFTsMarketplaceFactory.sol",
       "solcConfig": {
@@ -85,8 +85,152 @@
         "NFTsMarketplaceFactory"
       ]
     },
-    "C:\\Users\\MMO\\Desktop\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\access\\Ownable.sol": {
-      "lastModificationDate": 1758725133790,
+    "C:\\Side Hustle\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\interfaces\\IERC721Metadata.sol": {
+      "lastModificationDate": 1762325228573,
+      "contentHash": "7c1b217fe1a69cbe6ca5522a149fbbbd",
+      "sourceName": "@openzeppelin/contracts/interfaces/IERC721Metadata.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../token/ERC721/extensions/IERC721Metadata.sol"
+      ],
+      "versionPragmas": [
+        ">=0.6.2"
+      ],
+      "artifacts": []
+    },
+    "C:\\Side Hustle\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\interfaces\\IERC721Receiver.sol": {
+      "lastModificationDate": 1762325228573,
+      "contentHash": "a53c2ec7b6b13f5b399e5a78206f6a78",
+      "sourceName": "@openzeppelin/contracts/interfaces/IERC721Receiver.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../token/ERC721/IERC721Receiver.sol"
+      ],
+      "versionPragmas": [
+        ">=0.5.0"
+      ],
+      "artifacts": []
+    },
+    "C:\\Side Hustle\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\interfaces\\IERC165.sol": {
+      "lastModificationDate": 1762325228570,
+      "contentHash": "947853028399b7de34bcc3704ee06e99",
+      "sourceName": "@openzeppelin/contracts/interfaces/IERC165.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../utils/introspection/IERC165.sol"
+      ],
+      "versionPragmas": [
+        ">=0.4.16"
+      ],
+      "artifacts": []
+    },
+    "C:\\Side Hustle\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\utils\\ReentrancyGuard.sol": {
+      "lastModificationDate": 1762325228583,
+      "contentHash": "190613e556d509d9e9a0ea43dc5d891d",
+      "sourceName": "@openzeppelin/contracts/utils/ReentrancyGuard.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "ReentrancyGuard"
+      ]
+    },
+    "C:\\Side Hustle\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\access\\Ownable.sol": {
+      "lastModificationDate": 1762325228529,
       "contentHash": "d3c790edc9ccf808a17c5a6cd13614fd",
       "sourceName": "@openzeppelin/contracts/access/Ownable.sol",
       "solcConfig": {
@@ -123,80 +267,8 @@
         "Ownable"
       ]
     },
-    "C:\\Users\\MMO\\Desktop\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\utils\\ReentrancyGuard.sol": {
-      "lastModificationDate": 1758725133860,
-      "contentHash": "190613e556d509d9e9a0ea43dc5d891d",
-      "sourceName": "@openzeppelin/contracts/utils/ReentrancyGuard.sol",
-      "solcConfig": {
-        "version": "0.8.20",
-        "settings": {
-          "evmVersion": "paris",
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.20"
-      ],
-      "artifacts": [
-        "ReentrancyGuard"
-      ]
-    },
-    "C:\\Users\\MMO\\Desktop\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\interfaces\\IERC721Metadata.sol": {
-      "lastModificationDate": 1758725133744,
-      "contentHash": "7c1b217fe1a69cbe6ca5522a149fbbbd",
-      "sourceName": "@openzeppelin/contracts/interfaces/IERC721Metadata.sol",
-      "solcConfig": {
-        "version": "0.8.20",
-        "settings": {
-          "evmVersion": "paris",
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../token/ERC721/extensions/IERC721Metadata.sol"
-      ],
-      "versionPragmas": [
-        ">=0.6.2"
-      ],
-      "artifacts": []
-    },
-    "C:\\Users\\MMO\\Desktop\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\token\\ERC721\\ERC721.sol": {
-      "lastModificationDate": 1758725133688,
+    "C:\\Side Hustle\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\token\\ERC721\\ERC721.sol": {
+      "lastModificationDate": 1762325228580,
       "contentHash": "522ec023bce510c30dfbf61584f5a190",
       "sourceName": "@openzeppelin/contracts/token/ERC721/ERC721.sol",
       "solcConfig": {
@@ -239,80 +311,8 @@
         "ERC721"
       ]
     },
-    "C:\\Users\\MMO\\Desktop\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\interfaces\\IERC165.sol": {
-      "lastModificationDate": 1758725133729,
-      "contentHash": "947853028399b7de34bcc3704ee06e99",
-      "sourceName": "@openzeppelin/contracts/interfaces/IERC165.sol",
-      "solcConfig": {
-        "version": "0.8.20",
-        "settings": {
-          "evmVersion": "paris",
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../utils/introspection/IERC165.sol"
-      ],
-      "versionPragmas": [
-        ">=0.4.16"
-      ],
-      "artifacts": []
-    },
-    "C:\\Users\\MMO\\Desktop\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\interfaces\\IERC721Receiver.sol": {
-      "lastModificationDate": 1758725133745,
-      "contentHash": "a53c2ec7b6b13f5b399e5a78206f6a78",
-      "sourceName": "@openzeppelin/contracts/interfaces/IERC721Receiver.sol",
-      "solcConfig": {
-        "version": "0.8.20",
-        "settings": {
-          "evmVersion": "paris",
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../token/ERC721/IERC721Receiver.sol"
-      ],
-      "versionPragmas": [
-        ">=0.5.0"
-      ],
-      "artifacts": []
-    },
-    "C:\\Users\\MMO\\Desktop\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\utils\\Context.sol": {
-      "lastModificationDate": 1758725133632,
+    "C:\\Side Hustle\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\utils\\Context.sol": {
+      "lastModificationDate": 1762325228582,
       "contentHash": "67bfbc07588eb8683b3fd8f6f909563e",
       "sourceName": "@openzeppelin/contracts/utils/Context.sol",
       "solcConfig": {
@@ -347,8 +347,8 @@
         "Context"
       ]
     },
-    "C:\\Users\\MMO\\Desktop\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\token\\ERC721\\extensions\\IERC721Metadata.sol": {
-      "lastModificationDate": 1758725133745,
+    "C:\\Side Hustle\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\token\\ERC721\\extensions\\IERC721Metadata.sol": {
+      "lastModificationDate": 1762325228581,
       "contentHash": "136c64eca25bcb8a68f43ac6605559f9",
       "sourceName": "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol",
       "solcConfig": {
@@ -385,8 +385,8 @@
         "IERC721Metadata"
       ]
     },
-    "C:\\Users\\MMO\\Desktop\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\token\\ERC721\\IERC721.sol": {
-      "lastModificationDate": 1758725133743,
+    "C:\\Side Hustle\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\token\\ERC721\\IERC721.sol": {
+      "lastModificationDate": 1762325228581,
       "contentHash": "f62e11dbd302e17a5621a1438f4e054c",
       "sourceName": "@openzeppelin/contracts/token/ERC721/IERC721.sol",
       "solcConfig": {
@@ -423,8 +423,8 @@
         "IERC721"
       ]
     },
-    "C:\\Users\\MMO\\Desktop\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\utils\\introspection\\IERC165.sol": {
-      "lastModificationDate": 1758725133729,
+    "C:\\Side Hustle\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\utils\\introspection\\IERC165.sol": {
+      "lastModificationDate": 1762325228583,
       "contentHash": "7074c93b1ea0a122063f26ddd1db1032",
       "sourceName": "@openzeppelin/contracts/utils/introspection/IERC165.sol",
       "solcConfig": {
@@ -459,8 +459,44 @@
         "IERC165"
       ]
     },
-    "C:\\Users\\MMO\\Desktop\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\utils\\Strings.sol": {
-      "lastModificationDate": 1758725133878,
+    "C:\\Side Hustle\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\token\\ERC721\\IERC721Receiver.sol": {
+      "lastModificationDate": 1762325228581,
+      "contentHash": "d61660a41ce200e99816e4734f7fd202",
+      "sourceName": "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.5.0"
+      ],
+      "artifacts": [
+        "IERC721Receiver"
+      ]
+    },
+    "C:\\Side Hustle\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\utils\\Strings.sol": {
+      "lastModificationDate": 1762325228583,
       "contentHash": "d8f70caf0e0c77dc908176ed44812fb7",
       "sourceName": "@openzeppelin/contracts/utils/Strings.sol",
       "solcConfig": {
@@ -499,8 +535,8 @@
         "Strings"
       ]
     },
-    "C:\\Users\\MMO\\Desktop\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\interfaces\\draft-IERC6093.sol": {
-      "lastModificationDate": 1758725133651,
+    "C:\\Side Hustle\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\interfaces\\draft-IERC6093.sol": {
+      "lastModificationDate": 1762325228569,
       "contentHash": "5041977bbe908de2e6ed0270447f79ad",
       "sourceName": "@openzeppelin/contracts/interfaces/draft-IERC6093.sol",
       "solcConfig": {
@@ -537,8 +573,8 @@
         "IERC721Errors"
       ]
     },
-    "C:\\Users\\MMO\\Desktop\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\utils\\introspection\\ERC165.sol": {
-      "lastModificationDate": 1758725133672,
+    "C:\\Side Hustle\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\utils\\introspection\\ERC165.sol": {
+      "lastModificationDate": 1762325228583,
       "contentHash": "0906d06dca25210d4696dcef6dad2909",
       "sourceName": "@openzeppelin/contracts/utils/introspection/ERC165.sol",
       "solcConfig": {
@@ -575,8 +611,8 @@
         "ERC165"
       ]
     },
-    "C:\\Users\\MMO\\Desktop\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\token\\ERC721\\utils\\ERC721Utils.sol": {
-      "lastModificationDate": 1758725133696,
+    "C:\\Side Hustle\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\token\\ERC721\\utils\\ERC721Utils.sol": {
+      "lastModificationDate": 1762325228581,
       "contentHash": "4cefad279a37c895b709bce2b901816e",
       "sourceName": "@openzeppelin/contracts/token/ERC721/utils/ERC721Utils.sol",
       "solcConfig": {
@@ -614,8 +650,8 @@
         "ERC721Utils"
       ]
     },
-    "C:\\Users\\MMO\\Desktop\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\utils\\math\\SignedMath.sol": {
-      "lastModificationDate": 1758725133871,
+    "C:\\Side Hustle\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\utils\\math\\SignedMath.sol": {
+      "lastModificationDate": 1762325228583,
       "contentHash": "ae3528afb8bdb0a7dcfba5b115ee8074",
       "sourceName": "@openzeppelin/contracts/utils/math/SignedMath.sol",
       "solcConfig": {
@@ -652,8 +688,8 @@
         "SignedMath"
       ]
     },
-    "C:\\Users\\MMO\\Desktop\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\utils\\math\\Math.sol": {
-      "lastModificationDate": 1758725133753,
+    "C:\\Side Hustle\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\utils\\math\\Math.sol": {
+      "lastModificationDate": 1762325228583,
       "contentHash": "5ec781e33d3a9ac91ffdc83d94420412",
       "sourceName": "@openzeppelin/contracts/utils/math/Math.sol",
       "solcConfig": {
@@ -691,8 +727,8 @@
         "Math"
       ]
     },
-    "C:\\Users\\MMO\\Desktop\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\utils\\math\\SafeCast.sol": {
-      "lastModificationDate": 1758725133866,
+    "C:\\Side Hustle\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\utils\\math\\SafeCast.sol": {
+      "lastModificationDate": 1762325228583,
       "contentHash": "2adca1150f58fc6f3d1f0a0f22ee7cca",
       "sourceName": "@openzeppelin/contracts/utils/math/SafeCast.sol",
       "solcConfig": {
@@ -727,8 +763,8 @@
         "SafeCast"
       ]
     },
-    "C:\\Users\\MMO\\Desktop\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\utils\\Panic.sol": {
-      "lastModificationDate": 1758725133839,
+    "C:\\Side Hustle\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\utils\\Panic.sol": {
+      "lastModificationDate": 1762325228583,
       "contentHash": "2133dc13536b4a6a98131e431fac59e1",
       "sourceName": "@openzeppelin/contracts/utils/Panic.sol",
       "solcConfig": {
@@ -761,42 +797,6 @@
       ],
       "artifacts": [
         "Panic"
-      ]
-    },
-    "C:\\Users\\MMO\\Desktop\\NFTs-Marketplace\\frontend\\node_modules\\@openzeppelin\\contracts\\token\\ERC721\\IERC721Receiver.sol": {
-      "lastModificationDate": 1758725133746,
-      "contentHash": "d61660a41ce200e99816e4734f7fd202",
-      "sourceName": "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol",
-      "solcConfig": {
-        "version": "0.8.20",
-        "settings": {
-          "evmVersion": "paris",
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        ">=0.5.0"
-      ],
-      "artifacts": [
-        "IERC721Receiver"
       ]
     }
   }

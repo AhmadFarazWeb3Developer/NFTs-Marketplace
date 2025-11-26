@@ -19,6 +19,8 @@ const SingleNFTCard = ({
   const [owner, setOwner] = useState(null);
   const navigateTo = useNavigate("");
 
+  console.log(tokenURI);
+
   useEffect(() => {
     const init = async () => {
       if (collectionInstance) {
@@ -82,13 +84,13 @@ const SingleNFTCard = ({
               : "w-32 h-32 rounded-md overflow-hidden flex-shrink-0"
           }`}
         >
-          <img
-            src={stripBeforeHttp(tokenURI)}
-            alt=""
-            className={`object-cover w-full h-full ${
-              layout === "grid" ? "rounded-t-md" : "rounded-md"
-            }`}
-          />
+          <div className="w-full aspect-square rounded-t-md overflow-hidden bg-black/20">
+            <img
+              src={stripBeforeHttp(tokenURI)}
+              alt=""
+              className="object-contain w-full h-full rounded-t-md"
+            />
+          </div>
         </div>
 
         <div

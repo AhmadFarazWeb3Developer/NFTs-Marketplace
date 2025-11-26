@@ -2,16 +2,22 @@ require("@nomicfoundation/hardhat-toolbox");
 require("dotenv").config();
 
 module.exports = {
-  // defaultNetwork: "hardhat",
+  defaultNetwork: "hardhat",
   // defaultNetwork: "polygon_amoy",
   // defaultNetwork: "bsc_testnet",
   // defaultNetwork: "arbitrum_sepolia",
-  defaultNetwork: "avalanche_fuji",
+  // defaultNetwork: "avalanche_fuji",
 
   networks: {
+    localhost: {
+      allowUnlimitedContractSize: true,
+      gas: 30_000_000,
+      blockGasLimit: 30_000_000,
+    },
+
     hardhat: {
       blockGasLimit: 30_000_000,
-      gas: 12_000_000,
+      gas: 30_000_000,
       allowUnlimitedContractSize: true,
       loggingEnabled: true,
       accounts: {
